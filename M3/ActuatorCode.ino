@@ -1,7 +1,7 @@
 #include <math.h>
 // Pin setup
-const int dirPin1 = 4;   // Direction control
-const int dirPin2 = 5;
+const int dirPin1 = 4;   // H Bridge Dir Pin 1
+const int dirPin2 = 5;  // H Bridge Dir Pin 2
 const int pwmPin = 6;   // PWM pin (must support analogWrite)
 
 // Control parameters
@@ -24,15 +24,22 @@ void loop() {
   currentTime = millis();
   if(currentTime - lastActTime >= waveDelay) {
     lastActTime = currentTime;
+
     // Compute sine wave position (radians)
     float angle = (2 * PI * currentTime) / wavePeriod;
+
     // Sine output oscillates between -1 and 1
     float sineVal = sin(angle);
-    // Map sine value to speed and direction
-    int speedValue = abs(int(sineVal * maxSpeed));   // 0–maxSpeed
+
+    // Map sine value to speed and direction separately
+    int speedValue = abs(int(sineVal * maxSpeed));
+    // Save prev direction for debug
     bool prevDir = direction;
-    direction = (sineVal >= 0);            // true = forward, false = reverse
+    // true = forward, false = reverse
+    direction = (sineVal >= 0);       
+
     // Apply to motor
+    // Direction
     if(sineVal >= 0 ) {
       digitalWrite(dirPin1, HIGH);
       digitalWrite(dirPin2, LOW);
@@ -40,17 +47,18 @@ void loop() {
       digitalWrite(dirPin1, LOW);
       digitalWrite(dirPin2, HIGH);
     }
-    // digitalWrite(dirPin, HIGH);
+    // Speed
     analogWrite(pwmPin, speedValue);
+
     // Print for debugging (optional)
-    if(prevDir != direction) {
-      Serial.print("Changing Directions :");
-      Serial.print(direction ? "FWD " : "REV ");
-      Serial.print("Speed: ");
-      Serial.print(speedValue);
-      Serial.print(" ");
-      Serial.println(sineVal);
-    }
+    // if(prevDir != direction) {
+    //   Serial.print("Changing Directions :");
+    //   Serial.print(direction ? "FWD " : "REV ");
+    //   Serial.print("Speed: ");
+    //   Serial.print(speedValue);
+    //   Serial.print(" ");
+    //   Serial.println(sineVal);
+    // }
     // Serial.print("Dir: ");
     // Serial.print(direction ? "FWD " : "REV ");
     // Serial.print("Speed: ");
