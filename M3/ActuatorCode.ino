@@ -3,6 +3,7 @@
 const int dirPin1 = 4;   // H Bridge Dir Pin 1
 const int dirPin2 = 5;  // H Bridge Dir Pin 2
 const int pwmPin = 6;   // PWM pin (must support analogWrite)
+const int switchPin = 2;
 
 // Control parameters
 const int maxSpeed = 100;   // Max speed (0–255)
@@ -16,13 +17,14 @@ void setup() {
   pinMode(dirPin1, OUTPUT);
   pinMode(dirPin2, OUTPUT);
   pinMode(pwmPin, OUTPUT);
+  pinMode(switchPin, INPUT_PULLUP);
   Serial.begin(9600);
   Serial.println("Starting sine wave motor control...");
 }
 void loop() {
   // Get current time in milliseconds
   currentTime = millis();
-  if(currentTime - lastActTime >= waveDelay) {
+  if((currentTime - lastActTime >= waveDelay) && (switchPin == HIGH)) {
     lastActTime = currentTime;
 
     // Compute sine wave position (radians)
