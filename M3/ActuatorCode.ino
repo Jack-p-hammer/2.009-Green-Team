@@ -6,7 +6,7 @@ const int pwmPin = 6;   // PWM pin (must support analogWrite)
 const int switchPin = 2;
 
 // Control parameters
-const int maxSpeed = 100;   // Max speed (0–255)
+const int maxSpeed = 200;   // Max speed (0–255)
 const int waveDelay = 60;   // Delay between steps (ms)
 const float wavePeriod = 500.0; // Full sine wave period in ms (adjust for slower/faster oscillation)
 bool direction = true;
@@ -24,7 +24,7 @@ void setup() {
 void loop() {
   // Get current time in milliseconds
   currentTime = millis();
-  if((currentTime - lastActTime >= waveDelay) && (switchPin == HIGH)) {
+  if((currentTime - lastActTime >= waveDelay) && (digitalRead(switchPin) == HIGH)) {
     lastActTime = currentTime;
 
     // Compute sine wave position (radians)
