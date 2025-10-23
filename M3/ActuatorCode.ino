@@ -66,7 +66,7 @@ void loop() {
     // Serial.print("Speed: ");
     // Serial.println(speedValue);
     // delay(waveDelay);
-  } else {
+  } else if (digitalRead(switchPin) == LOW) {
     // set speed to 0 when off
     analogWrite(pwmPin, 0);
   }
