@@ -67,7 +67,10 @@ void loop() {
     // Serial.println(speedValue);
     // delay(waveDelay);
   } else if (digitalRead(switchPin) == LOW) {
-    // set speed to 0 when off
+    // turn off motor when off
     analogWrite(pwmPin, 0);
+    // Both on or both off - motor off
+    digitalWrite(dirPin1, LOW);
+    digitalWrite(dirPin2, LOW);
   }
 }
