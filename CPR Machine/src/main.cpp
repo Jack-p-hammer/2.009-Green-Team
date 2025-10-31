@@ -8,11 +8,13 @@ int myFunction(int, int);
 const int dirPin1 = 4;   // Direction control
 const int dirPin2 = 5;
 const int pwmPin = 6;   // PWM pin (must support analogWrite)
+const int LedPin = 13;  // Onboard LED
+
 
 // Control parameters
 const int maxSpeed = 100;   // Max speed (0–255)
 const int waveDelay = 60;   // Delay between steps (ms)
-const float wavePeriod = 500.0; // Full sine wave period in ms (adjust for slower/faster oscillation)
+const float wavePeriod = 1000.0; // Full sine wave period in ms (adjust for slower/faster oscillation)
 bool direction = true;
 unsigned long lastActTime = millis();
 unsigned long currentTime = millis();
@@ -21,6 +23,9 @@ void setup() {
   pinMode(dirPin1, OUTPUT);
   pinMode(dirPin2, OUTPUT);
   pinMode(pwmPin, OUTPUT);
+  pinMode(LedPin, OUTPUT);
+
+
   Serial.begin(9600);
   Serial.println("Starting sine wave motor control...");
 }
@@ -30,9 +35,8 @@ void loop() {
   
   if(currentTime - lastActTime >= waveDelay) {
     lastActTime = currentTime;
-    // Compute sine wave position (radians)
+// Compute sine wave position (radians)
     float angle = (2 * PI * currentTime) / wavePeriod;
-    // Sine output oscillates between -1 and 1
     float sineVal = sin(angle);
     // Map sine value to speed and direction
     int speedValue = abs(int(sineVal * maxSpeed));   // 0–maxSpeed
@@ -40,9 +44,11 @@ void loop() {
     direction = (sineVal >= 0);            // true = forward, false = reverse
     // Apply to motor
     if(sineVal >= 0 ) {
+      digitalWrite(LedPin, HIGH);
       digitalWrite(dirPin1, HIGH);
       digitalWrite(dirPin2, LOW);
     } else {
+      digitalWrite(LedPin, LOW);
       digitalWrite(dirPin1, LOW);
       digitalWrite(dirPin2, HIGH);
     }
