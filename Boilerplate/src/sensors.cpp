@@ -24,6 +24,8 @@ float read_force_sensor() {
 
 float read_linear_encoder() {
   // TODO: Implement encoder reading logic
+  
+
   return 0.0;
 }
 
