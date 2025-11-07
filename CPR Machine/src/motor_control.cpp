@@ -1,39 +1,61 @@
 #include "motor_control.h"
 #include <math.h>
+#include <Arduino.h>
+#include <ACAN2517FD.h>
+#include <Moteus.h>
 
-// Constructor initialization list
-MotorControl::MotorControl()
-    : can(MCP2517_CS, SPI, MCP2517_INT),
-      moteus(can, []() {
-          Moteus::Options options;
-          options.id = 1;
-          return options;
-      }()) {}
+static const byte MCP2517_SCK = 9 ; // SCK input of MCP2517
+static const byte MCP2517_SDI =  10 ; // SDI input of MCP2517
+static const byte MCP2517_SDO =  11 ; // SDO output of MCP2517
 
-void MotorControl::begin() {
+static const byte MCP2517_CS  = 17 ; // CS input of MCP2517
+static const byte MCP2517_INT = 7 ; // INT output of MCP2517
+
+const byte controller_period = 20; // Period between controller frames
+
+// Driver objects
+ACAN2517FD can(MCP2517_CS, SPI, MCP2517_INT);
+
+// Moteus motors
+Moteus moteus(can, []() {
+  Moteus::Options options;
+  options.id = 1;
+  return options;
+}());;
+
+// Timing variables
+uint32_t nextSendMillis = 0;
+uint16_t loopCount = 0;
+
+// Internal helpers
+void sendCommands();
+void printStatus();
+
+void initializeMotor() {
     pinMode(LED_BUILTIN, OUTPUT);
 
     Serial.begin(115200);
     while (!Serial) {}
-    Serial.println(F("MotorControl: begin()"));
+    Serial.println(F("MotorControl: initializeMotor()"));
 
     SPI.begin();
 
     // CAN-FD configuration
     ACAN2517FDSettings settings(
-        ACAN2517FDSettings::OSC_20MHz, 1000ll * 1000ll, DataBitRateFactor::x1);
+        ACAN2517FDSettings::OSC_40MHz, 1000ll * 1000ll, DataBitRateFactor::x1);
 
     settings.mArbitrationSJW = 2;
     settings.mDriverTransmitFIFOSize = 1;
     settings.mDriverReceiveFIFOSize = 2;
 
-    // Commented this out because it kept giving me issues, and it's really only to throw an error code
-    // const uint32_t errorCode = can.begin(settings, [] {can.isr();});
-    // if (errorCode != 0) {
-    //     Serial.print(F("CAN error 0x"));
-    //     Serial.println(errorCode, HEX);
-    //     while (true) { delay(1000); }
-    // }
+    // This line begins CAN communication
+    const uint32_t errorCode = can.begin(settings, [] {can.isr();});
+
+    if (errorCode != 0) {
+        Serial.print(F("CAN error 0x"));
+        Serial.println(errorCode, HEX);
+        while (true) { delay(1000); }
+    }
 
     // To clear any faults the controllers may have, we start by sending
     // a stop command to each.
@@ -41,12 +63,12 @@ void MotorControl::begin() {
     Serial.println(F("Motor stopped"));
 }
 
-void MotorControl::update() {
-    // We intend to send control frames every 20ms.
+void updateMotor() {
+    // We intend to send control frames every 10ms.
     const auto time = millis();
     if (nextSendMillis >= time) { return; }
 
-    nextSendMillis += 20;
+    nextSendMillis += controller_period;
     loopCount++;
 
     sendCommands();
@@ -57,7 +79,7 @@ void MotorControl::update() {
     }
 }
 
-void MotorControl::sendCommands() {
+void sendCommands() {
     // This needs to be changed into torque control!!!
     Moteus::PositionMode::Command cmd;
     cmd.position = NAN;
@@ -66,7 +88,7 @@ void MotorControl::sendCommands() {
     moteus.SetPosition(cmd);
 }
 
-void MotorControl::printStatus() {
+void printStatus() {
     Serial.print(F("time "));
     Serial.print(nextSendMillis);
 

@@ -6,16 +6,13 @@
 #include <ACAN2517FD.h>
 
 
-MotorControl motorControl;
-
-
 // Sampling period (ms), might have to adjust this
 // const unsigned long LOOP_INTERVAL = 10; 
 // unsigned long lastLoopTime = 0;
 
 void setup() {
 
-  motorControl.begin();
+  initializeMotor();
 
   // sensors_init();
   // control_init();
@@ -24,7 +21,7 @@ void setup() {
 
 void loop() {
   
-  motorControl.update();
+  updateMotor();
 
   // unsigned long now = millis();
   // if (now - lastLoopTime >= LOOP_INTERVAL) {
