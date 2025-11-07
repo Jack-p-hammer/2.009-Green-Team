@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #include <ACAN2517FD.h>
-#include <Moteus.h>
+#include "moteus/moteus.h"
 
 class MotorControl {
 public:

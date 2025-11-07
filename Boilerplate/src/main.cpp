@@ -2,7 +2,7 @@
 #include "motor_control.h"
 #include "sensors.h"
 #include "control_scheme.h"
-#include <Moteus.h>
+#include "moteus/moteus.h"
 #include <ACAN2517FD.h>
 
 

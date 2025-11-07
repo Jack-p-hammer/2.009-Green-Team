@@ -1,0 +1,3 @@
+[submodule "Boilerplate/lib/moteus"]
+	path = Boilerplate/lib/moteus
+	url = https://github.com/mjbots/moteus
