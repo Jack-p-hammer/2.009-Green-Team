@@ -1,74 +1,50 @@
 #include <Arduino.h>
-#include <math.h>
-
-// put function declarations here:
-int myFunction(int, int);
-
-// Pin setup
-const int dirPin1 = 4;   // Direction control
-const int dirPin2 = 5;
-const int pwmPin = 6;   // PWM pin (must support analogWrite)
-const int LedPin = 13;  // Onboard LED
+#include "motor_control.h"
+#include "sensors.h"
+#include "control_scheme.h"
+#include <Moteus.h>
+#include <ACAN2517FD.h>
 
 
-// Control parameters
-const int maxSpeed = 100;   // Max speed (0–255)
-const int waveDelay = 60;   // Delay between steps (ms)
-const float wavePeriod = 1000.0; // Full sine wave period in ms (adjust for slower/faster oscillation)
-bool direction = true;
-unsigned long lastActTime = millis();
-unsigned long currentTime = millis();
+MotorControl motorControl;
+
+
+// Sampling period (ms), might have to adjust this
+// const unsigned long LOOP_INTERVAL = 10; 
+// unsigned long lastLoopTime = 0;
 
 void setup() {
-  pinMode(dirPin1, OUTPUT);
-  pinMode(dirPin2, OUTPUT);
-  pinMode(pwmPin, OUTPUT);
-  pinMode(LedPin, OUTPUT);
 
+  motorControl.begin();
 
-  Serial.begin(9600);
-  Serial.println("Starting sine wave motor control...");
+  // sensors_init();
+  // control_init();
+
 }
+
 void loop() {
-  // Get current time in milliseconds
-  currentTime = millis();
   
-  if(currentTime - lastActTime >= waveDelay) {
-    lastActTime = currentTime;
-// Compute sine wave position (radians)
-    float angle = (2 * PI * currentTime) / wavePeriod;
-    float sineVal = sin(angle);
-    // Map sine value to speed and direction
-    int speedValue = abs(int(sineVal * maxSpeed));   // 0–maxSpeed
-    bool prevDir = direction;
-    direction = (sineVal >= 0);            // true = forward, false = reverse
-    // Apply to motor
-    if(sineVal >= 0 ) {
-      digitalWrite(LedPin, HIGH);
-      digitalWrite(dirPin1, HIGH);
-      digitalWrite(dirPin2, LOW);
-    } else {
-      digitalWrite(LedPin, LOW);
-      digitalWrite(dirPin1, LOW);
-      digitalWrite(dirPin2, HIGH);
-    }
+  motorControl.update();
 
-    // digitalWrite(dirPin, HIGH);
-    analogWrite(pwmPin, speedValue);
-    
-    // Print for debugging (optional)
-    if(prevDir != direction) {
-      Serial.print("Changing Directions :");
-      Serial.print(direction ? "FWD " : "REV ");
-      Serial.print("Speed: ");
-      Serial.print(speedValue);
-      Serial.print(" ");
-      Serial.println(sineVal);
-    }
-  }
-}
+  // unsigned long now = millis();
+  // if (now - lastLoopTime >= LOOP_INTERVAL) {
+  //   lastLoopTime = now;
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+    // Read sensors
+  
+    // float force = read_force_sensor();
+    // float linearPos = read_linear_encoder();
+    // float rotation = read_rotational_encoder();
+
+    // Print sensor readings
+    // Serial.println(force);
+    // Serial.println(linearPos);
+    // Serial.println(rotation);
+
+    // Compute control output
+    //float controlOutput = compute_control(force, linearPos, rotation);
+
+    // Send command to motor driver
+    //motor_set_speed(controlOutput);
+  //}
 }
