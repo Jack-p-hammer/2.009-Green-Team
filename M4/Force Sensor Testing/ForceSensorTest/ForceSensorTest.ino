@@ -17,7 +17,6 @@ void loop() {
   for (int i = 0; i < samples; i++) {
     ForceSum += analogRead(sensorPin);
     VinSum += analogRead(V_inPin);
-
   }
 
   float ForceAnalog = ForceSum / samples;

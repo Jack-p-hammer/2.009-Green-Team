@@ -8,6 +8,9 @@ const int LINEAR_ENCODER_B = 3;
 const int ROTARY_ENCODER_A = 4;
 const int ROTARY_ENCODER_B = 5;
 
+const int a = 1187.7440; // Calibration constants for force sensor
+const int b = -548.7972;
+
 void sensors_init() {
   pinMode(FORCE_PIN, INPUT);
   pinMode(LINEAR_ENCODER_A, INPUT);
@@ -17,9 +20,12 @@ void sensors_init() {
 }
 
 float read_force_sensor() {
+  // Ensure that Voltage at the non-inverting terminal is less about 0.5V (voltage divider or sum shite)
+  // If using a different reference voltage, recalibration is required
   int raw = analogRead(FORCE_PIN);
-  float voltage = raw * (5.0 / 1023.0); // https://docs.arduino.cc/built-in-examples/basics/ReadAnalogVoltage/
-  return voltage; // Convert to Newtons later!
+  float voltage = raw * (5.0 / 1023.0);
+  float force = a * voltage + b;
+  return force; // should be value in newtons
 }
 
 float read_linear_encoder() {
