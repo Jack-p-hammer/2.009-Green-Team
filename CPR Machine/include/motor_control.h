@@ -1,15 +1,28 @@
 #pragma once
 
+// Declare variables that would be useful in other files
 
-// Initialize motor, CAN bus, and motor driver
+// Controller period in ms
+extern const byte controller_period;
+
+// State enumeration for state machine
+enum cprState {
+    STANDBY,
+    HOMING,
+    COMPRESSIONS
+};
+
+// Declare function templates to be used for motor control
+
+// Initializer for motor driver, CAN bus, and sensors
 void initializeMotor();
 
 // Update motor controller with next control frame
 void updateMotor();
 
-// Internal helpers
-void sendCommands();
-void printStatus();
+// Read data input from sensors
+void readSensors();
+
 
 // class MotorControl {
 // public:

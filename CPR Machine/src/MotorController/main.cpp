@@ -23,25 +23,4 @@ void loop() {
   
   updateMotor();
 
-  // unsigned long now = millis();
-  // if (now - lastLoopTime >= LOOP_INTERVAL) {
-  //   lastLoopTime = now;
-
-    // Read sensors
-  
-    // float force = read_force_sensor();
-    // float linearPos = read_linear_encoder();
-    // float rotation = read_rotational_encoder();
-
-    // Print sensor readings
-    // Serial.println(force);
-    // Serial.println(linearPos);
-    // Serial.println(rotation);
-
-    // Compute control output
-    //float controlOutput = compute_control(force, linearPos, rotation);
-
-    // Send command to motor driver
-    //motor_set_speed(controlOutput);
-  //}
 }

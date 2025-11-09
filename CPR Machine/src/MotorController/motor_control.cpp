@@ -27,10 +27,6 @@ Moteus moteus(can, []() {
 uint32_t nextSendMillis = 0;
 uint16_t loopCount = 0;
 
-// Internal helpers
-void sendCommands();
-void printStatus();
-
 void initializeMotor() {
     pinMode(LED_BUILTIN, OUTPUT);
 
@@ -71,6 +67,7 @@ void updateMotor() {
     nextSendMillis += controller_period;
     loopCount++;
 
+    readSensors();
     sendCommands();
 
     // Only print our status every 5th cycle, so every 1s.
@@ -103,4 +100,9 @@ void printStatus() {
     print_moteus(moteus.last_result().values);
     Serial.print(F(" / "));
 
+}
+
+void readSensors() {
+    // Read sensor values
+    // TODO: Change return type from void based on how we implement
 }
