@@ -1,5 +1,4 @@
-#ifndef SENSORS_H
-#define SENSORS_H
+#pragma once
 
 // Sensor Pins
 
@@ -42,5 +41,3 @@ void zeroRotaryEncoder();
 
 // Read all sensor values and store them in global variables
 void readSensors();
-
-#endif
