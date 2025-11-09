@@ -6,6 +6,9 @@
 // Controller period in ms
 extern const uint8_t compression_controller_period;
 
+// Start time of compressions
+extern long compression_start_time;
+
 // Declare function templates to be used for motor control
 
 // Initialize Compressions
@@ -14,7 +17,8 @@ void initializeCompressions();
 // Update motor controller with next compression control frame
 void updateCompressions();
 
-// Returns torque setpoint for current controller period
+// Returns rack position setpoint for current controller period,
+// relative to linear encoder zero position
 double computeCompressionSetpoint();
 
 // class MotorControl {

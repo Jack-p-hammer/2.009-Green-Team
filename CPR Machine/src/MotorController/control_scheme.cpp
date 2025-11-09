@@ -75,7 +75,7 @@ double updateController(double setpoint, double linearPos, double rotation) {
 }
 
 void sendCommands(double controlOutput) {
-    // This needs to be changed into torque control!!!
+    // TODO: This needs to be changed into torque control!!!
     Moteus::PositionMode::Command cmd;
     cmd.position = NAN;
     cmd.velocity = 0.2 * ::sin(millis() / 1000.0);

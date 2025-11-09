@@ -6,6 +6,8 @@
 #include "control_scheme.h"
 #include "sensors.h"
 
+long compression_start_time = 0;
+
 void initializeCompressions() {
     // Initialize outer loop
     nextSendMillis = 0;
@@ -13,6 +15,9 @@ void initializeCompressions() {
 
     // Initialize controller (may not be used)
     compressionControllerInit();
+
+    // Record time start of compressions
+    compression_start_time = millis();
 }
 
 void updateCompressions() {
@@ -33,6 +38,11 @@ void updateCompressions() {
 }
 
 double computeCompressionSetpoint() {
-    // TODO: Define compression setpoint
-    return 0.0;
+    // TODO: Refine compression time profile
+    // Simulink profile for now
+    long currentTime = millis() - compression_start_time;
+
+    // 2 Hz wave, starting at 0 and going down 2 inches
+    // SI UNITS!!!!!!!!!!!!!!
+    return 0.0508/2*::cos(2*PI*2*currentTime / 1000.0) - 0.0508/2;
 }
