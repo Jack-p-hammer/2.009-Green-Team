@@ -29,7 +29,8 @@ void compressionControllerInit();
 void calibrationControllerInit();
 
 // Retrieve new compression controller output from sensor data
-double updateController(double setpoint, double linearPos, double rotation);
+// Requires setpoint input to allow for use in both calib/comp modes
+double updateController(double setpoint);
 
 // Send controller command to motor
 void sendCommands(double controlOutput);

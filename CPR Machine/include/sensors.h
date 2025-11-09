@@ -24,7 +24,7 @@ extern const int forceCalibOffset;
 // Setup sensor pins and zero sensors in position
 void initializeSensors();
 
-// Return force sensor reading, relative to zero position
+// Return force sensor reading
 double read_force_sensor();
 
 // Return linear encoder reading, relative to zero position
@@ -33,11 +33,11 @@ double read_linear_encoder();
 // Set zero of linear encoder to current position
 void zeroLinearEncoder();
 
-// Return rotary encoder reading
+// Return rotary encoder reading, relative to zero position
 double read_rotary_encoder();
 
 // Set zero of rotary encoder to current position
 void zeroRotaryEncoder();
 
-// Read all sensor values and store them in global variables
+// Read all sensor values, zeroed, and store them in global variables
 void readSensors();
