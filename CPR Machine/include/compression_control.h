@@ -1,27 +1,25 @@
 #pragma once
+#include <cstdint>
 
 // Declare variables that would be useful in other files
 
 // Controller period in ms
-extern const byte controller_period;
-
-// State enumeration for state machine
-enum cprState {
-    STANDBY,
-    HOMING,
-    COMPRESSIONS
-};
+extern const uint8_t compression_controller_period;
 
 // Declare function templates to be used for motor control
 
-// Initializer for motor driver, CAN bus, and sensors
-void initializeMotor();
+// Initialize Compressions
+void initializeCompressions();
 
-// Update motor controller with next control frame
-void updateMotor();
+// Update motor controller with next compression control frame
+void updateCompressions();
 
-// Read data input from sensors
-void readSensors();
+// Returns torque setpoint for current controller period
+double computeCompressionSetpoint();
+
+// Helper functions, unique as to not define them multiple times
+void sendCompressionCommands(double controlOutput);
+void printCompressionStatus();
 
 
 // class MotorControl {
@@ -53,6 +51,6 @@ void readSensors();
 //     uint16_t loopCount = 0;
 
 //     // Internal helpers
-//     void sendCommands();
-//     void printStatus();
+//     void sendCompressionCommands();
+//     void printCompressionStatus();
 // };

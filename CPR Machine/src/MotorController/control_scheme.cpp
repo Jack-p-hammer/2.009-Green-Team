@@ -2,17 +2,26 @@
 #include <Arduino.h>
 
 // Example placeholder PID-esque logic
-float targetForce = 10.0; // N (Assuming this will be instead a target curve)
-float Kp = 1.0;
+// Assume 0 initial conditions
+double prevCommand = 0;
+double prevError = 0;
 
-void control_init() {
+double errorGain = 109.1;
+double prevErrorGain = 243.6;
+
+void comressionControllerInit() {
   // You can set targetForce, PID gains, etc. here
 }
 
-float compute_control(float force, float linearPos, float rotation) {
-  float error = targetForce - force;
-  float output = Kp * error;
+double updateCompressionController(double setpoint, double linearPos, double rotation) {
+  double error = setpoint - linearPos;
 
-  // Placeholder for future control logic
-  return constrain(output, 0, 255);
+  // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
+  // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
+  double output = errorGain*error - prevErrorGain*prevError + prevCommand;
+  output = constrain(output, 0, 255);
+
+  prevCommand = output;
+  prevError = error;
+  return output;
 }

@@ -1,5 +1,7 @@
 #include <Arduino.h>
-#include "motor_control.h"
+#include "compression_control.h"
+#include "calibration_control.h"
+#include "state_machine.h"
 #include "sensors.h"
 #include "control_scheme.h"
 #include <Moteus.h>
@@ -20,7 +22,7 @@ void setup() {
 }
 
 void loop() {
-  
-  updateMotor();
+  // TODO: State Machine
+  updateCompressions();
 
 }
