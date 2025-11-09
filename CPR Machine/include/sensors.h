@@ -31,13 +31,13 @@ double read_force_sensor();
 // Return linear encoder reading, relative to zero position
 double read_linear_encoder();
 
-// Set zero of linear encoder
+// Set zero of linear encoder to current position
 void zeroLinearEncoder();
 
 // Return rotary encoder reading
 double read_rotary_encoder();
 
-// Set zero of rotary encoder
+// Set zero of rotary encoder to current position
 void zeroRotaryEncoder();
 
 // Read all sensor values and store them in global variables
