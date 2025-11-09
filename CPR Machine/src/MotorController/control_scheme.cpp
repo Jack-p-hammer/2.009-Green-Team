@@ -1,4 +1,5 @@
 #include "control_scheme.h"
+#include "sensors.h"
 #include <Moteus.h>
 #include <ACAN2517FD.h>
 #include <Arduino.h>
@@ -8,8 +9,8 @@
 double prevCommand = 0;
 double prevError = 0;
 
-double errorGain = 109.1;
-double prevErrorGain = 243.6;
+double errorGain = -117.9813; // This is the constant term of the TF numerator, with sign
+double prevErrorGain = 244.9501; // This is the z term of the TF numerator
 
 // Driver object
 ACAN2517FD can(MCP2517_CS, SPI, MCP2517_INT);
@@ -61,17 +62,20 @@ void calibrationControllerInit() {
   // You can set targetForce, PID gains, etc. here
 }
 
-double updateController(double setpoint, double linearPos, double rotation) {
+double updateController(double setpoint) {
+  readSensors();
   double error = setpoint - linearPos;
 
   // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
   // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
-  double output = errorGain*error - prevErrorGain*prevError + prevCommand;
-  output = constrain(output, 0, 255);
+  double torqueOutput = prevCommand - errorGain*error - prevErrorGain*prevError;
 
-  prevCommand = output;
+  // Saturate the control effort
+  torqueOutput = constrain(torqueOutput, -5, 5);
+
+  prevCommand = torqueOutput;
   prevError = error;
-  return output;
+  return torqueOutput;
 }
 
 void sendCommands(double controlOutput) {
