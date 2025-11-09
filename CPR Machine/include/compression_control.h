@@ -17,11 +17,6 @@ void updateCompressions();
 // Returns torque setpoint for current controller period
 double computeCompressionSetpoint();
 
-// Helper functions, unique as to not define them multiple times
-void sendCompressionCommands(double controlOutput);
-void printCompressionStatus();
-
-
 // class MotorControl {
 // public:
 //     MotorControl();

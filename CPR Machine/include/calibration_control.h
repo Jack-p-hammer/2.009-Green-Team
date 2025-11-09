@@ -16,7 +16,3 @@ void updateCalibration();
 
 // Returns torque setpoint for current controller period
 double computeCalibrationSetpoint();
-
-// Helper functions, unique as to not define them multiple times
-void sendCalibrationCommands(double controlOutput);
-void printCalibrationStatus();
