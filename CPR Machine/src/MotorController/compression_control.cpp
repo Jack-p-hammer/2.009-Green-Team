@@ -41,5 +41,6 @@ double computeCompressionSetpoint() {
 
     // 2 Hz wave, starting at 0 and going down 2 inches
     // SI UNITS!!!!!!!!!!!!!!
-    return 0.0508/2*::cos(2*PI*2*currentTime / 1000.0) - 0.0508/2;
+    // Positive rotation is down
+    return 0.0508/2*::cos(2*PI*2*currentTime / 1000.0) + 0.0508/2;
 }

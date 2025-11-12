@@ -83,8 +83,18 @@ double updateController(double setpoint) {
 void sendCommands(double controlOutput) {
     // TODO: This needs to be changed into torque control!!!
     Moteus::PositionMode::Command cmd;
-    cmd.position = NAN;
-    cmd.velocity = 0.2 * ::sin(millis() / 1000.0);
+
+    // Send sine wave position command at 120 bpm with 2 inch amplitude
+    // Positive rotation is down
+    cmd.position = (0.0254*2)/2 * ::cos(2*PI*(2/1000.0) * millis()) + (0.0254*2)/2;
+
+    // Velocity feedforward, derivative of position
+    // Supposed to help on high freqs, see if it matters for us
+    cmd.velocity = -2*PI*(2/1000.0) * (0.0254*2)/2 * ::sin(2*PI*(2/1000.0) * millis());
+
+    // No feedforward velocity, uncomment if above is commented
+    // cmd.velocity = NAN;
+
     // cmd.feedforward_torque = controlOutput;
 
     moteus.SetPosition(cmd);
