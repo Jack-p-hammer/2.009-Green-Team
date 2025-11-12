@@ -1,7 +1,8 @@
 #pragma once
 
-// Sensor Pins
+#include "Adafruit_VL53L0X.h"
 
+// Sensor Pins
 extern const int FORCE_PIN;
 extern const int LINEAR_ENCODER_A;
 extern const int LINEAR_ENCODER_B;
@@ -9,15 +10,16 @@ extern const int ROTARY_ENCODER_A;
 extern const int ROTARY_ENCODER_B;
 
 // Sensor outputs
-
 extern double linearPos; extern double linearZeroPos;
 extern double rotaryPos; extern double rotaryZeroPos;
 extern double forceVal;
 
 // Force Sensor Calibration Values
-
 extern const int forceCalibRate;
 extern const int forceCalibOffset;
+
+// ToF Sensor
+extern Adafruit_VL53L0X ToFSensor;
 
 // Sensor function definitions
 

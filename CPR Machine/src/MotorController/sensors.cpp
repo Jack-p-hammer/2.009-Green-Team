@@ -1,13 +1,12 @@
 #include "sensors.h"
 #include "control_scheme.h"
 #include <Arduino.h>
+#include "Adafruit_VL53L0X.h"
 
 // EXAMPLE PINS (FIX LATER!!!)
 const int FORCE_PIN = A0;
 const int LINEAR_ENCODER_A = 2;
 const int LINEAR_ENCODER_B = 3;
-const int ROTARY_ENCODER_A = 4;
-const int ROTARY_ENCODER_B = 5;
 
 const int forceCalibRate = 1187.7440; // Calibration constants for force sensor
 const int forceCalibOffset = -548.7972;
@@ -17,16 +16,24 @@ double linearPos = 0; double linearZeroPos = 0;
 double rotaryPos = 0; double rotaryZeroPos = 0;
 double forceVal = 0;
 
+// Declare ToF Sensor
+Adafruit_VL53L0X ToFSensor = Adafruit_VL53L0X();
+
 // Declare variables for sensor validation
 const float pinionRadius = 0.01; // Meters
 
 void initializeSensors() {
   // Set pins
   pinMode(FORCE_PIN, INPUT);
-  pinMode(LINEAR_ENCODER_A, INPUT);
-  pinMode(LINEAR_ENCODER_B, INPUT);
-  pinMode(ROTARY_ENCODER_A, INPUT);
-  pinMode(ROTARY_ENCODER_B, INPUT);
+
+  // Initialize ToF Sensor
+  if (!ToFSensor.begin()) {
+    Serial.println(F("Failed to boot Time of Flight sensor"));
+    while(1);
+  }
+
+  // TODO: Do we want continuous readings?
+  ToFSensor.startRangeContinuous();
 
   // Record zero positions
   rotaryZeroPos = read_rotary_encoder();
@@ -44,13 +51,15 @@ double read_force_sensor() {
 }
 
 double read_linear_encoder() {
-  // TODO: Implement encoder reading logic
-  // The following is dummy code
-  double reading = analogRead(LINEAR_ENCODER_A);
-  return reading - linearZeroPos; // always return zeroed value
+  // Record reading from ToF Sensor
+  if (ToFSensor.isRangeComplete()) {
+    double reading = ToFSensor.readRange();
+    return reading - linearZeroPos; // always return zeroed value
+  }
 }
 
 void zeroLinearEncoder() {
+  // Go through existing read function to get zero pos
   double reading = read_linear_encoder();
   linearZeroPos += reading; // Adjust zero position so that current value reads zero
 }
@@ -67,7 +76,7 @@ void zeroRotaryEncoder() {
   // limits based on rotaryPos, not the zeroed output we use internally. This, for all intents and
   // purposes, should be fine and adds another layer of safety
   double reading = read_rotary_encoder();
-  linearZeroPos += reading; // Adjust zero position so that current value reads zero
+  rotaryZeroPos += reading; // Adjust zero position so that current value reads zero
 }
 
 void readSensors() {
@@ -83,9 +92,10 @@ void readSensors() {
     if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 1e-3) {
       // TODO: Change from a print to throwing an exception
       Serial.println("ALERT: LINEAR - ROTARY MISMATCH");
+    }
 
     // Change limit from 550 to whatever we decide is a good worst-case limit
-    } else if (forceVal > 550) {
+    if (forceVal > 550) {
       // TODO: Change from a print to a crash/set torque to 0 then crash
       Serial.println("ALERT: OVER FORCE");
     }
