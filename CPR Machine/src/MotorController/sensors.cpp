@@ -55,7 +55,7 @@ void zeroLinearEncoder() {
 double read_rotary_encoder() {
   // Read position from Moteus controller (rotary encoder feedback)
   // The moteus library continuously updates q_current.position (in revolutions)
-  rotaryPos = moteus.q_current.position - rotaryZeroPos;
+  rotaryPos = moteus.last_result().values.position - rotaryZeroPos;
   return rotaryPos;
 }
 void zeroRotaryEncoder() {
