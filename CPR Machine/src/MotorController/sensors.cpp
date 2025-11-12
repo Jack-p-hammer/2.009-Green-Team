@@ -81,8 +81,12 @@ void zeroRotaryEncoder() {
 
 void readSensors() {
     forceVal = read_force_sensor();
-    linearPos = read_linear_encoder();
     rotaryPos = read_rotary_encoder(); // in revolutions
+    // ToF sensor only updates at 30ish ms max, if nothing read keep prev. encoder value
+    double tempPos = read_linear_encoder();
+    if(tempPos != 0) {
+      linearPos = tempPos;
+    }
 
     // TODO: Encoder Validation
     double rotaryPosFromLinear = linearPos/pinionRadius; // in radians
