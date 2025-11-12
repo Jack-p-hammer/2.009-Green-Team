@@ -17,6 +17,9 @@ double linearPos = 0; double linearZeroPos = 0;
 double rotaryPos = 0; double rotaryZeroPos = 0;
 double forceVal = 0;
 
+// Declare variables for sensor validation
+const float pinionRadius = 0.01; // Meters
+
 void initializeSensors() {
   // Set pins
   pinMode(FORCE_PIN, INPUT);
@@ -59,13 +62,31 @@ double read_rotary_encoder() {
   return rotaryPos;
 }
 void zeroRotaryEncoder() {
+  // Note that moteus encoder is semi-absolute: on power cycle, it will read an absolute position
+  // to the nearest rotation (i.e. from -0.5 to 0.5). The moteus will also have its own position
+  // limits based on rotaryPos, not the zeroed output we use internally. This, for all intents and
+  // purposes, should be fine and adds another layer of safety
   double reading = read_rotary_encoder();
   linearZeroPos += reading; // Adjust zero position so that current value reads zero
 }
 
 void readSensors() {
-    // TODO: Change return type from void based on how we implement
     forceVal = read_force_sensor();
     linearPos = read_linear_encoder();
-    rotaryPos = read_rotary_encoder();
+    rotaryPos = read_rotary_encoder(); // in revolutions
+
+    // TODO: Encoder Validation
+    double rotaryPosFromLinear = linearPos/pinionRadius; // in radians
+
+    // Change tolerance based on linear encoder precision
+    // must convert rotaryPos to radians
+    if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 1e-3) {
+      // TODO: Change from a print to throwing an exception
+      Serial.println("ALERT: LINEAR - ROTARY MISMATCH");
+
+    // Change limit from 550 to whatever we decide is a good worst-case limit
+    } else if (forceVal > 550) {
+      // TODO: Change from a print to a crash/set torque to 0 then crash
+      Serial.println("ALERT: OVER FORCE");
+    }
 }
