@@ -10,11 +10,8 @@ long compression_start_time = 0;
 
 void initializeCompressions() {
     // Initialize outer loop
-    nextSendMillis = 0;
+    nextSendMillis = millis();
     loopCount = 0;
-
-    // Initialize controller (may not be used)
-    compressionControllerInit();
 
     // Record time start of compressions
     compression_start_time = millis();

@@ -5,11 +5,19 @@
 #include <Arduino.h>
 #include <assert.h>
 
-// Example placeholder PID-esque logic
-// Assume 0 initial conditions
+// State machine variables
+cprState currentState = STANDBY;
+cprState prevState = STANDBY;
+
+// Control Loop Timing variables
+uint32_t nextSendMillis = 0;
+uint16_t loopCount = 0;
+
+// Lag controller variables
 double prevCommand = 0;
 double prevError = 0;
 
+// Lag controller gains
 double errorGain = -117.9813; // This is the constant term of the TF numerator, with sign
 double prevErrorGain = 244.9501; // This is the z term of the TF numerator
 
@@ -28,7 +36,7 @@ void initializeMotor() {
 
     Serial.begin(115200);
     while (!Serial) {}
-    Serial.println(F("MotorControl: initializeMotor()"));
+    Serial.println(F("control_scheme: initializeMotor()"));
 
     SPI.begin();
 
@@ -53,14 +61,6 @@ void initializeMotor() {
     // a stop command to each.
     moteus.SetStop();
     Serial.println(F("Motor stopped"));
-}
-
-void compressionControllerInit() {
-  // You can set targetForce, PID gains, etc. here
-}
-
-void calibrationControllerInit() {
-  // You can set targetForce, PID gains, etc. here
 }
 
 double updateController(double setpoint) {

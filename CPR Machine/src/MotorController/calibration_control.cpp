@@ -8,25 +8,29 @@
 
 void initializeCalibration() {
     // Initialize outer loop
-    nextSendMillis = 0;
+    nextSendMillis = millis();
     loopCount = 0;
 
-    // Initialize controller (may not be used)
-    calibrationControllerInit();
+    // Uses same controller as compression mode, with linear decreasing setpoint
 }
 
 void updateCalibration() {
     // We intend to send control frames every controller_period ms.
     const auto time = millis();
-    if (nextSendMillis >= time) { return; } // Only continue if it's time, may cause issues w/HMI integration on one MCU
+
+    // Only continue if it's time, may cause issues w/HMI integration when on one MCU
+    if (nextSendMillis >= time) { return; } 
 
     nextSendMillis += controller_period;
     loopCount++;
 
+    // Update sensor variables and error check
     readSensors();
+
+    // Send control command
     sendCommands(updateController(computeCalibrationSetpoint()));
 
-    // Only print our status every 25th cycle.
+    // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
         printStatus(nextSendMillis);
     }

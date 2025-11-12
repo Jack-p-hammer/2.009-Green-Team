@@ -3,6 +3,24 @@
 #include <ACAN2517FD.h>
 #include <Moteus.h>
 
+// State enumeration for state machine
+enum cprState {
+    STANDBY,
+    HOMING,
+    WAIT_FOR_CONFIRMATION,
+    COMPRESSIONS
+};
+
+// State variables (declared here, defined in a single .cpp)
+extern cprState currentState;
+extern cprState prevState;
+
+// Control Loop Timing variables
+// Declared here, defined in a single .cpp
+extern uint32_t nextSendMillis;
+extern uint16_t loopCount;
+
+
 // Control Loop Timing variables
 extern uint32_t nextSendMillis;
 extern uint16_t loopCount;
@@ -21,12 +39,6 @@ extern Moteus moteus;
 
 // Initializer for motor driver, CAN bus, and sensors
 void initializeMotor();
-
-// Initialize Compression Controller
-void compressionControllerInit();
-
-// Initialize Calibration Controller
-void calibrationControllerInit();
 
 // Retrieve new compression controller output from sensor data
 // Requires setpoint input to allow for use in both calib/comp modes
