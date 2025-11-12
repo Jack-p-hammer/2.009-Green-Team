@@ -30,6 +30,8 @@ void setup() {
 }
 
 void loop() {
+  //Refresh moteus controller readings
+  moteus.read();
   // TODO: State Machine
   updateCompressions();
   updateCalibration();

@@ -1,6 +1,6 @@
 const int sensorPin = A0;
 const int V_inPin = A1;
-const int samples = 1;  // number of readings to average
+const int samples = 10;  // number of readings to average
 
 const int a = 1187.7440;
 const int b = -548.7972;
@@ -27,15 +27,16 @@ void loop() {
   float ratio = ForceVoltage / VoltageIn;
 
   float force = a*ForceVoltage + b;
-
-  Serial.print("Force(N):");
+  // Serial.print("Voltage(V):");
+  // Serial.print(ForceVoltage, 3);
+  // Serial.print(" ,");
+  Serial.print("Force_1(N):");
   Serial.println(force, 3);
   // Serial.print(" , ");
   // Serial.print(ForceVoltage, 3);
-  // Serial.print(" , ");
-  // Serial.print(VoltageIn, 3);
-  // Serial.print(" , ");
-  // Serial.println(ratio, 3);
+  // Serial.print(",");
+  // Serial.print("Force_1(N):");
+  // Serial.println(a*VoltageIn + b, 3);
 
 
 

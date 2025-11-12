@@ -1,4 +1,5 @@
 #include "sensors.h"
+#include "control_scheme.h"
 #include <Arduino.h>
 
 // EXAMPLE PINS (FIX LATER!!!)
@@ -52,13 +53,11 @@ void zeroLinearEncoder() {
 }
 
 double read_rotary_encoder() {
-  // TODO: Implement encoder reading logic
-  // The following is dummy code
-  double reading = analogRead(ROTARY_ENCODER_A);
-  return reading - rotaryZeroPos; // always return zeroed value
-  return 0.0;
+  // Read position from Moteus controller (rotary encoder feedback)
+  // The moteus library continuously updates q_current.position (in revolutions)
+  rotaryPos = moteus.q_current.position - rotaryZeroPos;
+  return rotaryPos;
 }
-
 void zeroRotaryEncoder() {
   double reading = read_rotary_encoder();
   linearZeroPos += reading; // Adjust zero position so that current value reads zero
