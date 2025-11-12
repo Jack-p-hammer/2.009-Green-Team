@@ -3,6 +3,7 @@
 #include <Moteus.h>
 #include <ACAN2517FD.h>
 #include <Arduino.h>
+#include <assert.h>
 
 // Example placeholder PID-esque logic
 // Assume 0 initial conditions
@@ -68,6 +69,7 @@ double updateController(double setpoint) {
 
   // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
   // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
+  assert(controller_period == 10);
   double torqueOutput = prevCommand - errorGain*error - prevErrorGain*prevError;
 
   // Saturate the control effort
