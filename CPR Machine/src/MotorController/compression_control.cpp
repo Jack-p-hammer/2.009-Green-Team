@@ -29,7 +29,7 @@ void updateCompressions() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateController(computeCompressionSetpoint(), linearPos, rotaryPos));
+    sendCommands(updateController(computeCompressionSetpoint()));
 
     // Only print our status every 25th cycle.
     if (loopCount % 25 == 0) {

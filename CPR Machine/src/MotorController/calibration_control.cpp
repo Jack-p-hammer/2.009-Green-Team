@@ -24,7 +24,7 @@ void updateCalibration() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateController(computeCalibrationSetpoint(), linearPos, rotaryPos));
+    sendCommands(updateController(computeCalibrationSetpoint()));
 
     // Only print our status every 25th cycle.
     if (loopCount % 10 == 0) {
