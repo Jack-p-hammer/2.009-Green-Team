@@ -30,8 +30,11 @@ void setup() {
 }
 
 void loop() {
-  //Refresh moteus controller readings
-  moteus.read();
+  // Refresh moteus controller readings
+  // This is unneeded, as updateCalibration() and updateCompressions
+  // will always call readSensors(), which will cause a moteus read
+  // moteus.read();
+
   // TODO: State Machine
   updateCompressions();
   updateCalibration();
