@@ -9,9 +9,6 @@
 #include <Moteus.h>
 #include <ACAN2517FD.h>
 
-// General FIXME: This will not build until all state functions declared
-// in headers are given definitions
-
 void setup() {
   // Do everything that needs to occur on power up
   initializeMotor();
@@ -25,7 +22,6 @@ void loop() {
   // State changes into success states handled in main switch case
   // FIXME: if this turns out to be a bad idea
   switch (currentState) {
-    // TODO: Implement state machine cases
     case START_UP:  
       if(verifyBatteryPercentage()) {
         // Handle low battery scenario
@@ -59,7 +55,11 @@ void loop() {
       break;
     case ZERO_FAILED:
         // TODO: Handle different behavior for repeated zeroing failures
-        // Hence, nothing for now
+        // For now, treat as abort
+        prevState = currentState;
+        currentState = ABORT;
+        
+        break;
     case WAIT_FOR_COMPRESSION_CONFIRMATION:
       displayCompressionConfirmation();
 
