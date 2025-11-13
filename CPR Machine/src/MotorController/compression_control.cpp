@@ -41,14 +41,14 @@ double computeCompressionSetpoint() {
     double outputPos_cm = 0.0;                 // Compression position in centimeters
 
     // Piecewise trapezoidal profile (periodic)
-    // Positive rotation of motor is down on rack, so down is pos up is neg
+    // Positive rotation of motor is down on rack, so down is positive up is negative
     if (cycleTime < 0.12) {
         // Bottom hold
         outputPos_cm = 0.0;
     } 
     else if (cycleTime < 0.24) {
         // Downstroke (compression phase)
-        outputPos_cm = 40.53 * (cycleTime - .12);
+        outputPos_cm = 41.6666667 * (cycleTime - .12);
     } 
     else if (cycleTime < 0.323) {
         // Top hold
@@ -56,7 +56,7 @@ double computeCompressionSetpoint() {
     } 
     else if (cycleTime < 0.56) {
         // Return stroke (release)
-        outputPos_cm = -21.15 * (cycleTime - 0.323);
+        outputPos_cm = -21.0965609 * (cycleTime - 0.323) - 5.0;
     }
 
     // Convert to meters if needed by the rest of your control code
