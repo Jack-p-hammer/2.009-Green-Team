@@ -54,8 +54,16 @@ double read_linear_encoder() {
   // Record reading from ToF Sensor
   if (ToFSensor.isRangeComplete()) {
     double reading = ToFSensor.readRange();
-    return reading - linearZeroPos; // always return zeroed value
+
+    // Sensor is in millimeters, want meters
+    reading /= 1000.0;
+
+    // always return zeroed value 
+    return reading - linearZeroPos; 
   }
+  // If no reading is available, return 0
+  // This is fine because sensor noise will prevent a real zero reading
+  return 0;
 }
 
 void zeroLinearEncoder() {
@@ -84,6 +92,7 @@ void readSensors() {
     rotaryPos = read_rotary_encoder(); // in revolutions
     // ToF sensor only updates at 30ish ms max, if nothing read keep prev. encoder value
     double tempPos = read_linear_encoder();
+    // read_linear_encoder returns zero if no new reading is available
     if(tempPos != 0) {
       linearPos = tempPos;
     }
