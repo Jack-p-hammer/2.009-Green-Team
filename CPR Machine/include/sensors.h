@@ -21,6 +21,9 @@ extern const int forceCalibOffset;
 // ToF Sensor
 extern Adafruit_VL53L0X ToFSensor;
 
+// Declare variables for sensor validation
+extern const float pinionRadius; // Meters
+
 // Sensor function definitions
 
 // Setup sensor pins and zero sensors in position
