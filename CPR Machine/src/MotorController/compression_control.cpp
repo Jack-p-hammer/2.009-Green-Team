@@ -42,7 +42,7 @@ double computeCompressionSetpoint() {
     // // 2 Hz wave, starting at 0 and going down 2 inches
     // // SI UNITS!!!!!!!!!!!!!!
     // return 0.0508/2*::cos(2*PI*2*currentTime / 1000.0) - 0.0508/2;
-    double computeCompressionSetpoint() {
+
     // Elapsed time in seconds since compression started
     double t = (millis() - compression_start_time) / 1000.0;
     double cycleTime = fmod(t, 0.56);  // One complete cycle = 0.56 s
@@ -71,6 +71,5 @@ double computeCompressionSetpoint() {
     double y_m = y_cm / 100.0;
 
     return y_m;
-}
 
 }
