@@ -80,7 +80,7 @@ double updateController(double setpoint_m) {
   return torqueOutput;
 }
 
-void sendCommands(double controlOutput) {
+void sendCommands(double controlOutput_Nm) {
     // TODO: This needs to be changed into torque control!!!
     Moteus::PositionMode::Command cmd;
 
