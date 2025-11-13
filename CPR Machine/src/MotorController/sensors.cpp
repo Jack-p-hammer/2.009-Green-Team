@@ -22,14 +22,14 @@ Adafruit_VL53L0X ToFSensor = Adafruit_VL53L0X();
 // Declare variables for sensor validation
 const float pinionRadius = 0.01; // Meters
 
-void initializeSensors() {
+bool initializeSensors() {
   // Set pins
   pinMode(FORCE_PIN, INPUT);
 
   // Initialize ToF Sensor
   if (!ToFSensor.begin()) {
     Serial.println(F("Failed to boot Time of Flight sensor"));
-    while(1);
+    return false;
   }
 
   // TODO: Do we want continuous readings?
@@ -39,6 +39,9 @@ void initializeSensors() {
   rotaryZeroPos = read_rotary_encoder();
   linearZeroPos = read_linear_encoder();
   // Force sensor is pre-calibrated
+
+  // Initialization successful
+  return true;
 }
 
 double read_force_sensor() {

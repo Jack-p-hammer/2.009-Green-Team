@@ -5,6 +5,9 @@
 #include <Arduino.h>
 #include <assert.h>
 
+// Macro to disable print statements when DEBUG_PRINT is not defined
+
+
 // State machine variables
 cprState currentState = STANDBY;
 cprState prevState = STANDBY;
@@ -35,6 +38,7 @@ void initializeMotor() {
     pinMode(LED_BUILTIN, OUTPUT);
 
     Serial.begin(115200);
+    // TODO: Remove this delay for M6
     while (!Serial) {}
     Serial.println(F("control_scheme: initializeMotor()"));
 

@@ -27,7 +27,7 @@ extern const float pinionRadius; // Meters
 // Sensor function definitions
 
 // Setup sensor pins and zero sensors in position
-void initializeSensors();
+bool initializeSensors();
 
 // Return force sensor reading
 double read_force_sensor();
