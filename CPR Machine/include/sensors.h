@@ -45,4 +45,5 @@ double read_rotary_encoder();
 void zeroRotaryEncoder();
 
 // Read all sensor values, zeroed, and store them in global variables
-void readSensors();
+// This also does error checking, so bool
+bool readSensors();

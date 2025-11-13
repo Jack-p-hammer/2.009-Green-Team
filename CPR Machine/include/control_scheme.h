@@ -17,7 +17,8 @@
 enum cprState {
     START_UP,
     ZEROING,
-    CALIBRATION_FAILED,
+    ZERO_FAILED,
+    WAIT_FOR_COMPRESSION_CONFIRMATION,
     COMPRESSIONS,
     PAUSED,
     KNEEL_FAILURE,
@@ -26,6 +27,8 @@ enum cprState {
 
 // State variables (declared here, defined in a single .cpp)
 extern cprState currentState;
+
+// Track previous state to handle state transitions
 extern cprState prevState;
 
 // Control Loop Timing variables
@@ -58,13 +61,40 @@ void initializeMotor();
 
 // Start Up
 bool verifyBatteryPercentage();
-bool displaySetupInstructions();
+void displaySetupInstructions();
+bool checkUserStartConfirmation(); // True if user begins device operation
 
 // Zeroing
-// See C
+// See zeroing_control.h
+
+// Zeroing failure
+void displayAlignmentConfirmation();
+bool checkUserAlignmentConfirmation();
+// TODO: Handle repeated entries to state having different behavior?
+
+// Waiting for compression confirmation
+void displayCompressionConfirmation();
+bool checkUserCompressionConfirmation();
+
+// Compressions
+// See compression_control.h
+
+// Paused
+void displayPauseMessage();
+bool isPaused(); // Returns true if the system is currently paused
+
+// Kneeling failure
+void displayKneelFailureMessage();
+bool isKneelingFailure(); // Returns true if the system is currently in kneeling failure state
+
+// Abort
+void displayAbortMessage();
+void updateAbort(); // Return motor to zero position ASAP
+
+// General functions
 
 // Retrieve new compression controller output from sensor data
-// Requires setpoint input to allow for use in both calib/comp modes
+// Requires setpoint input to allow for use in both zero/comp modes
 double updateController(double setpoint);
 
 // Send controller command to motor

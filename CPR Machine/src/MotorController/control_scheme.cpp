@@ -29,7 +29,7 @@ Moteus moteus(can, []() {
   Moteus::Options options;
   options.id = 1;
   return options;
-}());;
+}());
 
 void initializeMotor() {
     pinMode(LED_BUILTIN, OUTPUT);

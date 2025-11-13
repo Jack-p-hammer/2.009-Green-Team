@@ -90,7 +90,7 @@ void zeroRotaryEncoder() {
   rotaryZeroPos += reading; // Adjust zero position so that current value reads zero
 }
 
-void readSensors() {
+bool readSensors() {
     forceVal = read_force_sensor();
     rotaryPos = read_rotary_encoder(); // in revolutions
     // ToF sensor only updates at 30ish ms max, if nothing read keep prev. encoder value
@@ -108,11 +108,14 @@ void readSensors() {
     if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 0.1) {
       // TODO: Change from a print to state switch
       DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
+      return false;
     }
 
     // Change limit from 550 to whatever we decide is a good worst-case limit
     if (forceVal > 550) {
       // TODO: Change from a print to a state switch
       DPRINTLN("ALERT: OVER FORCE");
+      return false;
     }
+    return true;
 }
