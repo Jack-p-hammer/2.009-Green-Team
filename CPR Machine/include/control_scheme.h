@@ -15,10 +15,13 @@
 
 // State enumeration for state machine
 enum cprState {
-    STANDBY,
-    HOMING,
-    WAIT_FOR_CONFIRMATION,
-    COMPRESSIONS
+    START_UP,
+    ZEROING,
+    CALIBRATION_FAILED,
+    COMPRESSIONS,
+    PAUSED,
+    KNEEL_FAILURE,
+    ABORT
 };
 
 // State variables (declared here, defined in a single .cpp)
@@ -49,6 +52,16 @@ extern Moteus moteus;
 
 // Initializer for motor driver, CAN bus, and sensors
 void initializeMotor();
+
+// State Machine functions
+// TODO: Spin each state into its own file and header?
+
+// Start Up
+bool verifyBatteryPercentage();
+bool displaySetupInstructions();
+
+// Zeroing
+// See C
 
 // Retrieve new compression controller output from sensor data
 // Requires setpoint input to allow for use in both calib/comp modes

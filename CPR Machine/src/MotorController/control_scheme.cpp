@@ -6,8 +6,8 @@
 #include <assert.h>
 
 // State machine variables
-cprState currentState = STANDBY;
-cprState prevState = STANDBY;
+cprState currentState = START_UP;
+cprState prevState = START_UP;
 
 // Control Loop Timing variables
 uint32_t nextSendMillis = 0;
