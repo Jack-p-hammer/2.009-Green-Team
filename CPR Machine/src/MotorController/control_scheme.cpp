@@ -63,9 +63,9 @@ void initializeMotor() {
     Serial.println(F("Motor stopped"));
 }
 
-double updateController(double setpoint) {
+double updateController(double setpoint_m) {
   readSensors();
-  double error = setpoint - linearPos;
+  double error = setpoint_m - linearPos;
 
   // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
   // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
