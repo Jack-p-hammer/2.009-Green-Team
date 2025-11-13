@@ -3,7 +3,7 @@
 #include <ACAN2517FD.h>
 #include <Moteus.h>
 
-// Macro to disable print statements when DEBUG_PRINT is not defined
+// Macro to disable print statements when DEBUG_PRINT is not defined in PIO settings
 #ifdef DEBUG_PRINT
   // Variadic macros allow forwarding optional format/base args like: DPRINT(val, HEX)
   #define DPRINT(...) Serial.print(__VA_ARGS__)
