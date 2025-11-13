@@ -48,7 +48,7 @@ double computeCompressionSetpoint() {
     } 
     else if (cycleTime < 0.24) {
         // Downstroke (compression phase)
-        outputPos_cm = 40.53 * cycleTime;
+        outputPos_cm = 40.53 * (cycleTime - .12);
     } 
     else if (cycleTime < 0.323) {
         // Top hold
@@ -56,7 +56,7 @@ double computeCompressionSetpoint() {
     } 
     else if (cycleTime < 0.56) {
         // Return stroke (release)
-        outputPos_cm = -21.15 * cycleTime;
+        outputPos_cm = -21.15 * (cycleTime - 0.323);
     }
 
     // Convert to meters if needed by the rest of your control code
