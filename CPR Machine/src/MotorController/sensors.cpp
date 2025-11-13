@@ -3,13 +3,13 @@
 #include <Arduino.h>
 #include "Adafruit_VL53L0X.h"
 
-// EXAMPLE PINS (FIX LATER!!!)
+// TODO: EXAMPLE PINS (FIX LATER!!!)
 const int FORCE_PIN = A0;
 const int LINEAR_ENCODER_A = 2;
 const int LINEAR_ENCODER_B = 3;
 
-const int forceCalibRate = 1187.7440; // Calibration constants for force sensor
-const int forceCalibOffset = -548.7972;
+const double forceCalibRate = 1187.7440; // Calibration constants for force sensor
+const double forceCalibOffset = -548.7972;
 
 // Assume 0 initial conditions
 double linearPos = 0; double linearZeroPos = 0;
@@ -45,8 +45,8 @@ double read_force_sensor() {
   // Ensure that Voltage at the non-inverting terminal is less about 0.5V (voltage divider or sum shite)
   // If using a different reference voltage, recalibration is required
   int raw = analogRead(FORCE_PIN);
-  float voltage = raw * (5.0 / 1023.0);
-  float force = forceCalibRate * voltage + forceCalibOffset;
+  double voltage = raw * (5.0 / 1023.0);
+  double force = forceCalibRate * voltage + forceCalibOffset;
   return force; // should be value in newtons
 }
 
