@@ -15,8 +15,8 @@ extern double rotaryPos; extern double rotaryZeroPos;
 extern double forceVal;
 
 // Force Sensor Calibration Values
-extern const int forceCalibRate;
-extern const int forceCalibOffset;
+extern const double forceCalibRate;
+extern const double forceCalibOffset;
 
 // ToF Sensor
 extern Adafruit_VL53L0X ToFSensor;

@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include "Adafruit_VL53L0X.h"
 
-// TODO: EXAMPLE PINS (FIX LATER!!!)
+// FIXME: EXAMPLE PINS
 const int FORCE_PIN = A0;
 const int LINEAR_ENCODER_A = 2;
 const int LINEAR_ENCODER_B = 3;
