@@ -65,3 +65,29 @@ double computeCompressionSetpoint() {
 
     return outputPos_m;
 }
+
+bool checkPauseCommand() {
+    // TODO: Implement pause command check
+    return false;
+}
+
+void returnToZero() {
+    // For whatever reason, we need to go to our calibrated zero
+    // If pre-calibration, this defaults to position on startup
+
+        // We intend to send control frames every controller_period ms.
+    const auto time = millis();
+    if (nextSendMillis >= time) { return; }
+
+    nextSendMillis += controller_period;
+    loopCount++;
+
+    readSensors();
+    sendCommands(updateController(0));
+
+    // Only print our status every 25th cycle.
+    if (loopCount % 25 == 0) {
+        printStatus(nextSendMillis);
+    }
+
+}

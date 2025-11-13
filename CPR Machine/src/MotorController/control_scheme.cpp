@@ -6,8 +6,13 @@
 #include <assert.h>
 
 // State machine variables
+#ifndef COMPRESSION_TEST
 cprState currentState = START_UP;
 cprState prevState = START_UP;
+#else
+cprState currentState = COMPRESSIONS;
+cprState prevState = COMPRESSIONS;
+#endif
 
 // Control Loop Timing variables
 uint32_t nextSendMillis = 0;
@@ -66,7 +71,9 @@ void initializeMotor() {
 
 double updateController(double setpoint_m) {
   readSensors();
-  double error = setpoint_m - linearPos;
+
+  // Take setpoint relative to linear zero
+  double error = (setpoint_m - linearZeroPos) - linearPos;
 
   // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
   // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD

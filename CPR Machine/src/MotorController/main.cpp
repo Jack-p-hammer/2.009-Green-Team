@@ -3,6 +3,9 @@
 #include "compression_control.h"
 #include "zeroing_control.h"
 #include "sensors.h"
+#include "start_up.h"
+#include "interrupt_control.h"
+#include "wait_for_compression.h"
 #include <Moteus.h>
 #include <ACAN2517FD.h>
 
@@ -24,7 +27,7 @@ void loop() {
   switch (currentState) {
     // TODO: Implement state machine cases
     case START_UP:  
-      if(!verifyBatteryPercentage()) {
+      if(verifyBatteryPercentage()) {
         // Handle low battery scenario
         prevState = currentState;
         currentState = ABORT;

@@ -26,3 +26,6 @@ bool checkPauseCommand();
 
 // Return to zero position if paused or recoverable error
 void returnToZero(); // No need to
+
+// Check for user pause
+bool checkPauseCommand();
