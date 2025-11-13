@@ -5,9 +5,6 @@
 #include <Arduino.h>
 #include <assert.h>
 
-// Macro to disable print statements when DEBUG_PRINT is not defined
-
-
 // State machine variables
 cprState currentState = STANDBY;
 cprState prevState = STANDBY;
@@ -40,7 +37,7 @@ void initializeMotor() {
     Serial.begin(115200);
     // TODO: Remove this delay for M6
     while (!Serial) {}
-    Serial.println(F("control_scheme: initializeMotor()"));
+    DPRINTLN(F("control_scheme: initializeMotor()"));
 
     SPI.begin();
 
@@ -56,15 +53,15 @@ void initializeMotor() {
     const uint32_t errorCode = can.begin(settings, [] {can.isr();});
 
     if (errorCode != 0) {
-        Serial.print(F("CAN error 0x"));
-        Serial.println(errorCode, HEX);
+        DPRINT(F("CAN error 0x"));
+        DPRINTLN(errorCode, HEX);
         while (true) { delay(1000); }
     }
 
     // To clear any faults the controllers may have, we start by sending
     // a stop command to each.
     moteus.SetStop();
-    Serial.println(F("Motor stopped"));
+    DPRINTLN(F("Motor stopped"));
 }
 
 double updateController(double setpoint_m) {
@@ -105,17 +102,17 @@ void sendCommands(double controlOutput_Nm) {
 }
 
 void printStatus(uint32_t currentTime){
-    Serial.print(F("time "));
-    Serial.print(currentTime);
+    DPRINT(F("time "));
+    DPRINT(currentTime);
 
     auto print_moteus = [](const Moteus::Query::Result& q) {
-        Serial.print(static_cast<int>(q.mode));
-        Serial.print(F(" pos "));
-        Serial.print(q.position);
-        Serial.print(F(" vel "));
-        Serial.print(q.velocity);
+        DPRINT(static_cast<int>(q.mode));
+        DPRINT(F(" pos "));
+        DPRINT(q.position);
+        DPRINT(F(" vel "));
+        DPRINT(q.velocity);
     };
 
     print_moteus(moteus.last_result().values);
-    Serial.print(F(" / "));
+    DPRINT(F(" / "));
 }

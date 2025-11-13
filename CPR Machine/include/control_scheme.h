@@ -3,6 +3,16 @@
 #include <ACAN2517FD.h>
 #include <Moteus.h>
 
+// Macro to disable print statements when DEBUG_PRINT is not defined
+#ifdef DEBUG_PRINT
+  // Variadic macros allow forwarding optional format/base args like: DPRINT(val, HEX)
+  #define DPRINT(...) Serial.print(__VA_ARGS__)
+  #define DPRINTLN(...) Serial.println(__VA_ARGS__)
+#else
+  #define DPRINT(...) ((void)0)
+  #define DPRINTLN(...) ((void)0)
+#endif
+
 // State enumeration for state machine
 enum cprState {
     STANDBY,
@@ -26,12 +36,12 @@ extern uint32_t nextSendMillis;
 extern uint16_t loopCount;
 const uint8_t controller_period = 10;
 
-static const uint8_t MCP2517_SCK = 13 ; // SCK input of MCP2517
-static const uint8_t MCP2517_SDI =  11 ; // SDI input of MCP2517
-static const uint8_t MCP2517_SDO =  12 ; // SDO output of MCP2517
+static const uint8_t MCP2517_SCK = 9 ; // SCK input of MCP2517
+static const uint8_t MCP2517_SDI =  10 ; // SDI input of MCP2517
+static const uint8_t MCP2517_SDO =  11 ; // SDO output of MCP2517
 
-static const uint8_t MCP2517_CS  = 10 ; // CS input of MCP2517
-static const uint8_t MCP2517_INT = 9 ; // INT output of MCP2517
+static const uint8_t MCP2517_CS  = 17 ; // CS input of MCP2517
+static const uint8_t MCP2517_INT = 7 ; // INT output of MCP2517
 
 extern ACAN2517FD can;
 

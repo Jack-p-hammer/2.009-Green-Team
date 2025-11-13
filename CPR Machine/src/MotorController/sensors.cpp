@@ -28,7 +28,7 @@ bool initializeSensors() {
 
   // Initialize ToF Sensor
   if (!ToFSensor.begin()) {
-    Serial.println(F("Failed to boot Time of Flight sensor"));
+    DPRINTLN(F("Failed to boot Time of Flight sensor"));
     return false;
   }
 
@@ -107,12 +107,12 @@ void readSensors() {
     // must convert rotaryPos to radians
     if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 0.1) {
       // TODO: Change from a print to state switch
-      Serial.println("ALERT: LINEAR - ROTARY MISMATCH");
+      DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
     }
 
     // Change limit from 550 to whatever we decide is a good worst-case limit
     if (forceVal > 550) {
       // TODO: Change from a print to a state switch
-      Serial.println("ALERT: OVER FORCE");
+      DPRINTLN("ALERT: OVER FORCE");
     }
 }
