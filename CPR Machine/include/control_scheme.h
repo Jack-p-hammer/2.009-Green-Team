@@ -42,7 +42,7 @@ extern uint32_t nextSendMillis;
 extern uint16_t loopCount;
 const uint8_t controller_period = 10;
 
-static const uint8_t MCP2517_SCK = 14 ; // SCK input of MCP2517
+static const uint8_t MCP2517_SCK = 13 ; // SCK input of MCP2517
 static const uint8_t MCP2517_SDI =  11 ; // SDI input of MCP2517
 static const uint8_t MCP2517_SDO =  12 ; // SDO output of MCP2517
 

@@ -7,11 +7,16 @@
 #include "sensors.h"
 
 const double extensionStrokeLimit = 0.0254*10; // 10 inches, in meters
+long zeroing_start_time = 0;
+const double zeroingVelocity = 1.0; // Hz
 
 void initializeZeroing() {
     // Initialize outer loop
     nextSendMillis = millis();
     loopCount = 0;
+
+    // Record zeroing start time
+    zeroing_start_time = millis();
 
     // Uses same controller as compression mode, with linear decreasing setpoint
 }
@@ -43,7 +48,7 @@ bool updateZeroing() {
     }
 
     // Check for successful zeroing
-    // TODO: Refine zeroing setpoint
+    // TODO: Refine zeroing setpoint to be weight of plunger-rack system
     if(forceVal >= 10) {
         // Handle state change in main state machine, just return true for now
         return true;
@@ -62,7 +67,10 @@ bool updateZeroing() {
 }
 
 double computeZeroingSetpoint() {
-    // TODO: Refine zeroing setpoint
-    // For now, nothin'
-    return 0.0;
+    // Send ramp input from starting position
+    // Assume we start at zero position
+
+    double time_sec = (millis() - zeroing_start_time) / 1000.0;
+    double outputPos_m = zeroingVelocity * time_sec;
+    return outputPos_m;
 }

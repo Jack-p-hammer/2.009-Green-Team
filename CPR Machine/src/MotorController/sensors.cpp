@@ -35,6 +35,7 @@ bool initializeSensors() {
   // TODO: Do we want continuous readings?
   ToFSensor.startRangeContinuous();
 
+  // TODO: Ensure that plunger is in full retract position before we take initial zeros
   // Record zero positions
   rotaryZeroPos = read_rotary_encoder();
   linearZeroPos = read_linear_encoder();
