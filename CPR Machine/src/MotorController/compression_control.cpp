@@ -62,7 +62,7 @@ double computeCompressionSetpoint() {
     // Convert to meters if needed by the rest of your control code
     // SI UNITS!!!!!!!!!!!!!!
     double outputPos_m = outputPos_cm / 100.0;
-
+   
     return outputPos_m;
 }
 

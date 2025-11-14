@@ -24,6 +24,8 @@ void loop() {
   // State changes into failure states handled by error detection code
   // State changes into success states handled in main switch case
   // FIXME: if this turns out to be a bad idea
+  //DPRINTLN(currentState);
+
   switch (currentState) {
     // TODO: Implement state machine cases
     case START_UP:  

@@ -107,7 +107,7 @@ bool readSensors() {
     // must convert rotaryPos to radians
     if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 0.1) {
       // TODO: Change from a print to state switch
-      DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
+     // DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
       return false;
     }
 
