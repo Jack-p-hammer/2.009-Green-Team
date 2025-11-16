@@ -36,6 +36,11 @@ extern cprState prevState;
 extern uint32_t nextSendMillis;
 extern uint16_t loopCount;
 
+// Controller variables
+extern double prevCommand;
+extern double prevPrevCommand;
+extern double prevError;
+extern double prevPrevError;
 
 // Control Loop Timing variables
 extern uint32_t nextSendMillis;
@@ -57,10 +62,6 @@ extern Moteus moteus;
 void initializeMotor();
 
 // General functions
-
-// Retrieve new compression controller output from sensor data
-// Requires setpoint input to allow for use in both zero/comp modes
-double updateCompressionController(double setpoint);
 
 // Send controller command to motor
 void sendCommands(double controlOutput);

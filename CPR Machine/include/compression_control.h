@@ -17,6 +17,10 @@ void initializeCompressions();
 // Update motor controller with next compression control frame
 void updateCompressions();
 
+// Retrieve new compression controller output from sensor data
+// Requires setpoint input to allow for use in both zero/comp modes
+double updateCompressionController(double setpoint);
+
 // Returns rack position setpoint for current controller period,
 // relative to linear encoder zero position
 double computeCompressionSetpoint();
@@ -25,7 +29,7 @@ double computeCompressionSetpoint();
 bool checkPauseCommand();
 
 // Return to zero position if paused or recoverable error
-void returnToZero(); // No need to
+void returnToCompressionZero(); // No need to
 
 // Check for user pause
 bool checkPauseCommand();

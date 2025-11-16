@@ -99,7 +99,7 @@ void loop() {
       break;
     case KNEEL_FAILURE:
       // Command zero setpoint, don't necessarily need to get there before re-kneel
-      returnToZero(); 
+      returnToCompressionZero(); 
       displayKneelFailureMessage();
 
       // If they re-kneel, get back to rib breaking

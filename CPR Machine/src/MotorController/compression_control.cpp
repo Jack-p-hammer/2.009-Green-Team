@@ -5,8 +5,13 @@
 #include <Moteus.h>
 #include "control_scheme.h"
 #include "sensors.h"
+#include <assert.h>
 
 long compression_start_time = 0;
+
+// Lag controller gains
+double errorGain = 257.6539;//-117.9813; // This is the constant term of the TF numerator, with sign
+double prevErrorGain = -173.3746; //244.9501; // This is the z term of the TF numerator
 
 void initializeCompressions() {
     // Initialize outer loop
@@ -26,7 +31,7 @@ void updateCompressions() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateController(computeCompressionSetpoint()));
+    sendCommands(updateCompressionController(computeCompressionSetpoint()));
 
     // Only print our status every 25th cycle.
     if (loopCount % 25 == 0) {
@@ -71,11 +76,11 @@ bool checkPauseCommand() {
     return false;
 }
 
-void returnToZero() {
+void returnToCompressionZero() {
     // For whatever reason, we need to go to our calibrated zero
     // If pre-calibration, this defaults to position on startup
 
-        // We intend to send control frames every controller_period ms.
+    // We intend to send control frames every controller_period ms.
     const auto time = millis();
     if (nextSendMillis >= time) { return; }
 
@@ -83,11 +88,41 @@ void returnToZero() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateController(0));
+    sendCommands(updateCompressionController(0));
 
     // Only print our status every 25th cycle.
     if (loopCount % 25 == 0) {
         printStatus(nextSendMillis);
     }
 
+}
+
+double updateCompressionController(double setpoint_m) {
+  readSensors();
+
+  // Take setpoint relative to linear zero
+  //double error = (setpoint_m - linearZeroPos) - linearPos;
+  double error = setpoint_m - rotaryPos*(2*PI)*pinionRadius;
+
+  // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
+  // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
+  assert(controller_period == 10);
+  double torqueOutput = errorGain*error + prevErrorGain*prevError + prevCommand;
+
+  // Saturate the control effort
+  torqueOutput = constrain(torqueOutput, -5, 5);
+
+  prevCommand = torqueOutput;
+  prevError = error;
+ 
+  DPRINT(">");
+  DPRINT("Setpoint:"); DPRINT(setpoint_m);
+  DPRINT(",");  
+  DPRINT("ERROR:"); DPRINT(error);
+  DPRINT(",");
+  DPRINT("ROTARY POS:"); DPRINT(rotaryPos);
+  DPRINT(",");
+  DPRINT("TORQUE:"); DPRINTLN(torqueOutput);
+
+  return torqueOutput;
 }

@@ -5,6 +5,16 @@
 #include <Moteus.h>
 #include "control_scheme.h"
 #include "sensors.h"
+#include <assert.h>
+
+
+double current_error_gain = 68.58;
+
+double prev_command_gain = 1.002;
+double prev_error_gain = -113.9;
+
+double prev_prev_command_gain = -.00201;
+double prev_prev_error_gain = 50.2;
 
 const double extensionStrokeLimit = 0.0254*10; // 10 inches, in meters
 long zeroing_start_time = 0;
@@ -55,7 +65,7 @@ bool updateZeroing() {
     }
 
     // Send control command
-    sendCommands(updateCompressionController(computeZeroingSetpoint()));
+    sendCommands(updateZeroingController(computeZeroingSetpoint()));
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
@@ -64,6 +74,57 @@ bool updateZeroing() {
 
     // No errors, return false because setpoint not found
     return false;
+}
+
+void returnToPreZeroingZero() {
+    // For whatever reason, we need to go to our uncalibrated zero
+    // If pre-calibration, this defaults to position on startup
+
+    // We intend to send control frames every controller_period ms.
+    const auto time = millis();
+    if (nextSendMillis >= time) { return; }
+
+    nextSendMillis += controller_period;
+    loopCount++;
+
+    readSensors();
+    sendCommands(updateZeroingController(0));
+
+    // Only print our status every 25th cycle.
+    if (loopCount % 25 == 0) {
+        printStatus(nextSendMillis);
+    }
+
+}
+double updateZeroingController(double setpoint_m) {
+  readSensors();
+
+  // TODO: Update so that it references absolute 0, not zeroed zero
+
+  // Take setpoint relative to linear zero
+  //double error = (setpoint_m - linearZeroPos) - linearPos;
+  double error = setpoint_m - rotaryPos*(2*PI)*pinionRadius;
+
+  // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
+  // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
+  assert(controller_period == 10);
+
+  // Different controller setup --> no chest in the way
+  double torqueOutput = current_error_gain*error
+                      + prev_command_gain*prevCommand + prev_error_gain*prevError 
+                      + prev_prev_command_gain*prevPrevCommand + prev_prev_error_gain*prevPrevError; 
+                      
+
+  // Saturate the control effort
+  torqueOutput = constrain(torqueOutput, -5, 5);
+
+  prevPrevCommand = prevCommand;
+  prevPrevError = prevError;
+
+  prevCommand = torqueOutput;
+  prevError = error;
+
+  return torqueOutput;
 }
 
 double computeZeroingSetpoint() {
