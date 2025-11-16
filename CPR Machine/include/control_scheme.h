@@ -60,7 +60,7 @@ void initializeMotor();
 
 // Retrieve new compression controller output from sensor data
 // Requires setpoint input to allow for use in both zero/comp modes
-double updateController(double setpoint);
+double updateCompressionController(double setpoint);
 
 // Send controller command to motor
 void sendCommands(double controlOutput);

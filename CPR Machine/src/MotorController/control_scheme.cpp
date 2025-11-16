@@ -23,8 +23,8 @@ double prevCommand = 0;
 double prevError = 0;
 
 // Lag controller gains
-double errorGain = -173.3746;//-117.9813; // This is the constant term of the TF numerator, with sign
-double prevErrorGain = 257.6539; //244.9501; // This is the z term of the TF numerator
+double errorGain = 257.6539;//-117.9813; // This is the constant term of the TF numerator, with sign
+double prevErrorGain = -173.3746; //244.9501; // This is the z term of the TF numerator
 
 
 // All Zeroing controller vars
@@ -96,7 +96,7 @@ void initializeMotor() {
     DPRINTLN(F("Motor stopped"));
 }
 
-double updateController(double setpoint_m) {
+double updateCompressionController(double setpoint_m) {
   readSensors();
 
   // Take setpoint relative to linear zero
@@ -106,7 +106,7 @@ double updateController(double setpoint_m) {
   // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
   // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
   assert(controller_period == 10);
-  double torqueOutput = prevCommand - errorGain*error - prevErrorGain*prevError;
+  double torqueOutput = errorGain*error + prevErrorGain*prevError + prevCommand;
 
   // Saturate the control effort
   torqueOutput = constrain(torqueOutput, -5, 5);

@@ -55,7 +55,7 @@ bool updateZeroing() {
     }
 
     // Send control command
-    sendCommands(updateController(computeZeroingSetpoint()));
+    sendCommands(updateCompressionController(computeZeroingSetpoint()));
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
