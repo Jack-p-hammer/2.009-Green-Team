@@ -26,6 +26,22 @@ double prevError = 0;
 double errorGain = -173.3746;//-117.9813; // This is the constant term of the TF numerator, with sign
 double prevErrorGain = 257.6539; //244.9501; // This is the z term of the TF numerator
 
+
+// All Zeroing controller vars
+double prev_prev_Command = 0;
+double prev_prev_Error = 0;
+
+double current_error_gain = 68.58;
+
+double prev_command_gain = 1.002;
+double prev_error_gain = -113.9;
+
+double prev_prev_command_gain = -.00201;
+double prev_prev_error_gain = 50.2;
+
+
+
+
 // Driver object
 ACAN2517FD can(MCP2517_CS, SPI, MCP2517_INT);
 
@@ -35,6 +51,17 @@ Moteus moteus(can, []() {
   options.id = 1;
   return options;
 }());
+
+// Initialize PositionMode::Format at global scope using a lambda so the
+// assignment is performed during initialization rather than as a standalone
+// statement (which is invalid at file scope).
+const Moteus::PositionMode::Format positionModeOptions = []() {
+  Moteus::PositionMode::Format options;
+  options.feedforward_torque = Moteus::kFloat;
+  options.kd_scale = Moteus::kFloat;
+  options.kp_scale = Moteus::kFloat;
+  return options;
+}();
 
 void initializeMotor() {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -87,10 +114,44 @@ double updateController(double setpoint_m) {
   prevCommand = torqueOutput;
   prevError = error;
  
-  DPRINT("Setpoint: "); DPRINT(setpoint_m);
-  DPRINT(" ERROR: "); DPRINT(error);
-  DPRINT(" ROTARY POS: "); DPRINT(rotaryPos);
-  DPRINT(" TORQUE: "); DPRINTLN(torqueOutput);
+  DPRINT(">");
+  DPRINT("Setpoint:"); DPRINT(setpoint_m);
+  DPRINT(",");  
+  DPRINT("ERROR:"); DPRINT(error);
+  DPRINT(",");
+  DPRINT("ROTARY POS:"); DPRINT(rotaryPos);
+  DPRINT(",");
+  DPRINT("TORQUE:"); DPRINTLN(torqueOutput);
+
+  return torqueOutput;
+}
+
+
+double updateControllerZeroing(double setpoint_m) {
+  readSensors();
+
+  // Take setpoint relative to linear zero
+  //double error = (setpoint_m - linearZeroPos) - linearPos;
+  double error = setpoint_m - rotaryPos*(2*PI)*pinionRadius;
+
+  // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
+  // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
+  assert(controller_period == 10);
+
+  // Different controller setup --> no chest in the way
+  double torqueOutput = current_error_gain*error
+                      + prev_command_gain*prevCommand + prev_error_gain*prevError 
+                      + prev_prev_command_gain*prev_prev_Command + prev_prev_error_gain*prev_prev_Error; 
+                      
+
+  // Saturate the control effort
+  torqueOutput = constrain(torqueOutput, -5, 5);
+
+  prev_prev_Command = prevCommand;
+  prev_prev_Error = prevError;
+
+  prevCommand = torqueOutput;
+  prevError = error;
 
   return torqueOutput;
 }
@@ -111,14 +172,16 @@ void sendCommands(double controlOutput_Nm) {
     //printStatus(millis());
     // No feedforward velocity, uncomment if above is commented
     // cmd.velocity = NAN;
-    cmd.position = NAN;
+    // ------------------------- old torque control code ------------------------- (doesnt work)
+    cmd.position = std::numeric_limits<double>::quiet_NaN();
     cmd.velocity = 0.0;
     cmd.kp_scale = 0.0;
     cmd.kd_scale = 0.0;
 
     cmd.feedforward_torque = controlOutput_Nm;
 
-    moteus.SetPosition(cmd);
+    moteus.SetPosition(cmd, &positionModeOptions);
+    // New attempt
 }
 
 void printStatus(uint32_t currentTime){

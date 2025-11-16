@@ -56,7 +56,7 @@ double computeCompressionSetpoint() {
     } 
     else if (cycleTime < 0.56) {
         // Return stroke (release)
-        outputPos_cm = -21.0965609 * (cycleTime - 0.323) - 5.0;
+        outputPos_cm = -21.0965609 * (cycleTime - 0.323) + 5.0;
     }
 
     // Convert to meters if needed by the rest of your control code
