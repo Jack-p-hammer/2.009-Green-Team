@@ -26,7 +26,11 @@ bool initializeSensors() {
   // Set pins
   pinMode(FORCE_PIN, INPUT);
 
-  // Initialize ToF Sensor
+  // TODO: Ensure that plunger is in full retract position before we take initial zeros
+  // Record zero positions
+  rotaryZeroPos = read_rotary_encoder();
+
+    // Initialize ToF Sensor
   if (!ToFSensor.begin()) {
     DPRINTLN(F("Failed to boot Time of Flight sensor"));
     return false;
@@ -34,10 +38,7 @@ bool initializeSensors() {
 
   // TODO: Do we want continuous readings?
   ToFSensor.startRangeContinuous();
-
-  // TODO: Ensure that plunger is in full retract position before we take initial zeros
-  // Record zero positions
-  rotaryZeroPos = read_rotary_encoder();
+  
   linearZeroPos = read_linear_encoder();
   // Force sensor is pre-calibrated
 
@@ -63,7 +64,9 @@ double read_linear_encoder() {
     reading /= 1000.0;
 
     // always return zeroed value 
-    return reading - linearZeroPos; 
+    // return reading - linearZeroPos; 
+    // TODO: DOnt return rotaryPos again
+    return 2*PI*rotaryPos*pinionRadius;
   }
   // If no reading is available, return 0
   // This is fine because sensor noise will prevent a real zero reading
@@ -92,7 +95,8 @@ void zeroRotaryEncoder() {
 }
 
 bool readSensors() {
-    forceVal = read_force_sensor();
+    // forceVal = read_force_sensor();
+    forceVal = 5; // TEMP FOR TESTING
     rotaryPos = read_rotary_encoder(); // in revolutions
     // ToF sensor only updates at 30ish ms max, if nothing read keep prev. encoder value
     double tempPos = read_linear_encoder();
@@ -108,7 +112,7 @@ bool readSensors() {
     // must convert rotaryPos to radians
     if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 0.1) {
       // TODO: Change from a print to state switch
-     // DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
+      DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
       return false;
     }
 

@@ -21,7 +21,9 @@ void loop() {
   // State changes into failure states handled by error detection code
   // State changes into success states handled in main switch case
   // FIXME: if this turns out to be a bad idea
-  //DPRINTLN(currentState);
+  // if(currentState != ABORT) {
+  //   DPRINT(currentState); DPRINT(" | "); DPRINTLN(linearPos);
+  // }
 
   switch (currentState) {
     case START_UP:  
@@ -53,12 +55,18 @@ void loop() {
         prevState = currentState;
         currentState = WAIT_FOR_COMPRESSION_CONFIRMATION;
       }
-
+      
+      if(currentState == ZEROING) {
+        prevState = currentState;
+      }
       break;
     case ZERO_FAILED:
         // TODO: Handle different behavior for repeated zeroing failures
         // For now, treat as abort
         prevState = currentState;
+        DPRINT("ZEROING FAILED, ABORTING");
+        DPRINT(" | ROTARY POS: "); DPRINT(rotaryPos);
+        DPRINT(" | LINEAR POS: "); DPRINTLN(linearPos);
         currentState = ABORT;
         
         break;
@@ -86,6 +94,9 @@ void loop() {
         currentState = PAUSED;
       }
 
+      if(currentState == COMPRESSIONS) {
+        prevState = currentState;
+      }
       break;
     case PAUSED:
       displayPauseMessage();
@@ -113,6 +124,11 @@ void loop() {
       // Shit's fucked, get plunger out of there and tell people to do manual compressions
       displayAbortMessage();
       updateAbort();
+
+      if(prevState != currentState) {
+        DPRINTLN("ABORT");
+        prevState = currentState;
+      }
       
       // No getting out of this one, don't change state
       // TODO: Handle reset after use

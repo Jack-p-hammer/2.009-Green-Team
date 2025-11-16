@@ -18,7 +18,7 @@ double prev_prev_error_gain = 50.2;
 
 const double extensionStrokeLimit = 0.0254*10; // 10 inches, in meters
 long zeroing_start_time = 0;
-const double zeroingVelocity = 1.0; // Hz
+const double zeroingVelocity = 0.02; // m/s
 
 void initializeZeroing() {
     // Initialize outer loop
@@ -27,8 +27,6 @@ void initializeZeroing() {
 
     // Record zeroing start time
     zeroing_start_time = millis();
-
-    // Uses same controller as compression mode, with linear decreasing setpoint
 }
 
 bool updateZeroing() {
@@ -59,17 +57,31 @@ bool updateZeroing() {
 
     // Check for successful zeroing
     // TODO: Refine zeroing setpoint to be weight of plunger-rack system
+    
+
     if(forceVal >= 10) {
         // Handle state change in main state machine, just return true for now
         return true;
     }
 
     // Send control command
-    sendCommands(updateZeroingController(computeZeroingSetpoint()));
+    Moteus::PositionMode::Command cmd;
+
+    cmd.position = std::numeric_limits<double>::quiet_NaN();
+    cmd.velocity = zeroingVelocity/(2*PI*pinionRadius); // in revolutions per second
+
+    moteus.SetPosition(cmd);
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
         printStatus(nextSendMillis);
+                
+        DPRINT(">");
+        DPRINT("Linear Pos:"); DPRINT(linearPos);
+        DPRINT(",");  
+        DPRINT("Rotary Pos:"); DPRINT(rotaryPos);
+        DPRINT(",");
+        DPRINT(" | STATE: "); DPRINTLN(currentState);
     }
 
     // No errors, return false because setpoint not found
@@ -133,5 +145,10 @@ double computeZeroingSetpoint() {
 
     double time_sec = (millis() - zeroing_start_time) / 1000.0;
     double outputPos_m = zeroingVelocity * time_sec;
+
+    // limit outputPos to max stroke
+    if(outputPos_m > extensionStrokeLimit) {
+        outputPos_m = extensionStrokeLimit;
+    }
     return outputPos_m;
 }

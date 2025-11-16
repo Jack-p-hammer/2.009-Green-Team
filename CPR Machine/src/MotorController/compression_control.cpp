@@ -122,7 +122,8 @@ double updateCompressionController(double setpoint_m) {
   DPRINT(",");
   DPRINT("ROTARY POS:"); DPRINT(rotaryPos);
   DPRINT(",");
-  DPRINT("TORQUE:"); DPRINTLN(torqueOutput);
+  DPRINT("TORQUE:"); DPRINT(torqueOutput);
+  DPRINT(" | STATE: "); DPRINTLN(currentState);
 
   return torqueOutput;
 }

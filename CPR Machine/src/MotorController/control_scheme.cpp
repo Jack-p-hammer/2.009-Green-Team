@@ -6,12 +6,15 @@
 #include <assert.h>
 
 // State machine variables
-#ifndef COMPRESSION_TEST
-cprState currentState = START_UP;
-cprState prevState = START_UP;
-#else
+#if defined(COMPRESSION_TEST)
 cprState currentState = COMPRESSIONS;
 cprState prevState = COMPRESSIONS;
+#elif defined(ZEROING_TEST)
+cprState currentState = ZEROING;
+cprState prevState = START_UP;
+#else
+cprState currentState = START_UP;
+cprState prevState = START_UP;
 #endif
 
 // Control Loop Timing variables
@@ -83,19 +86,6 @@ void sendCommands(double controlOutput_Nm) {
     // TODO: This needs to be changed into torque control!!!
     Moteus::PositionMode::Command cmd;
 
-    // Send sine wave position command at 120 bpm with 2 inch amplitude
-    // Positive rotation is down
-    //cmd.position = ((0.0254*2)/2 * ::cos(2*PI*(2/1000.0) * millis()) + (0.0254*2)/2)/pinionRadius;
-
-    // Velocity feedforward, derivative of position
-    // Supposed to help on high freqs, see if it matters for us
-    //cmd.velocity = (-2*PI*(2/1000.0) * (0.0254*2)/2 * ::sin(2*PI*(2/1000.0) * millis()))/pinionRadius;
-    
-    //DPRINTLN(read_rotary_encoder());
-    //printStatus(millis());
-    // No feedforward velocity, uncomment if above is commented
-    // cmd.velocity = NAN;
-    // ------------------------- old torque control code ------------------------- (doesnt work)
     cmd.position = std::numeric_limits<double>::quiet_NaN();
     cmd.velocity = 0.0;
     cmd.kp_scale = 0.0;
@@ -116,7 +106,7 @@ void printStatus(uint32_t currentTime){
         DPRINT(F(" pos "));
         DPRINT(q.position);
         DPRINT(F(" vel "));
-        DPRINT(q.velocity);
+        DPRINTLN(q.velocity);
     };
 
     print_moteus(moteus.last_result().values);
