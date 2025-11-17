@@ -2,6 +2,7 @@
 #include "control_scheme.h"
 #include <Arduino.h>
 #include "Adafruit_VL53L0X.h"
+#include <Adafruit_BNO08x.h>
 
 // FIXME: EXAMPLE PINS
 const int FORCE_PIN = A0;
@@ -22,6 +23,14 @@ Adafruit_VL53L0X ToFSensor = Adafruit_VL53L0X();
 // Declare variables for sensor validation
 const float pinionRadius = 0.01; // Meters
 
+// IMU Setup
+Adafruit_BNO08x IMU = Adafruit_BNO08x();
+sh2_SensorValue_t imuValue;
+
+float imu_ax = 0;   // m/s^2
+float imu_ay = 0;
+float imu_az = 0;
+
 bool initializeSensors() {
   // Set pins
   pinMode(FORCE_PIN, INPUT);
@@ -41,6 +50,21 @@ bool initializeSensors() {
   
   linearZeroPos = read_linear_encoder();
   // Force sensor is pre-calibrated
+
+  // ----- Initialize BNO085 IMU -----
+  if (!IMU.begin_I2C()) {
+    DPRINTLN(F("Failed to initialize BNO085 IMU"));
+    return false;
+  }
+
+  // Enable linear acceleration reports (gravity removed) at ~100 Hz
+  if (!IMU.enableReport(SH2_LINEAR_ACCELERATION, 10000)) { 
+    // 10,000 µs = 10 ms = 100 Hz update rate
+    DPRINTLN(F("Could not enable linear acceleration report"));
+    return false;
+  }
+
+  DPRINTLN(F("BNO085 IMU initialized"));
 
   // Initialization successful
   return true;
@@ -73,6 +97,26 @@ double read_linear_encoder() {
   return 0;
 }
 
+bool read_imu() {
+  sh2_SensorValue_t sensorValue;
+
+  // Try to get a new event (non-blocking)
+  if (!IMU.getSensorEvent(&sensorValue)) {
+    return false;  // No new IMU data yet
+  }
+
+  // We only care about linear acceleration
+  if (sensorValue.sensorId == SH2_LINEAR_ACCELERATION) {
+    imu_ax = sensorValue.un.linearAcceleration.x;
+    imu_ay = sensorValue.un.linearAcceleration.y;
+    imu_az = sensorValue.un.linearAcceleration.z;
+    return true;
+  }
+
+  return false;
+}
+
+
 void zeroLinearEncoder() {
   // Go through existing read function to get zero pos
   double reading = read_linear_encoder();
@@ -100,6 +144,8 @@ bool readSensors() {
     rotaryPos = read_rotary_encoder(); // in revolutions
     // ToF sensor only updates at 30ish ms max, if nothing read keep prev. encoder value
     double tempPos = read_linear_encoder();
+    read_imu();
+
     // read_linear_encoder returns zero if no new reading is available
     if(tempPos != 0) {
       linearPos = tempPos;

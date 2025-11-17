@@ -47,3 +47,8 @@ void zeroRotaryEncoder();
 // Read all sensor values, zeroed, and store them in global variables
 // This also does error checking, so bool
 bool readSensors();
+
+// IMU Sensor
+// Return IMU reading (T/F), roll, pitch, yaw in degrees
+bool read_imu();
+extern float imu_ax, imu_ay, imu_az;
