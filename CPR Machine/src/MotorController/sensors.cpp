@@ -31,6 +31,12 @@ float imu_ax = 0;   // m/s^2
 float imu_ay = 0;
 float imu_az = 0;
 
+// Rack & pinion dimensions
+double rackLength = 12.925*0.0254; // double check this (inches converted to meters)
+double plungerLength = 3.0*0.0254; // double check this (inches converted to meters)
+double bushingLength = 4.355*0.0254; // double check this (inches converted to meters)
+
+
 bool initializeSensors() {
   // Set pins
   pinMode(FORCE_PIN, INPUT);
@@ -91,7 +97,12 @@ double read_linear_encoder() {
     // return reading - linearZeroPos; 
     // TODO: DOnt return rotaryPos again
     return 2*PI*rotaryPos*pinionRadius;
+
+    // Return converted value of depth of rack
+    //return (rackLength + plungerLength) - reading - bushingLength - linearZeroPos;
   }
+
+
   // If no reading is available, return 0
   // This is fine because sensor noise will prevent a real zero reading
   return 0;
