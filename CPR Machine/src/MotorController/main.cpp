@@ -10,6 +10,7 @@
 #include <ACAN2517FD.h>
 
 void setup() {
+  Wire.begin();  // Start I2C
   // Do everything that needs to occur on power up
   initializeMotor();
   initializeSensors();

@@ -20,6 +20,7 @@ double forceVal = 0;
 // Declare ToF Sensor
 Adafruit_VL53L0X ToFSensor = Adafruit_VL53L0X();
 
+
 // Declare variables for sensor validation
 const float pinionRadius = 0.01; // Meters
 
@@ -87,19 +88,21 @@ double read_force_sensor() {
 
 double read_linear_encoder() {
   // Record reading from ToF Sensor
-  if (ToFSensor.isRangeComplete()) {
-    double reading = ToFSensor.readRange();
+  VL53L0X_RangingMeasurementData_t measure;
+    
+  ToFSensor.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
 
-    // Sensor is in millimeters, want meters
-    reading /= 1000.0;
+  if (measure.RangeStatus != 4) {  // phase failures have incorrect data
+    double reading = measure.RangeMilliMeter/1000.0; // convert millimeters to meters
+    //Serial.print("Distance (mm): "); Serial.println(measure.RangeMilliMeter);
 
     // always return zeroed value 
     // return reading - linearZeroPos; 
     // TODO: DOnt return rotaryPos again
-    return 2*PI*rotaryPos*pinionRadius;
+    //return 2*PI*rotaryPos*pinionRadius; // comment this out later
 
     // Return converted value of depth of rack
-    //return (rackLength + plungerLength) - reading - bushingLength - linearZeroPos;
+    return (rackLength + plungerLength) - reading - bushingLength - linearZeroPos;
   }
 
 
