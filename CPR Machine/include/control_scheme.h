@@ -47,12 +47,12 @@ extern uint32_t nextSendMillis;
 extern uint16_t loopCount;
 const uint8_t controller_period = 10;
 
-static const uint8_t MCP2517_SCK = 27;//13 ; // SCK input of MCP2517
-static const uint8_t MCP2517_SDI =  26; //11 ; // SDI input of MCP2517
-static const uint8_t MCP2517_SDO =  39; //12 ; // SDO output of MCP2517
+static const uint8_t MCP2517_SCK = 13;//27;//13 ; // SCK input of MCP2517
+static const uint8_t MCP2517_SDI =  11;//26; //11 ; // SDI input of MCP2517
+static const uint8_t MCP2517_SDO =  12;//39; //12 ; // SDO output of MCP2517
 
-static const uint8_t MCP2517_CS  = 38; //10 ; // CS input of MCP2517
-static const uint8_t MCP2517_INT = 28; //9 ; // INT output of MCP2517
+static const uint8_t MCP2517_CS  = 10;//38; //10 ; // CS input of MCP2517
+static const uint8_t MCP2517_INT = 9;//28; //9 ; // INT output of MCP2517
 
 extern ACAN2517FD can;
 

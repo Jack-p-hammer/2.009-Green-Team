@@ -1,14 +1,11 @@
 #include <Arduino.h>
 
 #include <Adafruit_RA8875.h>
-
 #include <SPI.h>
 #include <Wire.h>
 #include <SD.h>
 #include <Adafruit_GFX.h>    // Core graphics library
-#include "Adafruit_RA8875.h"
 #include <Adafruit_STMPE610.h>
-
 #include "sd_to_display.h"
 
 const int SD_CHIP_SELECT = BUILTIN_SDCARD;  // No external CS pin needed
@@ -18,7 +15,7 @@ const int SD_CHIP_SELECT = BUILTIN_SDCARD;  // No external CS pin needed
 // Connect MISO to UNO Digital #12 (Hardware SPI MISO)
 // Connect MOSI to UNO Digital #11 (Hardware SPI MOSI)
 #define RA8875_INT 3
-#define RA8875_CS 10
+#define RA8875_CS 37//10
 #define RA8875_RESET 9
 
 
@@ -66,7 +63,7 @@ void showCurrentFrame() {
   Serial.print(currentIndex);
   Serial.print(" -> ");
   Serial.println(filename);
-
+// 
   if (SD.exists(filename)) {
     bmpDraw(&tft, filename, 0, 0);
   } else {
@@ -76,8 +73,7 @@ void showCurrentFrame() {
   }
 }
 
-void setup() {
-Serial.begin(9600);
+void HMI_setup() {
 
   // ---- Button setup ----
   pinMode(BUTTON_PIN, INPUT_PULLUP);   // button to GND, so LOW = pressed
@@ -129,7 +125,7 @@ Serial.begin(9600);
 
 }
 
-void loop() {
+void HMI_loop() {
      unsigned long now = millis();
 
   // ========== 1) Handle button with debounce ==========

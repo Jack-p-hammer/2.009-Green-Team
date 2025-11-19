@@ -8,12 +8,14 @@
 #include "wait_for_compression.h"
 #include <Moteus.h>
 #include <ACAN2517FD.h>
+#include "HMI_main.h"
 
 void setup() {
   Wire.begin();  // Start I2C
   // Do everything that needs to occur on power up
   initializeMotor();
   initializeSensors();
+  //HMI_setup();
   // TODO: Does anything else need to happen here?
 }
 
@@ -26,17 +28,19 @@ void loop() {
   //   DPRINT(currentState); DPRINT(" | "); DPRINTLN(linearPos);
   // }
 
+  //HMI_loop();
+
   switch (currentState) {
     case START_UP:  
-      if(verifyBatteryPercentage()) {
-        // Handle low battery scenario
-        prevState = currentState;
-        currentState = ABORT;
-      }
+      // if(verifyBatteryPercentage()) {
+      //   // Handle low battery scenario
+      //   prevState = currentState;
+      //   currentState = ABORT;
+      // }
 
-      displaySetupInstructions();
+      //displaySetupInstructions();
 
-      if(checkUserStartConfirmation()) {
+      if(true/*checkUserStartConfirmation()*/) {
         // User has pressed start, get started
         prevState = currentState;
         currentState = ZEROING;

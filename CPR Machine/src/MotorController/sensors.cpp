@@ -61,14 +61,14 @@ bool initializeSensors() {
   // ----- Initialize BNO085 IMU -----
   if (!IMU.begin_I2C()) {
     DPRINTLN(F("Failed to initialize BNO085 IMU"));
-    return false;
+    return true; //changed from false
   }
 
   // Enable linear acceleration reports (gravity removed) at ~100 Hz
   if (!IMU.enableReport(SH2_LINEAR_ACCELERATION, 10000)) { 
     // 10,000 µs = 10 ms = 100 Hz update rate
     DPRINTLN(F("Could not enable linear acceleration report"));
-    return false;
+    return true; //changed from false
   }
 
   DPRINTLN(F("BNO085 IMU initialized"));
@@ -99,10 +99,10 @@ double read_linear_encoder() {
     // always return zeroed value 
     // return reading - linearZeroPos; 
     // TODO: DOnt return rotaryPos again
-    //return 2*PI*rotaryPos*pinionRadius; // comment this out later
+    return 2*PI*rotaryPos*pinionRadius; // comment this out later
 
     // Return converted value of depth of rack
-    return (rackLength + plungerLength) - reading - bushingLength - linearZeroPos;
+   // return (rackLength + plungerLength) - reading - bushingLength - linearZeroPos;
   }
 
 
@@ -172,17 +172,17 @@ bool readSensors() {
     // must convert rotaryPos to radians
     if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 0.1) {
       // TODO: update state machine
-      currentState = ABORT;
+      //currentState = ABORT; uncomment later!!!
       DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
-      return false;
+      return true; // change back to false; later
     }
 
     // Change limit from 550 to whatever we decide is a good worst-case limit
     if (forceVal > 550) {
       // TODO: update state machine
-      currentState = ABORT;
+      //currentState = ABORT; uncomment later!!!
       DPRINTLN("ALERT: OVER FORCE");
-      return false;
+      return true; //change back to false later
     }
     return true;
 }

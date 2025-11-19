@@ -45,7 +45,7 @@ void displaySetupInstructions() {
     // Connect MISO to UNO Digital #12 (Hardware SPI MISO)
     // Connect MOSI to UNO Digital #11 (Hardware SPI MOSI)
     #define RA8875_INT 3
-    #define RA8875_CS 10
+    #define RA8875_CS 37//10
     #define RA8875_RESET 9
 
 
