@@ -168,14 +168,16 @@ bool readSensors() {
     // Change tolerance based on linear encoder precision
     // must convert rotaryPos to radians
     if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 0.1) {
-      // TODO: Change from a print to state switch
+      // TODO: update state machine
+      currentState = ABORT;
       DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
       return false;
     }
 
     // Change limit from 550 to whatever we decide is a good worst-case limit
     if (forceVal > 550) {
-      // TODO: Change from a print to a state switch
+      // TODO: update state machine
+      currentState = ABORT;
       DPRINTLN("ALERT: OVER FORCE");
       return false;
     }
