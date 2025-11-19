@@ -123,7 +123,8 @@ double updateCompressionController(double setpoint_m) {
   DPRINT("ROTARY POS:"); DPRINT(rotaryPos);
   DPRINT(",");
   DPRINT("TORQUE:"); DPRINT(torqueOutput);
-  DPRINT(" | STATE: "); DPRINTLN(currentState);
+  DPRINT(" | STATE: "); DPRINT(currentState);
+  DPRINT(" | CAN TEST: "); DPRINTLN(moteus.last_result().values.fault);
 
   return torqueOutput;
 }
