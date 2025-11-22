@@ -16,7 +16,7 @@ double prev_error_gain = -113.9;
 double prev_prev_command_gain = -.00201;
 double prev_prev_error_gain = 50.2;
 
-const double extensionStrokeLimit = 0.0254*10; // 10 inches, in meters
+const double extensionStrokeLimit = 0.0254*4; // 10 inches, in meters
 long zeroing_start_time = 0;
 const double zeroingVelocity = 0.02; // m/s
 
@@ -59,7 +59,7 @@ bool updateZeroing() {
     // TODO: Refine zeroing setpoint to be weight of plunger-rack system
     
 
-    if(forceVal >= 10) {
+    if(forceVal >= 20) {
         // Handle state change in main state machine, just return true for now
         return true;
     }
@@ -74,14 +74,14 @@ bool updateZeroing() {
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
-        printStatus(nextSendMillis);
+        // printStatus(nextSendMillis);
                 
-        DPRINT(">");
-        DPRINT("Linear Pos:"); DPRINT(linearPos);
-        DPRINT(",");  
-        DPRINT("Rotary Pos:"); DPRINT(rotaryPos);
-        DPRINT(",");
-        DPRINT(" | STATE: "); DPRINTLN(currentState);
+        // DPRINT(">");
+        // DPRINT("Linear_Pos:"); DPRINT(linearPos);
+        // DPRINT(",");  
+        // DPRINT("Rotary_Pos:"); DPRINTLN(rotaryPos);
+        // DPRINT(",");
+        // DPRINT(" | STATE: "); DPRINTLN(currentState);
     }
 
     // No errors, return false because setpoint not found

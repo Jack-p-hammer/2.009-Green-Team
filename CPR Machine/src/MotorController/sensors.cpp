@@ -9,7 +9,9 @@ const int LINEAR_ENCODER_A = 2;
 const int LINEAR_ENCODER_B = 3;
 
 const double forceCalibRate = 1187.7440; // Calibration constants for force sensor
-const double forceCalibOffset = -548.7972;
+const double forceCalibOffset = -548.7972 - 595 + 403;
+const int average_samples = 20; // Number of samples to average for force sensor
+
 
 // Assume 0 initial conditions
 double linearPos = 0; double linearZeroPos = 0;
@@ -52,6 +54,17 @@ double read_force_sensor() {
   int raw = analogRead(FORCE_PIN);
   double voltage = raw * (5.0 / 1023.0);
   double force = forceCalibRate * voltage + forceCalibOffset;
+  for (int i = 0; i < average_samples; i++) {
+    // Simple moving average filter
+    raw = analogRead(FORCE_PIN);
+    voltage = raw * (5.0 / 1023.0);
+    force = 0.1*(forceCalibRate * voltage + forceCalibOffset) + 0.9*force;
+  }
+  DPRINT(">");
+  DPRINT("Force:"); DPRINT(force);
+  DPRINT(",");
+  DPRINT("State:"); DPRINTLN(currentState);
+
   return force; // should be value in newtons
 }
 
@@ -96,7 +109,8 @@ void zeroRotaryEncoder() {
 
 bool readSensors() {
     // forceVal = read_force_sensor();
-    forceVal = 5; // TEMP FOR TESTING
+    forceVal = read_force_sensor();
+    // forceVal = 5; // TEMP FOR TESTING
     rotaryPos = read_rotary_encoder(); // in revolutions
     // ToF sensor only updates at 30ish ms max, if nothing read keep prev. encoder value
     double tempPos = read_linear_encoder();
