@@ -82,6 +82,8 @@ bool updateZeroing() {
         DPRINT("Rotary Pos:"); DPRINT(rotaryPos);
         DPRINT(",");
         DPRINT(" | STATE: "); DPRINTLN(currentState);
+        DPRINT(" | STATE: "); DPRINT(currentState);
+        DPRINT(" | CAN TEST: "); DPRINTLN(moteus.last_result().values.temperature);
     }
 
     // No errors, return false because setpoint not found
