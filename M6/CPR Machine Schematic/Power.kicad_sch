@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "397fb2d0-d00d-46b6-ba58-cec6e536a3e7")
+	(uuid "a47efda1-57e0-4cb3-9a0f-ffd7ba2acdfb")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Connector:Conn_01x02_Socket"
@@ -2299,7 +2299,7 @@
 				)
 			)
 		)
-		(property "Value" "Contactor - NO"
+		(property "Value" "Contactor - Norm. Open"
 			(at 99.06 40.64 90)
 			(effects
 				(font

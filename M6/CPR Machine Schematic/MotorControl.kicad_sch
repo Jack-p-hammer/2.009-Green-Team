@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "483d670b-30e9-43ab-ae3d-3384e0a40423")
+	(uuid "e2e96b0c-cb98-4ae9-9b9c-99972b556dd1")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Custom_Parts:MCP2517FD_CLICK"

@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "13dec7c7-85aa-408b-846b-77da7012e2a2")
+	(uuid "deb2327f-b058-4256-b134-ebb9f4a7df57")
 	(paper "A4")
 	(lib_symbols
 		(symbol "teensy:Teensy4.1"
@@ -1478,6 +1478,28 @@
 			(justify right)
 		)
 		(uuid "150a8e45-51d9-488f-b069-0c0ba52597e6")
+	)
+	(hierarchical_label "I2C_SCL"
+		(shape output)
+		(at 170.18 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "853068a5-4e1f-4057-8aaf-15f2b8182473")
+	)
+	(hierarchical_label "I2C_SDA"
+		(shape bidirectional)
+		(at 170.18 73.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a1af867c-82a2-40a4-8da2-4e7ae80a2e56")
 	)
 	(hierarchical_label "CS"
 		(shape output)
