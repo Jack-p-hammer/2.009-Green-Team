@@ -6,7 +6,7 @@
 #include <Adafruit_GFX.h>
 #include "sd_to_display.h"
 
-#define BUFFPIXEL 80
+#define BUFFPIXEL 85
 
 void bmpDraw(Adafruit_RA8875 *tft, const char *filename, int x, int y, volatile bool *abortFlag) {
   File     bmpFile;

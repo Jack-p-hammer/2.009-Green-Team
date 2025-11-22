@@ -11,54 +11,53 @@
 
 #include "sd_to_display.h"
 
+// Pin definitions
+const int SD_CHIP_SELECT = BUILTIN_SDCARD;
+const int BUTTON_PIN = 4;
+const int POWER_BUTTON_PIN = 5;
+const int RA8875_CS = 37;
+const int RA8875_RESET = 9;
 
-
-const int SD_CHIP_SELECT = BUILTIN_SDCARD;  // No external CS pin needed
-
-// Library only supports hardware SPI at this time
-// Connect SCLK to UNO Digital #13 (Hardware SPI clock)
-// Connect MISO to UNO Digital #12 (Hardware SPI MISO)
-// Connect MOSI to UNO Digital #11 (Hardware SPI MOSI)
-#define RA8875_INT 3
-#define RA8875_CS 10
-#define RA8875_RESET 9
-
-
-// ---- Button pin (5-pin LED button, switch part) ----
-const int BUTTON_PIN = 4;    // CHANGE if you wired to a different pin
-//const int LED_PIN    = 1;   // LED part of the button
-
-
+// Display object
 Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
 
-
-// -------- Animation settings --------
-const int TARGET_FPS          = 2;               // how fast to flip between the 2 images
-const uint16_t FRAME_INTERVAL = 1000 / TARGET_FPS;
-
-
-// 3 groups, 2 BMPs each, in bmp1 / bmp2 / bmp3
-// Note: SD card paths must start with "/" (root of SD card)
-const char *frameGroups[3][2] = {
-  { "/bmp1/ezgif-frame-001.bmp", "/bmp1/ezgif-frame-002.bmp" },   // group 0
-  { "/bmp2/ezgif-frame-001.bmp", "/bmp2/ezgif-frame-002.bmp" },   // group 1
-  { "/bmp3/ezgif-frame-001.bmp", "/bmp3/ezgif-frame-002.bmp" }    // group 2
+const char *frameGroups[] = {
+  "/bmp01/bare_chest.bmp",
+  "/bmp02/ezgif-frame-002.bmp",
+  "/bmp03/hold_down.bmp",
+  "/bmp04/start_img.bmp",
 };
 
-uint8_t currentGroup = 0;    // 0..2 (which bmpN)
-uint8_t currentIndex = 0;    // 0 or 1 (which of the two bmps in that group)
 
-unsigned long lastFrameTime  = 0;
+//const uint8_t NUM_GROUPS = sizeof(frameGroups) / sizeof(frameGroups[0]);
+
+
+// Current group state (0, 1, or 2)
+uint8_t currentGroup = 0;
+
+// Track if the screen is “on” (backlight & display enabled)
+bool screenOn = false;
+
+// Button state variables
+bool buttonState = HIGH;
+bool lastButtonReading = HIGH;
+unsigned long lastDebounceTime = 0;
+
+// Button state variables (power button)
+bool powerButtonState = HIGH;
+bool lastPowerButtonReading = HIGH;
+unsigned long lastPowerDebounceTime = 0;
+
+
+const unsigned long DEBOUNCE_DELAY = 40;  // ms
 
 
 
 void showCurrentFrame() {
-  const char *filename = frameGroups[currentGroup][currentIndex];
+  const char *filename = frameGroups[currentGroup];
 
   Serial.print("Showing group ");
   Serial.print(currentGroup);
-  Serial.print(", frame ");
-  Serial.print(currentIndex);
   Serial.print(" -> ");
   Serial.println(filename);
 
@@ -67,29 +66,62 @@ void showCurrentFrame() {
   } else {
     Serial.print("ERROR: File not found: ");
     Serial.println(filename);
-    tft.fillScreen(RA8875_RED);  // Show red screen if file missing
+    tft.fillScreen(RA8875_RED);
   }
 }
 
-// ---- Button state (debounced) ----
-bool buttonState       = HIGH;  // debounced state (HIGH = not pressed)
-bool lastButtonReading = HIGH;  // previous raw reading
-unsigned long lastDebounceTime = 0;
-const unsigned long DEBOUNCE_DELAY = 40;  // ms, adjust 20–50 ms
+void toggleScreen() {
+  if (screenOn) {
+    // ----- TURN SCREEN OFF -----
+    Serial.println("Turning screen OFF");
+    screenOn = false;
+
+    tft.PWM1out(0);        // backlight off
+    tft.displayOn(false);  // disable display output
+    // Optional: clear it so it’s black if it ever flickers back on
+    tft.graphicsMode();
+    tft.fillScreen(RA8875_BLACK);
+  } else {
+    // ----- TURN SCREEN ON -----
+    Serial.println("Turning screen ON");
+    currentGroup = 0;
+    screenOn = true;
+
+    tft.displayOn(true);   // enable display
+    tft.PWM1out(255);      // backlight full
+
+    // either keep currentGroup, or reset to 0 if you always want to
+    // restart from the first image when turning on:
+    // currentGroup = 0;
+
+    showCurrentFrame();
+  }
+}
 
 
 
 void setup() {
-Serial.begin(9600);
+  Serial.begin(9600);
 
   // ---- Button setup ----
   pinMode(BUTTON_PIN, INPUT_PULLUP);   // button to GND, so LOW = pressed
+  pinMode(POWER_BUTTON_PIN, INPUT_PULLUP);  // power button
+
   lastButtonReading = digitalRead(BUTTON_PIN);  // Initialize button state
+  lastPowerButtonReading = digitalRead(POWER_BUTTON_PIN);
+
   
   Serial.print("Button initialized on pin ");
   Serial.print(BUTTON_PIN);
   Serial.print(", initial state: ");
   Serial.println(lastButtonReading == HIGH ? "HIGH (not pressed)" : "LOW (pressed)");
+
+  Serial.print("Power button on pin ");
+  Serial.print(POWER_BUTTON_PIN);
+  Serial.print(", initial state: ");
+  Serial.println(lastPowerButtonReading == HIGH ? "HIGH (not pressed)" : "LOW (pressed)");
+
+
 
   if (!SD.begin(SD_CHIP_SELECT)) {
     Serial.println("SD initialization failed!");
@@ -106,10 +138,10 @@ Serial.begin(9600);
 
   Serial.println("Found RA8875");
 
-  tft.displayOn(true);
+  tft.displayOn(false);
   tft.GPIOX(true);      // Enable TFT - display enable tied to GPIOX
   tft.PWM1config(true, RA8875_PWM_CLK_DIV1024); // PWM output for backlight
-  tft.PWM1out(255);
+  tft.PWM1out(0);   // <<< backlight off (0 = dark)
 
   Serial.print("(");
   Serial.print(tft.width());
@@ -120,26 +152,35 @@ Serial.begin(9600);
   tft.fillScreen(RA8875_BLACK);
   tft.graphicsMode();
 
-  // Draw the very first frame of the first group
+  // Draw the first frame of the first group
   currentGroup = 0;
-  currentIndex = 0;
-  showCurrentFrame();
-
-  unsigned long now = millis();
-  lastFrameTime = now;
-
+  screenOn = false;       // <<< start with screen off
 }
 
-unsigned long lastLoopDuration = 0;  // in microseconds
-
 void loop() {
+  // Handle button with debounce
+  unsigned long PowerNow = millis();
 
-  unsigned long loopStart = micros();   // <--- start time
-  unsigned long now = millis();
+  // ====== 1) Handle POWER button (pin 5) with debounce ======
+  bool rawPowerReading = digitalRead(POWER_BUTTON_PIN);  // LOW = pressed
+  if (rawPowerReading != lastPowerButtonReading) {
+    lastPowerDebounceTime = PowerNow;
+  }
 
+  if ((PowerNow - lastPowerDebounceTime) > DEBOUNCE_DELAY) {
+    if (rawPowerReading != powerButtonState) {
+      powerButtonState = rawPowerReading;
 
-  // ========== 1) Handle button with debounce ==========
+      if (powerButtonState == LOW) {
+        toggleScreen();
+        }
+
+      }
+    }
+  
+  lastPowerButtonReading = rawPowerReading;
   bool rawReading = digitalRead(BUTTON_PIN);  // LOW = pressed (INPUT_PULLUP)
+  unsigned long now = millis();
 
   // If the reading changed from last time, reset the debounce timer
   if (rawReading != lastButtonReading) {
@@ -154,52 +195,27 @@ void loop() {
 
       // We just got a clean transition
       // Detect a press on HIGH -> LOW (button down)
+     // Transition: HIGH -> LOW = button pressed
       if (buttonState == LOW) {
-        // ---- BUTTON PRESS ACTION: switch to next group ----
-        currentGroup++;
-        if (currentGroup >= 3) {
-          currentGroup = 0;
-        }
-
-        // Start each group on its first frame
-        currentIndex = 0;
-
-        // Reset frame timer so animation doesn't immediately flip
-        lastFrameTime = now;
+        // Only do anything if screen is ON
+        if (screenOn) {
+          currentGroup++;
+          if (currentGroup >= 4) {
+            currentGroup = 0;
+          }
 
         Serial.print("Button press -> switched to group ");
         Serial.println(currentGroup);
 
         // Immediately show the new group's first frame
         showCurrentFrame();
+      } else {
+        Serial.println("Group button pressed but screen is OFF; ignoring.");
+      }
       }
     }
   }
 
   // Save raw reading for next pass
   lastButtonReading = rawReading;
-
-
-  // ========== 2) Flip between the 2 frames in the current group ==========
-  if (now - lastFrameTime >= FRAME_INTERVAL) {
-    lastFrameTime = now;
-
-    // toggle between 0 and 1
-    currentIndex ^= 1;
-
-    showCurrentFrame();
-  }
-
-  // ---- Measure loop time at the end ----
-  unsigned long loopEnd = micros();
-  lastLoopDuration = loopEnd - loopStart;
-
-  // Print loop duration occasionally (every 0.5 seconds)
-  static unsigned long lastPrint = 0;
-  if (millis() - lastPrint > 500) {
-    lastPrint = millis();
-    Serial.print("Loop duration: ");
-    Serial.print(lastLoopDuration);
-    Serial.println(" microseconds");
-  }
 }
