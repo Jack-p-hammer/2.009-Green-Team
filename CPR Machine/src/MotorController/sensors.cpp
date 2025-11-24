@@ -9,12 +9,18 @@ const int LINEAR_ENCODER_A = 2;
 const int LINEAR_ENCODER_B = 3;
 
 const double forceCalibRate = 1187.7440; // Calibration constants for force sensor
-const double forceCalibOffset = -548.7972;
+const double forceCalibOffset = -548.7972 - 180;
+const int samplesToAverage = 100;
+
+float absRotaryZero = 0.0; // Absolute zero position of rotary encoder on power up
+float absLinearZero = 0.0; // Absolute zero position of rotary encoder on power up
+
 
 // Assume 0 initial conditions
 double linearPos = 0; double linearZeroPos = 0;
 double rotaryPos = 0; double rotaryZeroPos = 0;
 double forceVal = 0;
+float rawForceVal = 0;
 
 // Declare ToF Sensor
 Adafruit_VL53L0X ToFSensor = Adafruit_VL53L0X();
@@ -49,8 +55,14 @@ bool initializeSensors() {
 double read_force_sensor() {
   // Ensure that Voltage at the non-inverting terminal is less about 0.5V (voltage divider or sum shite)
   // If using a different reference voltage, recalibration is required
-  int raw = analogRead(FORCE_PIN);
-  double voltage = raw * (5.0 / 1023.0);
+  // Read analog value and average over several samples
+  for (int i = 0; i < samplesToAverage; i++) {
+    rawForceVal += analogRead(FORCE_PIN);
+  }
+
+  rawForceVal /= samplesToAverage;
+  
+  double voltage = rawForceVal * (5.0 / 1023.0);
   double force = forceCalibRate * voltage + forceCalibOffset;
   return force; // should be value in newtons
 }
@@ -66,11 +78,11 @@ double read_linear_encoder() {
     // always return zeroed value 
     // return reading - linearZeroPos; 
     // TODO: DOnt return rotaryPos again
-    return 2*PI*rotaryPos*pinionRadius;
+    return 2*PI*rotaryPos*pinionRadius -  absLinearZero;
   }
   // If no reading is available, return 0
   // This is fine because sensor noise will prevent a real zero reading
-  return 0;
+  return 2*PI*rotaryPos*pinionRadius - absLinearZero;
 }
 
 void zeroLinearEncoder() {
@@ -82,7 +94,7 @@ void zeroLinearEncoder() {
 double read_rotary_encoder() {
   // Read position from Moteus controller (rotary encoder feedback)
   // The moteus library continuously updates q_current.position (in revolutions)
-  rotaryPos = moteus.last_result().values.position - rotaryZeroPos;
+  rotaryPos = moteus.last_result().values.position - absRotaryZero;
   return rotaryPos;
 }
 void zeroRotaryEncoder() {
@@ -95,8 +107,8 @@ void zeroRotaryEncoder() {
 }
 
 bool readSensors() {
-    // forceVal = read_force_sensor();
-    forceVal = 5; // TEMP FOR TESTING
+    forceVal = read_force_sensor();
+    // forceVal = 5; // TEMP FOR TESTING
     rotaryPos = read_rotary_encoder(); // in revolutions
     // ToF sensor only updates at 30ish ms max, if nothing read keep prev. encoder value
     double tempPos = read_linear_encoder();

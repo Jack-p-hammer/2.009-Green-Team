@@ -1,22 +1,16 @@
 #include "interrupt_control.h"
 #include <Arduino.h>
+#include <control_scheme.h>
 
-void displayAlignmentConfirmation() {
-  // Implementation for displaying alignment confirmation
-}
 
-bool checkUserAlignmentConfirmation() {
-  // TODO: Implementation for checking user alignment confirmation
-  return true;
+bool checkPauseCommand() {
+    // TODO: Implement pause command check
+    return false;
 }
 
 void displayPauseMessage() {
   // TODO: Implementation for displaying pause message
-}
-
-bool isPaused() {
-  // TODO: Implementation for checking if the system is paused
-  return false;
+  DPRINT("Press NEXT to resume compressions");
 }
 
 void displayKneelFailureMessage() {

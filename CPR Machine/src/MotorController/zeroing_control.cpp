@@ -16,7 +16,7 @@ double prev_error_gain = -113.9;
 double prev_prev_command_gain = -.00201;
 double prev_prev_error_gain = 50.2;
 
-const double extensionStrokeLimit = 0.0254*10; // 10 inches, in meters
+const double extensionStrokeLimit = 0.0254*8; // 10 inches, in meters
 long zeroing_start_time = 0;
 const double zeroingVelocity = 0.02; // m/s
 
@@ -27,6 +27,8 @@ void initializeZeroing() {
 
     // Record zeroing start time
     zeroing_start_time = millis();
+    // absLinearZero = read_linear_encoder();
+    // absRotaryZero = read_rotary_encoder();
 }
 
 bool updateZeroing() {
@@ -47,11 +49,17 @@ bool updateZeroing() {
         currentState = ABORT;
         return false;
     }
+    DPRINT(">");
+    DPRINT("Force:"); DPRINT(forceVal);
+    DPRINT(",");
+    DPRINT("Prev_State:"); DPRINT(prevState);
+    DPRINT(",");
+    DPRINT("STATE:"); DPRINTLN(currentState);
 
     // Check for zeroing failure conditions
     if(linearPos > extensionStrokeLimit) {
         prevState = currentState;
-        currentState = ZERO_FAILED;
+        currentState = ABORT;
         return false;
     }
 
@@ -59,29 +67,35 @@ bool updateZeroing() {
     // TODO: Refine zeroing setpoint to be weight of plunger-rack system
     
 
-    if(forceVal >= 10) {
+    if(forceVal >= 25) {
         // Handle state change in main state machine, just return true for now
+
+        zeroLinearEncoder();
+        zeroRotaryEncoder();
+        DPRINTLN("ZEROING COMPLETE");
+        moteus.SetStop();
         return true;
     }
 
     // Send control command
-    Moteus::PositionMode::Command cmd;
+    //Moteus::PositionMode::Command cmd;//cmd = Moteus::PositionMode::Command();
 
-    cmd.position = std::numeric_limits<double>::quiet_NaN();
-    cmd.velocity = zeroingVelocity/(2*PI*pinionRadius); // in revolutions per second
+    // cmd.position = std::numeric_limits<double>::quiet_NaN();
+    // cmd.velocity = zeroingVelocity/(2*PI*pinionRadius); // in revolutions per second
+    // moteus.SetPosition(cmd);
 
-    moteus.SetPosition(cmd);
+    sendCommands(zeroingVelocity/(2*PI*pinionRadius), true);
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
         printStatus(nextSendMillis);
                 
         DPRINT(">");
-        DPRINT("Linear Pos:"); DPRINT(linearPos);
-        DPRINT(",");  
-        DPRINT("Rotary Pos:"); DPRINT(rotaryPos);
+        DPRINT("LINEAR POS:"); DPRINT(linearPos-linearZeroPos);
         DPRINT(",");
-        DPRINT(" | STATE: "); DPRINTLN(currentState);
+        DPRINT("PreviousState:"); DPRINT(prevState);
+                DPRINT(",");
+        DPRINT("STATE:"); DPRINTLN(currentState);
     }
 
     // No errors, return false because setpoint not found
@@ -100,12 +114,7 @@ void returnToPreZeroingZero() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateZeroingController(0));
-
-    // Only print our status every 25th cycle.
-    if (loopCount % 25 == 0) {
-        printStatus(nextSendMillis);
-    }
+    sendCommands(updateZeroingController(0), true);
 
 }
 double updateZeroingController(double setpoint_m) {

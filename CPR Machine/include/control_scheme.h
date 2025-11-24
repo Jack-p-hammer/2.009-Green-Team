@@ -15,9 +15,11 @@
 
 // State enumeration for state machine
 enum cprState {
+    BATTERY_CHECK,
     START_UP,
+    ALIGNMENT,
+    ZEROING_PREP,
     ZEROING,
-    ZERO_FAILED,
     WAIT_FOR_COMPRESSION_CONFIRMATION,
     COMPRESSIONS,
     PAUSED,
@@ -64,7 +66,7 @@ void initializeMotor();
 // General functions
 
 // Send controller command to motor
-void sendCommands(double controlOutput);
+void sendCommands(double controlOutput, bool velocityControl);
 
 // Print current motor status
 void printStatus(uint32_t currentTime);

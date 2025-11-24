@@ -3,9 +3,8 @@
 #include "compression_control.h"
 #include "zeroing_control.h"
 #include "sensors.h"
-#include "start_up.h"
+#include "utils.h"
 #include "interrupt_control.h"
-#include "wait_for_compression.h"
 #include <Moteus.h>
 #include <ACAN2517FD.h>
 
@@ -24,24 +23,52 @@ void loop() {
   // if(currentState != ABORT) {
   //   DPRINT(currentState); DPRINT(" | "); DPRINTLN(linearPos);
   // }
-
   switch (currentState) {
-    case START_UP:  
-      if(verifyBatteryPercentage()) {
+    case BATTERY_CHECK:
+      // Immediately check battery state
+      if(!verifyBatteryPercentage()) {
         // Handle low battery scenario
         prevState = currentState;
         currentState = ABORT;
+      } else {
+        // Battery good, move to startup
+        prevState = currentState;
+        currentState = START_UP;
       }
+      break;
 
+    case START_UP:  
       displaySetupInstructions();
 
-      if(checkUserStartConfirmation()) {
+      if(checkUserConfirmation()) {
         // User has pressed start, get started
         prevState = currentState;
-        currentState = ZEROING;
+        currentState = ALIGNMENT;
       }
 
       break;
+
+    case ALIGNMENT:
+      displayAlignmentInstructions();
+
+      if(checkUserConfirmation()) {
+        // User has confirmed alignment, move to zeroing
+        prevState = currentState;
+        currentState = ZEROING_PREP;
+      }
+      break;
+    
+    case ZEROING_PREP:
+      // Prepare for zeroing, then move to zeroing state
+      displayZeroingInstructions();
+
+      if(checkUserConfirmation()) {
+        // User has confirmed alignment, move to zeroing
+        prevState = currentState;
+        currentState = ZEROING;
+      }
+      break;
+    
     case ZEROING:
       // Initialize zeroing state, with error handling
       // Only do this when we switch states
@@ -60,21 +87,9 @@ void loop() {
         prevState = currentState;
       }
       break;
-    case ZERO_FAILED:
-        // TODO: Handle different behavior for repeated zeroing failures
-        // For now, treat as abort
-        prevState = currentState;
-        DPRINT("ZEROING FAILED, ABORTING");
-        DPRINT(" | ROTARY POS: "); DPRINT(rotaryPos);
-        DPRINT(" | LINEAR POS: "); DPRINTLN(linearPos);
-        currentState = ABORT;
-        
-        break;
     case WAIT_FOR_COMPRESSION_CONFIRMATION:
-      displayCompressionConfirmation();
-
-      // If user confirms compression start, start compressions (shocker)
-      if(checkUserCompressionConfirmation()) {
+      if(displayCompressionConfirmation()) {
+        // User has confirmed, move to compressions
         prevState = currentState;
         currentState = COMPRESSIONS;
       }
@@ -102,7 +117,7 @@ void loop() {
       displayPauseMessage();
 
       // If not paused, resume compressions
-      if(!isPaused()) {
+      if(!checkPauseCommand()) {
         prevState = currentState;
         currentState = COMPRESSIONS;
       }

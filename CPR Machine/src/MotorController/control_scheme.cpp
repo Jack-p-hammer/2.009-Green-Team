@@ -4,6 +4,7 @@
 #include <ACAN2517FD.h>
 #include <Arduino.h>
 #include <assert.h>
+#include <zeroing_control.h>
 
 // State machine variables
 #if defined(COMPRESSION_TEST)
@@ -13,8 +14,8 @@ cprState prevState = COMPRESSIONS;
 cprState currentState = ZEROING;
 cprState prevState = START_UP;
 #else
-cprState currentState = START_UP;
-cprState prevState = START_UP;
+cprState currentState = BATTERY_CHECK;
+cprState prevState = BATTERY_CHECK;
 #endif
 
 // Control Loop Timing variables
@@ -82,19 +83,24 @@ void initializeMotor() {
 }
 
 
-void sendCommands(double controlOutput_Nm) {
+void sendCommands(double controlOutput, bool velocityControl) {
     // TODO: This needs to be changed into torque control!!!
+    // Moteus::PositionMode::Command cmd;
     Moteus::PositionMode::Command cmd;
 
-    cmd.position = std::numeric_limits<double>::quiet_NaN();
-    cmd.velocity = 0.0;
-    cmd.kp_scale = 0.0;
-    cmd.kd_scale = 0.0;
+    if (velocityControl) {
+        cmd.position = std::numeric_limits<double>::quiet_NaN();
+        cmd.velocity = controlOutput; // in revolutions per second
+    } else {
+        cmd.position = std::numeric_limits<double>::quiet_NaN();
+        cmd.velocity = 0.0;
+        cmd.kp_scale = 0.0;
+        cmd.kd_scale = 0.0;
 
-    cmd.feedforward_torque = controlOutput_Nm;
-
+        cmd.feedforward_torque = controlOutput;
+    
+}
     moteus.SetPosition(cmd, &positionModeOptions);
-    // New attempt
 }
 
 void printStatus(uint32_t currentTime){

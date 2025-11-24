@@ -20,6 +20,7 @@ void initializeCompressions() {
 
     // Record time start of compressions
     compression_start_time = millis();
+    DPRINTLN("Keep holding down. Press pause if advised by AED or emergency services");
 }
 
 void updateCompressions() {
@@ -31,7 +32,7 @@ void updateCompressions() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateCompressionController(computeCompressionSetpoint()));
+    sendCommands(updateCompressionController(computeCompressionSetpoint()), false);
 
     // Only print our status every 25th cycle.
     if (loopCount % 25 == 0) {
@@ -71,10 +72,6 @@ double computeCompressionSetpoint() {
     return outputPos_m;
 }
 
-bool checkPauseCommand() {
-    // TODO: Implement pause command check
-    return false;
-}
 
 void returnToCompressionZero() {
     // For whatever reason, we need to go to our calibrated zero
@@ -88,7 +85,7 @@ void returnToCompressionZero() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateCompressionController(0));
+    sendCommands(updateCompressionController(0), false);
 
     // Only print our status every 25th cycle.
     if (loopCount % 25 == 0) {
@@ -101,8 +98,8 @@ double updateCompressionController(double setpoint_m) {
   readSensors();
 
   // Take setpoint relative to linear zero
-  //double error = (setpoint_m - linearZeroPos) - linearPos;
-  double error = setpoint_m - rotaryPos*(2*PI)*pinionRadius;
+  double error = (setpoint_m - linearZeroPos) - linearPos;
+  //double error = (setpoint_m - linearZeroPos) - rotaryPos*(2*PI)*pinionRadius;
 
   // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
   // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD
@@ -120,10 +117,14 @@ double updateCompressionController(double setpoint_m) {
   DPRINT(",");  
   DPRINT("ERROR:"); DPRINT(error);
   DPRINT(",");
-  DPRINT("ROTARY POS:"); DPRINT(rotaryPos);
+  DPRINT("LINEAR POS:"); DPRINT(linearPos-linearZeroPos);
   DPRINT(",");
   DPRINT("TORQUE:"); DPRINT(torqueOutput);
+  DPRINT(",");
+  DPRINT("LINEARZ ZERO POS:"); DPRINT(linearZeroPos);
+  DPRINT(" | PreviousState: "); DPRINT(prevState);
   DPRINT(" | STATE: "); DPRINTLN(currentState);
+
 
   return torqueOutput;
 }
