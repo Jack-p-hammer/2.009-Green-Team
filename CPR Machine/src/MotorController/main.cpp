@@ -23,6 +23,8 @@ void loop() {
   // if(currentState != ABORT) {
   //   DPRINT(currentState); DPRINT(" | "); DPRINTLN(linearPos);
   // }
+  DPRINT(">");
+  DPRINT("LinearPos:"); DPRINTLN(linearPos);
   switch (currentState) {
     case BATTERY_CHECK:
       // Immediately check battery state

@@ -68,10 +68,10 @@ double read_force_sensor() {
   double force = forceCalibRate * voltage + forceCalibOffset;
 
 
-  DPRINT(">");
-  DPRINT("Force:"); DPRINT(force);
-  DPRINT(",");
-  DPRINT("State:"); DPRINTLN(currentState);
+  // DPRINT(">");
+  // DPRINT("Force:"); DPRINT(force);
+  // DPRINT(",");
+  // DPRINT("State:"); DPRINTLN(currentState);
 
   return force; // should be value in newtons
 }

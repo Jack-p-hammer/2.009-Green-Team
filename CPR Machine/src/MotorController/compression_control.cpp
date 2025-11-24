@@ -98,7 +98,7 @@ double updateCompressionController(double setpoint_m) {
   readSensors();
 
   // Take setpoint relative to linear zero
-  double error = (setpoint_m - linearZeroPos) - linearPos;
+  double error = (setpoint_m + linearZeroPos) - linearPos;
   //double error = (setpoint_m - linearZeroPos) - rotaryPos*(2*PI)*pinionRadius;
 
   // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
@@ -112,18 +112,18 @@ double updateCompressionController(double setpoint_m) {
   prevCommand = torqueOutput;
   prevError = error;
  
-  DPRINT(">");
-  DPRINT("Setpoint:"); DPRINT(setpoint_m);
-  DPRINT(",");  
-  DPRINT("ERROR:"); DPRINT(error);
-  DPRINT(",");
-  DPRINT("LINEAR POS:"); DPRINT(linearPos-linearZeroPos);
-  DPRINT(",");
-  DPRINT("TORQUE:"); DPRINT(torqueOutput);
-  DPRINT(",");
-  DPRINT("LINEARZ ZERO POS:"); DPRINT(linearZeroPos);
-  DPRINT(" | PreviousState: "); DPRINT(prevState);
-  DPRINT(" | STATE: "); DPRINTLN(currentState);
+//   DPRINT(">");
+//   DPRINT("Setpoint:"); DPRINT(setpoint_m);
+//   DPRINT(",");  
+//   DPRINT("ERROR:"); DPRINT(error);
+//   DPRINT(",");
+//   DPRINT("LINEAR POS:"); DPRINT(linearPos-linearZeroPos);
+//   DPRINT(",");
+//   DPRINT("TORQUE:"); DPRINT(torqueOutput);
+//   DPRINT(",");
+//   DPRINT("LINEARZ ZERO POS:"); DPRINT(linearZeroPos);
+//   DPRINT(" | PreviousState: "); DPRINT(prevState);
+//   DPRINT(" | STATE: "); DPRINTLN(currentState);
 
 
   return torqueOutput;
