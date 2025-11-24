@@ -88,7 +88,7 @@ bool updateZeroing() {
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
-        printStatus(nextSendMillis);
+        // printStatus(nextSendMillis);
                 
         DPRINT(">");
         DPRINT("LINEAR POS:"); DPRINT(linearPos-linearZeroPos);

@@ -56,14 +56,20 @@ double read_force_sensor() {
   // Ensure that Voltage at the non-inverting terminal is less about 0.5V (voltage divider or sum shite)
   // If using a different reference voltage, recalibration is required
   // Read analog value and average over several samples
-  for (int i = 0; i < samplesToAverage; i++) {
-    rawForceVal += analogRead(FORCE_PIN);
-  }
 
-  rawForceVal /= samplesToAverage;
-  
-  double voltage = rawForceVal * (5.0 / 1023.0);
-  double force = forceCalibRate * voltage + forceCalibOffset;
+  float force = 0.0;
+
+  for (int i = 0; i < samplesToAverage; i++) {
+    // Simple moving average filter
+    float raw = analogRead(FORCE_PIN);
+    float voltage = raw * (5.0 / 1023.0);
+    float force = 0.1*(forceCalibRate * voltage + forceCalibOffset) + 0.9*force;
+  }
+  DPRINT(">");
+  DPRINT("Force:"); DPRINT(force);
+  DPRINT(",");
+  DPRINT("State:"); DPRINTLN(currentState);
+
   return force; // should be value in newtons
 }
 

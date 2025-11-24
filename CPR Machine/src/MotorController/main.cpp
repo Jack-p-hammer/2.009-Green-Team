@@ -79,8 +79,9 @@ void loop() {
       if(updateZeroing()) {
         // updateZeroing returned true, indicating zeroing is complete
         // Error cases handled in zeroing control
-        prevState = currentState;
-        currentState = WAIT_FOR_COMPRESSION_CONFIRMATION;
+        DPRINTLN("ZEROING COMPLETE");
+        prevState = COMPRESSIONS;
+        currentState = COMPRESSIONS;
       }
       
       if(currentState == ZEROING) {
