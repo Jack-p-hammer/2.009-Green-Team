@@ -843,6 +843,10 @@
 		(uuid "a418abac-e918-4979-921f-8216001ded94")
 	)
 	(no_connect
+		(at 86.36 57.15)
+		(uuid "a8dcf7d7-b2fe-4729-9156-5fc8784c33e4")
+	)
+	(no_connect
 		(at 118.11 49.53)
 		(uuid "c673cfa7-e53e-445a-af16-8d2063c7db34")
 	)
@@ -907,17 +911,6 @@
 			(justify right)
 		)
 		(uuid "b65d206a-d445-4fda-956f-8cef7f9c1074")
-	)
-	(hierarchical_label "ToF_GPIO"
-		(shape bidirectional)
-		(at 86.36 57.15 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "cc1ff183-bd69-4db1-bea4-07ebef812696")
 	)
 	(symbol
 		(lib_id "power:+5V")
