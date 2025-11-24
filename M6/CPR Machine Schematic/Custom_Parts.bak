@@ -508,7 +508,7 @@
 			(pin bidirectional line
 				(at -3.81 -15.24 90)
 				(length 2.54)
-				(name "CANL"
+				(name "CANH"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -544,7 +544,7 @@
 			(pin bidirectional line
 				(at 0 -15.24 90)
 				(length 2.54)
-				(name "CANH"
+				(name "CANL"
 					(effects
 						(font
 							(size 1.27 1.27)
