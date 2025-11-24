@@ -13,16 +13,16 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "J"
-				(at 0 2.54 0)
+			(property "Reference" "J1"
+				(at -0.635 -7.62 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "Conn_01x02_Socket"
-				(at 0 -5.08 0)
+			(property "Value" "Battery EC2 Socket"
+				(at -0.635 -5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -131,7 +131,7 @@
 						(type none)
 					)
 				)
-				(pin passive line
+				(pin power_out line
 					(at -5.08 0 0)
 					(length 3.81)
 					(name "Pin_1"
@@ -897,22 +897,20 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "K"
-				(at 11.43 3.81 0)
+			(property "Reference" "K1"
+				(at 15.24 0 90)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
-			(property "Value" "Relay_SPST-NO"
-				(at 11.43 1.27 0)
+			(property "Value" "Contactor - Norm. Open"
+				(at 12.7 0 90)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
 			(property "Footprint" ""
@@ -1156,7 +1154,7 @@
 						)
 					)
 				)
-				(pin passive line
+				(pin power_out line
 					(at 5.08 -7.62 90)
 					(length 2.54)
 					(name "~"
@@ -1174,7 +1172,7 @@
 						)
 					)
 				)
-				(pin passive line
+				(pin power_in line
 					(at 7.62 7.62 270)
 					(length 2.54)
 					(name "~"

@@ -1432,40 +1432,7 @@
 			)
 		)
 	)
-	(hierarchical_label "INT"
-		(shape output)
-		(at 152.4 110.49 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "572dc5a8-189e-45fb-a1d4-c7a5f4b907b3")
-	)
-	(hierarchical_label "SDI"
-		(shape input)
-		(at 132.08 120.65 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "8e056bdf-485a-4f4c-a581-a6bd9225c8f4")
-	)
-	(hierarchical_label "SCK"
-		(shape input)
-		(at 132.08 115.57 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a604d312-fdc6-42fd-9dcd-66bd8a8a8e46")
-	)
-	(hierarchical_label "SDO"
+	(hierarchical_label "SPI_SDO"
 		(shape output)
 		(at 132.08 118.11 180)
 		(effects
@@ -1474,9 +1441,9 @@
 			)
 			(justify right)
 		)
-		(uuid "b8af73aa-c5ac-4792-adc1-fed2dea59e8c")
+		(uuid "191bac61-6c0d-48c5-8838-fd28f496f411")
 	)
-	(hierarchical_label "CS"
+	(hierarchical_label "SPI_CS"
 		(shape input)
 		(at 132.08 113.03 180)
 		(effects
@@ -1485,7 +1452,40 @@
 			)
 			(justify right)
 		)
-		(uuid "c8531b16-7cdd-4d9e-97fd-0392443ee40c")
+		(uuid "338592ef-8fdd-48e6-a01f-30e13c6ce1bc")
+	)
+	(hierarchical_label "SPI_SDI"
+		(shape input)
+		(at 132.08 120.65 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "90c86ec6-7806-470b-aabf-edd6b1205758")
+	)
+	(hierarchical_label "SPI_INT"
+		(shape output)
+		(at 152.4 110.49 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d6bba6b8-09bf-4b29-8eee-a9ce086c8775")
+	)
+	(hierarchical_label "SPI_SCK"
+		(shape input)
+		(at 132.08 115.57 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "eedd5198-80d1-48bb-bfa8-e2a6b327c545")
 	)
 	(symbol
 		(lib_id "Device:Fuse")
