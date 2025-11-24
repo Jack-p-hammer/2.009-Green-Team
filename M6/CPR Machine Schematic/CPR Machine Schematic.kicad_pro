@@ -424,7 +424,7 @@
     ],
     [
       "6f4ed3f2-e76d-4623-90c5-067eb820b8e2",
-      "HMI"
+      "HMI_Raspi"
     ],
     [
       "390cafbd-c317-4387-95c3-e11405a1139f",
@@ -433,6 +433,10 @@
     [
       "2e704a40-db78-4cf7-9f7e-cfc586f5aeb3",
       "Sensing"
+    ],
+    [
+      "709433ac-4f95-432e-b356-28cd0d53ea85",
+      "HMI_Teensy"
     ]
   ],
   "text_variables": {}
