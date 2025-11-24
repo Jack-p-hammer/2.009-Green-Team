@@ -8,6 +8,7 @@
 
 #define BUFFPIXEL 85
 
+
 void bmpDraw(Adafruit_RA8875 *tft, const char *filename, int x, int y, volatile bool *abortFlag) {
   File     bmpFile;
   int      bmpWidth, bmpHeight;   // W+H in pixels
