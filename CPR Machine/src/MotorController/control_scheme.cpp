@@ -97,7 +97,7 @@ void sendCommands(double controlOutput, bool velocityControl) {
         cmd.kp_scale = 0.0;
         cmd.kd_scale = 0.0;
 
-        cmd.feedforward_torque = controlOutput;
+        cmd.feedforward_torque = controlOutput/10;
     
 }
     moteus.SetPosition(cmd, &positionModeOptions);

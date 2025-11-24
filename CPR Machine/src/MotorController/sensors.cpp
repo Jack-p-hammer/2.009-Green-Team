@@ -57,14 +57,17 @@ double read_force_sensor() {
   // If using a different reference voltage, recalibration is required
   // Read analog value and average over several samples
 
-  float force = 0.0;
-
-  for (int i = 0; i < samplesToAverage; i++) {
-    // Simple moving average filter
-    float raw = analogRead(FORCE_PIN);
-    float voltage = raw * (5.0 / 1023.0);
-    float force = 0.1*(forceCalibRate * voltage + forceCalibOffset) + 0.9*force;
+  //average samples to return force value
+  float total = 0;
+  for(int i = 0; i < samplesToAverage; i++) {
+    total += analogRead(FORCE_PIN);
   }
+  rawForceVal = total / samplesToAverage;
+  // Convert to force in Newtons
+  double voltage = (rawForceVal / 1023.0) * 5.0; // Assuming 10-bit ADC and 5V reference
+  double force = forceCalibRate * voltage + forceCalibOffset;
+
+
   DPRINT(">");
   DPRINT("Force:"); DPRINT(force);
   DPRINT(",");
