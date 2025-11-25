@@ -1807,8 +1807,8 @@
 		)
 	)
 	(rectangle
-		(start 36.195 36.195)
-		(end 118.11 80.645)
+		(start 80.645 73.025)
+		(end 162.56 117.475)
 		(stroke
 			(width 0)
 			(type default)
@@ -1820,7 +1820,7 @@
 	)
 	(text "Battery Connection & Power Switch\n"
 		(exclude_from_sim no)
-		(at 53.086 35.052 0)
+		(at 97.536 71.882 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1829,26 +1829,26 @@
 		(uuid "1d80b474-38dc-4ecc-b6df-a8fb52cfb2c6")
 	)
 	(junction
-		(at 91.44 71.12)
+		(at 135.89 107.95)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "3feef3c8-4d6c-4946-9a8e-f8329d8828a7")
 	)
 	(junction
-		(at 63.5 45.72)
+		(at 107.95 82.55)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7299ce43-8349-4632-9d91-5bd2f7aaa3c4")
 	)
 	(junction
-		(at 106.68 71.12)
+		(at 151.13 107.95)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "bdab51fa-bc93-4900-bedd-1d26d96ac66a")
 	)
 	(wire
 		(pts
-			(xy 63.5 76.2) (xy 74.93 76.2)
+			(xy 107.95 113.03) (xy 119.38 113.03)
 		)
 		(stroke
 			(width 0)
@@ -1858,7 +1858,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 76.2) (xy 91.44 71.12)
+			(xy 135.89 113.03) (xy 135.89 107.95)
 		)
 		(stroke
 			(width 0)
@@ -1868,7 +1868,7 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 48.26) (xy 50.8 48.26)
+			(xy 102.87 85.09) (xy 95.25 85.09)
 		)
 		(stroke
 			(width 0)
@@ -1878,7 +1878,7 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 45.72) (xy 74.93 45.72)
+			(xy 107.95 82.55) (xy 119.38 82.55)
 		)
 		(stroke
 			(width 0)
@@ -1888,7 +1888,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 71.12) (xy 95.25 71.12)
+			(xy 135.89 107.95) (xy 139.7 107.95)
 		)
 		(stroke
 			(width 0)
@@ -1898,7 +1898,7 @@
 	)
 	(wire
 		(pts
-			(xy 106.68 73.66) (xy 106.68 71.12)
+			(xy 151.13 110.49) (xy 151.13 107.95)
 		)
 		(stroke
 			(width 0)
@@ -1908,7 +1908,7 @@
 	)
 	(wire
 		(pts
-			(xy 63.5 45.72) (xy 63.5 55.88)
+			(xy 107.95 82.55) (xy 107.95 92.71)
 		)
 		(stroke
 			(width 0)
@@ -1918,7 +1918,7 @@
 	)
 	(wire
 		(pts
-			(xy 106.68 58.42) (xy 106.68 71.12)
+			(xy 151.13 95.25) (xy 151.13 107.95)
 		)
 		(stroke
 			(width 0)
@@ -1928,7 +1928,7 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 45.72) (xy 91.44 45.72)
+			(xy 127 82.55) (xy 135.89 82.55)
 		)
 		(stroke
 			(width 0)
@@ -1938,7 +1938,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 58.42) (xy 91.44 71.12)
+			(xy 135.89 95.25) (xy 135.89 107.95)
 		)
 		(stroke
 			(width 0)
@@ -1948,7 +1948,7 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 76.2) (xy 91.44 76.2)
+			(xy 129.54 113.03) (xy 135.89 113.03)
 		)
 		(stroke
 			(width 0)
@@ -1958,7 +1958,7 @@
 	)
 	(wire
 		(pts
-			(xy 106.68 71.12) (xy 102.87 71.12)
+			(xy 151.13 107.95) (xy 147.32 107.95)
 		)
 		(stroke
 			(width 0)
@@ -1968,7 +1968,7 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 45.72) (xy 63.5 45.72)
+			(xy 95.25 82.55) (xy 107.95 82.55)
 		)
 		(stroke
 			(width 0)
@@ -1978,7 +1978,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 57.15 48.26 0)
+		(at 102.87 85.09 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1987,7 +1987,7 @@
 		(fields_autoplaced yes)
 		(uuid "072db64b-b65c-4a6d-9134-a483db70409b")
 		(property "Reference" "#PWR06"
-			(at 57.15 54.61 0)
+			(at 102.87 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1996,7 +1996,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 57.15 53.34 0)
+			(at 102.87 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2004,7 +2004,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 57.15 48.26 0)
+			(at 102.87 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2013,7 +2013,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 57.15 48.26 0)
+			(at 102.87 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2022,7 +2022,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 57.15 48.26 0)
+			(at 102.87 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2044,7 +2044,7 @@
 	)
 	(symbol
 		(lib_id "power:+24V")
-		(at 138.43 48.26 0)
+		(at 182.88 85.09 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2053,7 +2053,7 @@
 		(fields_autoplaced yes)
 		(uuid "188fe88f-f87f-4673-b65e-dbcb8c139f9a")
 		(property "Reference" "#PWR010"
-			(at 138.43 52.07 0)
+			(at 182.88 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2062,7 +2062,7 @@
 			)
 		)
 		(property "Value" "+22.2V"
-			(at 138.43 43.18 0)
+			(at 182.88 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2070,7 +2070,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 138.43 48.26 0)
+			(at 182.88 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2079,7 +2079,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 138.43 48.26 0)
+			(at 182.88 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2088,7 +2088,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+24V\""
-			(at 138.43 48.26 0)
+			(at 182.88 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2110,7 +2110,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 171.45 58.42 0)
+		(at 215.9 95.25 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2119,7 +2119,7 @@
 		(fields_autoplaced yes)
 		(uuid "2062ecd9-4abf-4a76-8f89-75ba85c4399e")
 		(property "Reference" "#PWR014"
-			(at 171.45 64.77 0)
+			(at 215.9 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2128,7 +2128,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 171.45 63.5 0)
+			(at 215.9 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2136,7 +2136,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 171.45 58.42 0)
+			(at 215.9 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2145,7 +2145,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 171.45 58.42 0)
+			(at 215.9 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2154,7 +2154,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 171.45 58.42 0)
+			(at 215.9 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2176,7 +2176,7 @@
 	)
 	(symbol
 		(lib_id "Regulator_Switching:TSR_1-2433")
-		(at 166.37 58.42 90)
+		(at 210.82 95.25 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2185,7 +2185,7 @@
 		(dnp no)
 		(uuid "2a4fe69a-2213-4859-b73a-3ad27dea8ef9")
 		(property "Reference" "U6"
-			(at 160.02 59.6901 90)
+			(at 204.47 96.5201 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2193,8 +2193,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TSR_1-2433"
-			(at 160.02 57.1501 90)
+		(property "Value" "3.3V Buck"
+			(at 204.47 93.9801 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2203,7 +2203,7 @@
 			)
 		)
 		(property "Footprint" "Converter_DCDC:Converter_DCDC_TRACO_TSR-1_THT"
-			(at 170.18 58.42 0)
+			(at 214.63 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2214,7 +2214,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.tracopower.com/products/tsr1.pdf"
-			(at 166.37 58.42 0)
+			(at 210.82 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2223,7 +2223,7 @@
 			)
 		)
 		(property "Description" "1A step-down regulator module, fixed 3.3V output voltage, 5-36V input voltage, -40°C to +85°C temperature range, TO-220 compatible LM78xx replacement"
-			(at 166.37 58.42 0)
+			(at 210.82 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2251,7 +2251,7 @@
 	)
 	(symbol
 		(lib_id "Relay:Relay_SPST-NO")
-		(at 99.06 53.34 90)
+		(at 143.51 90.17 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2260,7 +2260,7 @@
 		(fields_autoplaced yes)
 		(uuid "3d142b2d-6f1c-42fa-98e0-5b796d39f844")
 		(property "Reference" "K1"
-			(at 99.06 38.1 90)
+			(at 143.51 74.93 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2268,7 +2268,7 @@
 			)
 		)
 		(property "Value" "Contactor - Norm. Open"
-			(at 99.06 40.64 90)
+			(at 143.51 77.47 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2276,7 +2276,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 100.33 41.91 0)
+			(at 144.78 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2286,7 +2286,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 99.06 53.34 0)
+			(at 143.51 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2295,7 +2295,7 @@
 			)
 		)
 		(property "Description" "Relay SPST, normally open, EN50005"
-			(at 99.06 53.34 0)
+			(at 143.51 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2326,7 +2326,7 @@
 	)
 	(symbol
 		(lib_id "Regulator_Switching:TSR_1-2450")
-		(at 140.97 58.42 90)
+		(at 185.42 95.25 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2335,7 +2335,7 @@
 		(dnp no)
 		(uuid "40655d7d-3c5a-4156-8d06-599becd1a79b")
 		(property "Reference" "U5"
-			(at 134.62 59.6901 90)
+			(at 179.07 96.5201 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2343,8 +2343,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TSR_1-2450"
-			(at 134.62 57.1501 90)
+		(property "Value" "5V Buck"
+			(at 179.07 93.9801 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2353,7 +2353,7 @@
 			)
 		)
 		(property "Footprint" "Converter_DCDC:Converter_DCDC_TRACO_TSR-1_THT"
-			(at 144.78 58.42 0)
+			(at 189.23 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2364,7 +2364,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.tracopower.com/products/tsr1.pdf"
-			(at 140.97 58.42 0)
+			(at 185.42 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2373,7 +2373,7 @@
 			)
 		)
 		(property "Description" "1A step-down regulator module, fixed 5V output voltage, 5-36V input voltage, -40°C to +85°C temperature range, TO-220 compatible LM78xx replacement"
-			(at 140.97 58.42 0)
+			(at 185.42 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2401,7 +2401,7 @@
 	)
 	(symbol
 		(lib_id "Regulator_Switching:TSR_1-24120")
-		(at 66.04 66.04 90)
+		(at 110.49 102.87 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2410,7 +2410,7 @@
 		(dnp no)
 		(uuid "42e0d7d6-794b-4859-99d3-718461d8b95d")
 		(property "Reference" "U4"
-			(at 59.69 67.3101 90)
+			(at 104.14 104.1401 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2418,8 +2418,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TSR_1-24120"
-			(at 59.69 64.7701 90)
+		(property "Value" "12V Buck"
+			(at 104.14 101.6001 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2428,7 +2428,7 @@
 			)
 		)
 		(property "Footprint" "Converter_DCDC:Converter_DCDC_TRACO_TSR-1_THT"
-			(at 69.85 66.04 0)
+			(at 114.3 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2439,7 +2439,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.tracopower.com/products/tsr1.pdf"
-			(at 66.04 66.04 0)
+			(at 110.49 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2448,7 +2448,7 @@
 			)
 		)
 		(property "Description" "1A step-down regulator module, fixed 12V output voltage, 5-36V input voltage, -40°C to +85°C temperature range, TO-220 compatible LM78xx replacement"
-			(at 66.04 66.04 0)
+			(at 110.49 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2476,7 +2476,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 106.68 73.66 0)
+		(at 151.13 110.49 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2485,7 +2485,7 @@
 		(fields_autoplaced yes)
 		(uuid "45320fb5-7193-40a2-9ce0-5ad699dd97bd")
 		(property "Reference" "#PWR08"
-			(at 106.68 80.01 0)
+			(at 151.13 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2494,7 +2494,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 106.68 78.74 0)
+			(at 151.13 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2502,7 +2502,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 106.68 73.66 0)
+			(at 151.13 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2511,7 +2511,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 106.68 73.66 0)
+			(at 151.13 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2520,7 +2520,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 106.68 73.66 0)
+			(at 151.13 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2542,7 +2542,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x02_Socket")
-		(at 45.72 45.72 0)
+		(at 90.17 82.55 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2551,7 +2551,7 @@
 		(dnp no)
 		(uuid "4bf0632d-8c0f-43a7-aacc-922426a86a3a")
 		(property "Reference" "J1"
-			(at 46.355 53.34 0)
+			(at 90.805 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2559,7 +2559,7 @@
 			)
 		)
 		(property "Value" "Battery EC2 Socket"
-			(at 46.355 50.8 0)
+			(at 90.805 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2567,7 +2567,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 45.72 45.72 0)
+			(at 90.17 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2576,7 +2576,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 45.72 45.72 0)
+			(at 90.17 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2585,7 +2585,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated"
-			(at 45.72 45.72 0)
+			(at 90.17 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2610,7 +2610,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 71.12 66.04 0)
+		(at 115.57 102.87 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2619,7 +2619,7 @@
 		(fields_autoplaced yes)
 		(uuid "5175d20f-ad9d-4b46-8602-f934443265ad")
 		(property "Reference" "#PWR09"
-			(at 71.12 72.39 0)
+			(at 115.57 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2628,7 +2628,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 71.12 0)
+			(at 115.57 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2636,7 +2636,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 66.04 0)
+			(at 115.57 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2645,7 +2645,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 66.04 0)
+			(at 115.57 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2654,7 +2654,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 71.12 66.04 0)
+			(at 115.57 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2676,7 +2676,7 @@
 	)
 	(symbol
 		(lib_id "Device:Fuse")
-		(at 78.74 45.72 90)
+		(at 123.19 82.55 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2685,7 +2685,7 @@
 		(fields_autoplaced yes)
 		(uuid "a30725a5-06ad-408d-8d58-e531f806a68d")
 		(property "Reference" "F1"
-			(at 78.74 39.37 90)
+			(at 123.19 76.2 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2693,7 +2693,7 @@
 			)
 		)
 		(property "Value" "30A"
-			(at 78.74 41.91 90)
+			(at 123.19 78.74 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2701,7 +2701,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 78.74 47.498 90)
+			(at 123.19 84.328 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2710,7 +2710,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 78.74 45.72 0)
+			(at 123.19 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2719,7 +2719,7 @@
 			)
 		)
 		(property "Description" "Fuse"
-			(at 78.74 45.72 0)
+			(at 123.19 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2744,7 +2744,7 @@
 	)
 	(symbol
 		(lib_id "power:+3.3V")
-		(at 163.83 68.58 180)
+		(at 208.28 105.41 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2753,7 +2753,7 @@
 		(fields_autoplaced yes)
 		(uuid "a8092ac0-1517-4c98-85a0-c5e5f1c40f98")
 		(property "Reference" "#PWR015"
-			(at 163.83 64.77 0)
+			(at 208.28 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2762,7 +2762,7 @@
 			)
 		)
 		(property "Value" "+3.3V"
-			(at 163.83 73.66 0)
+			(at 208.28 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2770,7 +2770,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 163.83 68.58 0)
+			(at 208.28 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2779,7 +2779,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 163.83 68.58 0)
+			(at 208.28 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2788,7 +2788,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 163.83 68.58 0)
+			(at 208.28 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2810,7 +2810,7 @@
 	)
 	(symbol
 		(lib_id "power:+24V")
-		(at 106.68 48.26 270)
+		(at 151.13 85.09 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2819,7 +2819,7 @@
 		(fields_autoplaced yes)
 		(uuid "af5c1093-0d87-43a9-afe2-3431ab88982e")
 		(property "Reference" "#PWR07"
-			(at 102.87 48.26 0)
+			(at 147.32 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2828,7 +2828,7 @@
 			)
 		)
 		(property "Value" "+22.2V"
-			(at 110.49 48.2599 90)
+			(at 154.94 85.0899 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2837,7 +2837,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 106.68 48.26 0)
+			(at 151.13 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2846,7 +2846,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 106.68 48.26 0)
+			(at 151.13 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2855,7 +2855,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+24V\""
-			(at 106.68 48.26 0)
+			(at 151.13 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2877,7 +2877,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_SPST")
-		(at 80.01 76.2 0)
+		(at 124.46 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2886,15 +2886,15 @@
 		(fields_autoplaced yes)
 		(uuid "ba41b5ca-b953-4da6-a901-d8680f2ca331")
 		(property "Reference" "SW1"
-			(at 80.01 69.85 0)
+			(at 124.46 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "SW_SPST"
-			(at 80.01 72.39 0)
+		(property "Value" "Power Switch"
+			(at 124.46 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2902,7 +2902,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 80.01 76.2 0)
+			(at 124.46 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2911,7 +2911,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 80.01 76.2 0)
+			(at 124.46 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2920,7 +2920,7 @@
 			)
 		)
 		(property "Description" "Single Pole Single Throw (SPST) switch"
-			(at 80.01 76.2 0)
+			(at 124.46 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2945,7 +2945,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 146.05 58.42 0)
+		(at 190.5 95.25 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2954,7 +2954,7 @@
 		(fields_autoplaced yes)
 		(uuid "d65e0465-b193-4de8-ac51-845a59098155")
 		(property "Reference" "#PWR012"
-			(at 146.05 64.77 0)
+			(at 190.5 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2963,7 +2963,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 146.05 63.5 0)
+			(at 190.5 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2971,7 +2971,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 146.05 58.42 0)
+			(at 190.5 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2980,7 +2980,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 146.05 58.42 0)
+			(at 190.5 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2989,7 +2989,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 146.05 58.42 0)
+			(at 190.5 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3011,7 +3011,7 @@
 	)
 	(symbol
 		(lib_id "power:+24V")
-		(at 163.83 48.26 0)
+		(at 208.28 85.09 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3020,7 +3020,7 @@
 		(fields_autoplaced yes)
 		(uuid "dc859cdb-c909-4407-b4f4-e0a43c73511d")
 		(property "Reference" "#PWR011"
-			(at 163.83 52.07 0)
+			(at 208.28 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3029,7 +3029,7 @@
 			)
 		)
 		(property "Value" "+22.2V"
-			(at 163.83 43.18 0)
+			(at 208.28 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3037,7 +3037,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 163.83 48.26 0)
+			(at 208.28 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3046,7 +3046,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 163.83 48.26 0)
+			(at 208.28 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3055,7 +3055,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+24V\""
-			(at 163.83 48.26 0)
+			(at 208.28 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3077,7 +3077,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 138.43 68.58 180)
+		(at 182.88 105.41 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3086,7 +3086,7 @@
 		(fields_autoplaced yes)
 		(uuid "f736b537-6cda-4ee9-b0f9-bf55c04f8ca6")
 		(property "Reference" "#PWR013"
-			(at 138.43 64.77 0)
+			(at 182.88 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3095,7 +3095,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 138.43 73.66 0)
+			(at 182.88 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3103,7 +3103,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 138.43 68.58 0)
+			(at 182.88 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3112,7 +3112,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 138.43 68.58 0)
+			(at 182.88 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3121,7 +3121,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 138.43 68.58 0)
+			(at 182.88 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3143,7 +3143,7 @@
 	)
 	(symbol
 		(lib_id "Diode:1N4007")
-		(at 99.06 71.12 0)
+		(at 143.51 107.95 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3152,7 +3152,7 @@
 		(fields_autoplaced yes)
 		(uuid "f9bf8363-d621-4f16-a4c8-d71278ae181a")
 		(property "Reference" "D1"
-			(at 99.06 64.77 0)
+			(at 143.51 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3160,7 +3160,7 @@
 			)
 		)
 		(property "Value" "1N4007"
-			(at 99.06 67.31 0)
+			(at 143.51 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3168,7 +3168,7 @@
 			)
 		)
 		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
-			(at 99.06 75.565 0)
+			(at 143.51 112.395 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3177,7 +3177,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.vishay.com/docs/88503/1n4001.pdf"
-			(at 99.06 71.12 0)
+			(at 143.51 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3186,7 +3186,7 @@
 			)
 		)
 		(property "Description" "1000V 1A General Purpose Rectifier Diode, DO-41"
-			(at 99.06 71.12 0)
+			(at 143.51 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3195,7 +3195,7 @@
 			)
 		)
 		(property "Sim.Device" "D"
-			(at 99.06 71.12 0)
+			(at 143.51 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3204,7 +3204,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=K 2=A"
-			(at 99.06 71.12 0)
+			(at 143.51 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)

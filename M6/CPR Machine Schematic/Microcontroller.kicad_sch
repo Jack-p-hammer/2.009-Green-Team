@@ -1760,14 +1760,6 @@
 		(uuid "0d6eb847-8beb-4977-aa3e-586fc44989df")
 	)
 	(no_connect
-		(at 114.3 66.04)
-		(uuid "1af25449-fece-4f12-a9dd-0bbde2381613")
-	)
-	(no_connect
-		(at 114.3 63.5)
-		(uuid "1c538522-2504-4723-87ee-03d7cc726c7c")
-	)
-	(no_connect
 		(at 114.3 133.35)
 		(uuid "1cb49c14-d092-43f3-9806-8754c9e65c6a")
 	)
@@ -1796,6 +1788,10 @@
 		(uuid "490c813d-f148-4603-9e8a-512bb9f49096")
 	)
 	(no_connect
+		(at 114.3 55.88)
+		(uuid "54b35726-94d7-435a-8d33-81c3deb64285")
+	)
+	(no_connect
 		(at 138.43 140.97)
 		(uuid "587a7c0e-c963-4db0-ae75-c4f39157f4de")
 	)
@@ -1814,6 +1810,10 @@
 	(no_connect
 		(at 170.18 123.19)
 		(uuid "75455c6e-5e04-4aff-9f36-d8b917a07afc")
+	)
+	(no_connect
+		(at 114.3 58.42)
+		(uuid "79e110ad-927c-4447-9935-691f7dce7cf8")
 	)
 	(no_connect
 		(at 114.3 91.44)
@@ -1854,10 +1854,6 @@
 	(no_connect
 		(at 170.18 128.27)
 		(uuid "baf5f71a-dab9-453f-a087-718ca3eab9c4")
-	)
-	(no_connect
-		(at 114.3 60.96)
-		(uuid "c11b43e7-05fd-4aa5-9a69-57b5655bed75")
 	)
 	(no_connect
 		(at 114.3 123.19)
@@ -1913,7 +1909,7 @@
 	)
 	(wire
 		(pts
-			(xy 172.72 88.9) (xy 170.18 88.9)
+			(xy 173.99 88.9) (xy 170.18 88.9)
 		)
 		(stroke
 			(width 0)
@@ -1963,6 +1959,17 @@
 		)
 		(uuid "0a9d916a-5d53-493b-8b13-695fcda0fbb1")
 	)
+	(hierarchical_label "I2S2_DIN"
+		(shape output)
+		(at 114.3 60.96 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0d0f41bc-d44d-4895-93fe-ea38abff4a93")
+	)
 	(hierarchical_label "Red_Button"
 		(shape output)
 		(at 114.3 96.52 180)
@@ -1974,7 +1981,7 @@
 		)
 		(uuid "0f7cb356-2a75-494a-be7e-4dc65e7face8")
 	)
-	(hierarchical_label "I2S_BCLK"
+	(hierarchical_label "I2S1_BCLK"
 		(shape output)
 		(at 170.18 66.04 0)
 		(effects
@@ -1985,7 +1992,7 @@
 		)
 		(uuid "10b5318c-a04d-4a1b-b633-dcf67b0f1e73")
 	)
-	(hierarchical_label "I2S_LRC"
+	(hierarchical_label "I2S1_LRC"
 		(shape output)
 		(at 170.18 68.58 0)
 		(effects
@@ -1995,17 +2002,6 @@
 			(justify left)
 		)
 		(uuid "2c5ea38c-6705-451c-a54c-6ce650672e63")
-	)
-	(hierarchical_label "RST1"
-		(shape output)
-		(at 170.18 71.12 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "346ee751-e1ec-4fcb-849f-40ac1614c7c3")
 	)
 	(hierarchical_label "SPI_CS2"
 		(shape output)
@@ -2040,27 +2036,16 @@
 		)
 		(uuid "41a22373-1167-4215-ac93-20261bb153a8")
 	)
-	(hierarchical_label "UART_RX"
-		(shape input)
-		(at 114.3 55.88 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "4b2a8808-c9b1-4443-87a7-44d09c0f9491")
-	)
-	(hierarchical_label "UART_TX"
+	(hierarchical_label "I2C_SCL"
 		(shape output)
-		(at 114.3 58.42 180)
+		(at 170.18 71.12 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
-		(uuid "529dff95-05df-4bfa-bdd6-1cbbd61b9cfa")
+		(uuid "6cf317a6-16fd-4821-b67d-4e0b0e9d3b8e")
 	)
 	(hierarchical_label "Green_Button"
 		(shape output)
@@ -2073,17 +2058,6 @@
 		)
 		(uuid "71e9dcbc-96f7-4e1e-b553-632ca5ecaeee")
 	)
-	(hierarchical_label "I2C_SCL"
-		(shape output)
-		(at 170.18 81.28 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "853068a5-4e1f-4057-8aaf-15f2b8182473")
-	)
 	(hierarchical_label "Red_LED"
 		(shape output)
 		(at 114.3 99.06 180)
@@ -2094,6 +2068,17 @@
 			(justify right)
 		)
 		(uuid "9763e0dc-8b32-41d9-916e-133e81f5f9ba")
+	)
+	(hierarchical_label "RST2"
+		(shape output)
+		(at 170.18 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9829d670-e786-41fe-aac0-57ab62cc7952")
 	)
 	(hierarchical_label "SPI_INT"
 		(shape input)
@@ -2106,17 +2091,6 @@
 		)
 		(uuid "9e81d24a-cbae-49aa-895f-5f4c6baa0496")
 	)
-	(hierarchical_label "I2C_SDA"
-		(shape bidirectional)
-		(at 170.18 83.82 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "a1af867c-82a2-40a4-8da2-4e7ae80a2e56")
-	)
 	(hierarchical_label "White_Button"
 		(shape output)
 		(at 114.3 93.98 180)
@@ -2127,17 +2101,6 @@
 			(justify right)
 		)
 		(uuid "a6e80875-9e03-4fe2-b0ac-3805e141768d")
-	)
-	(hierarchical_label "RST2"
-		(shape output)
-		(at 170.18 73.66 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ca7b2493-a659-41a7-b4f3-5bf9ba6f7639")
 	)
 	(hierarchical_label "Green_LED"
 		(shape output)
@@ -2150,7 +2113,7 @@
 		)
 		(uuid "ce9f7c71-7422-48ab-ab5b-064b687aa28b")
 	)
-	(hierarchical_label "I2S_DIN"
+	(hierarchical_label "I2S1_DIN"
 		(shape output)
 		(at 170.18 63.5 0)
 		(effects
@@ -2160,6 +2123,17 @@
 			(justify left)
 		)
 		(uuid "df45e553-ce1e-46f0-9ea3-f2bc6411c0ce")
+	)
+	(hierarchical_label "I2S2_LRC"
+		(shape output)
+		(at 114.3 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e3cefddf-6901-4e48-a497-2baccf609221")
 	)
 	(hierarchical_label "SPI_CS"
 		(shape output)
@@ -2171,6 +2145,39 @@
 			(justify right)
 		)
 		(uuid "e477f612-0dc0-4ae5-877e-de9a70427565")
+	)
+	(hierarchical_label "RST1"
+		(shape output)
+		(at 170.18 81.28 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f3215a8c-d87a-4ca9-80a7-b72b06c36abf")
+	)
+	(hierarchical_label "I2C_SDA"
+		(shape bidirectional)
+		(at 170.18 73.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f32c5228-1ebc-4dbd-8f2a-73273168a4e1")
+	)
+	(hierarchical_label "I2S2_BCLK"
+		(shape output)
+		(at 114.3 66.04 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "fbaa8f9d-dbc8-4cd3-9468-3cf234ef83fa")
 	)
 	(symbol
 		(lib_id "teensy:Teensy4.1")
@@ -2637,7 +2644,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 172.72 88.9 0)
+		(at 173.99 88.9 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2646,7 +2653,7 @@
 		(fields_autoplaced yes)
 		(uuid "9a3dc59f-038d-4d9b-8b9f-abdcae6bbb27")
 		(property "Reference" "#PWR025"
-			(at 172.72 95.25 0)
+			(at 173.99 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2655,7 +2662,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 172.72 93.98 0)
+			(at 173.99 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2663,7 +2670,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 172.72 88.9 0)
+			(at 173.99 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2672,7 +2679,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 172.72 88.9 0)
+			(at 173.99 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2681,7 +2688,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 172.72 88.9 0)
+			(at 173.99 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)

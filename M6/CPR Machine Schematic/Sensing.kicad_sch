@@ -818,59 +818,71 @@
 			(embedded_fonts no)
 		)
 	)
+	(junction
+		(at 139.7 105.41)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "41a1a7d6-3313-49ac-9d65-8601842b8e80")
+	)
+	(junction
+		(at 142.24 107.95)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "49ef2506-554b-435b-9dc7-2fd3a432c1a2")
+	)
 	(no_connect
-		(at 118.11 59.69)
+		(at 161.29 100.33)
 		(uuid "1801692c-5619-4edf-a3b3-561166ca59aa")
 	)
 	(no_connect
-		(at 148.59 44.45)
+		(at 191.77 85.09)
 		(uuid "2010a769-526a-4e14-82f9-63584d28a84e")
 	)
 	(no_connect
-		(at 88.9 57.15)
+		(at 132.08 97.79)
 		(uuid "32141b7e-7318-4a17-8ad0-c3ad2298c01a")
 	)
 	(no_connect
-		(at 148.59 49.53)
+		(at 191.77 90.17)
 		(uuid "719b0490-534f-4f29-9b56-8a24cc4762fa")
 	)
 	(no_connect
-		(at 148.59 57.15)
+		(at 191.77 97.79)
 		(uuid "8879d437-ed39-470c-a304-64306e93b9db")
 	)
 	(no_connect
-		(at 118.11 62.23)
+		(at 161.29 102.87)
 		(uuid "a418abac-e918-4979-921f-8216001ded94")
 	)
 	(no_connect
-		(at 86.36 57.15)
+		(at 129.54 97.79)
 		(uuid "a8dcf7d7-b2fe-4729-9156-5fc8784c33e4")
 	)
 	(no_connect
-		(at 118.11 49.53)
+		(at 161.29 90.17)
 		(uuid "c673cfa7-e53e-445a-af16-8d2063c7db34")
 	)
 	(no_connect
-		(at 148.59 52.07)
+		(at 191.77 92.71)
 		(uuid "f128b774-5187-47b2-9e27-d52e3e7663e3")
 	)
 	(no_connect
-		(at 118.11 57.15)
+		(at 161.29 97.79)
 		(uuid "ff8aac1a-a10e-40be-9861-80714d9656ed")
 	)
 	(wire
 		(pts
-			(xy 118.11 64.77) (xy 81.28 64.77)
+			(xy 142.24 107.95) (xy 161.29 107.95)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2c9e670a-441c-4f65-ad20-b75eec138f69")
+		(uuid "13aa8095-8558-42d5-aa2d-b5854319ada7")
 	)
 	(wire
 		(pts
-			(xy 78.74 62.23) (xy 78.74 57.15)
+			(xy 121.92 102.87) (xy 121.92 97.79)
 		)
 		(stroke
 			(width 0)
@@ -880,7 +892,17 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 64.77) (xy 81.28 57.15)
+			(xy 139.7 96.52) (xy 139.7 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4bbeed98-7467-41d7-9be9-00f75c7b9194")
+	)
+	(wire
+		(pts
+			(xy 124.46 105.41) (xy 124.46 97.79)
 		)
 		(stroke
 			(width 0)
@@ -890,7 +912,7 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 67.31) (xy 118.11 67.31)
+			(xy 127 107.95) (xy 142.24 107.95)
 		)
 		(stroke
 			(width 0)
@@ -900,7 +922,37 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 57.15) (xy 83.82 67.31)
+			(xy 139.7 105.41) (xy 124.46 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae737e9a-6989-4370-a7ae-7cf94169606b")
+	)
+	(wire
+		(pts
+			(xy 142.24 96.52) (xy 142.24 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dede7047-e7ba-4b91-9657-2f07c3a0e459")
+	)
+	(wire
+		(pts
+			(xy 139.7 105.41) (xy 161.29 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2ba58e2-3ffd-4b4e-bab8-c59e7c4e5c36")
+	)
+	(wire
+		(pts
+			(xy 127 97.79) (xy 127 107.95)
 		)
 		(stroke
 			(width 0)
@@ -910,7 +962,7 @@
 	)
 	(hierarchical_label "I2C_SCL"
 		(shape input)
-		(at 99.06 64.77 90)
+		(at 139.7 96.52 90)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -921,18 +973,18 @@
 	)
 	(hierarchical_label "I2C_SDA"
 		(shape bidirectional)
-		(at 99.06 67.31 270)
+		(at 142.24 96.52 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
 		(uuid "c506396e-d5da-43cd-9c9a-cdb74a39c35b")
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 76.2 57.15 180)
+		(at 119.38 97.79 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -940,7 +992,7 @@
 		(dnp no)
 		(uuid "212ac011-0cc1-47f6-8ad9-8a8da6a93697")
 		(property "Reference" "#PWR019"
-			(at 76.2 53.34 0)
+			(at 119.38 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -949,7 +1001,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 76.2 62.23 0)
+			(at 119.38 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -957,7 +1009,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 76.2 57.15 0)
+			(at 119.38 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -966,7 +1018,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 76.2 57.15 0)
+			(at 119.38 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -975,7 +1027,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 76.2 57.15 0)
+			(at 119.38 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -997,7 +1049,7 @@
 	)
 	(symbol
 		(lib_id "Custom_Parts:Adafruit_VL53L0X")
-		(at 82.55 46.99 0)
+		(at 125.73 87.63 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1005,7 +1057,7 @@
 		(dnp no)
 		(uuid "290785a6-618c-479b-aa58-0627f68b345a")
 		(property "Reference" "U7"
-			(at 81.28 41.402 0)
+			(at 124.46 82.042 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1014,7 +1066,7 @@
 			)
 		)
 		(property "Value" "Adafruit VL53L0X"
-			(at 74.422 43.434 0)
+			(at 117.602 84.074 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1023,7 +1075,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 82.55 46.99 0)
+			(at 125.73 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1032,7 +1084,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 82.55 46.99 0)
+			(at 125.73 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1041,7 +1093,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 82.55 46.99 0)
+			(at 125.73 87.63 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1078,7 +1130,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 148.59 69.85 0)
+		(at 191.77 110.49 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1087,7 +1139,7 @@
 		(fields_autoplaced yes)
 		(uuid "4da40571-f16d-48c7-bfed-0867762c8e4b")
 		(property "Reference" "#PWR021"
-			(at 148.59 76.2 0)
+			(at 191.77 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1096,7 +1148,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 148.59 74.93 0)
+			(at 191.77 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1104,7 +1156,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 148.59 69.85 0)
+			(at 191.77 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1113,7 +1165,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 148.59 69.85 0)
+			(at 191.77 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1122,7 +1174,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 148.59 69.85 0)
+			(at 191.77 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1144,7 +1196,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 78.74 62.23 0)
+		(at 121.92 102.87 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1153,7 +1205,7 @@
 		(fields_autoplaced yes)
 		(uuid "5ec8e315-8ddd-44ca-9e67-cd793fd2f960")
 		(property "Reference" "#PWR018"
-			(at 78.74 68.58 0)
+			(at 121.92 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1162,7 +1214,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 78.74 67.31 0)
+			(at 121.92 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1170,7 +1222,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 78.74 62.23 0)
+			(at 121.92 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1179,7 +1231,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 62.23 0)
+			(at 121.92 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1188,7 +1240,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 78.74 62.23 0)
+			(at 121.92 102.87 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1210,7 +1262,7 @@
 	)
 	(symbol
 		(lib_id "4754:4754")
-		(at 133.35 57.15 0)
+		(at 176.53 97.79 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1219,7 +1271,7 @@
 		(fields_autoplaced yes)
 		(uuid "ac928339-de7a-4e0b-80de-62ab8ca77e7b")
 		(property "Reference" "U8"
-			(at 133.35 36.83 0)
+			(at 176.53 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1227,7 +1279,7 @@
 			)
 		)
 		(property "Value" "Adafruit IMU"
-			(at 133.35 39.37 0)
+			(at 176.53 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1235,7 +1287,7 @@
 			)
 		)
 		(property "Footprint" "4754:MODULE_4754"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1245,7 +1297,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1254,7 +1306,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1263,7 +1315,7 @@
 			)
 		)
 		(property "MF" "Adafruit"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1273,7 +1325,7 @@
 			)
 		)
 		(property "MAXIMUM_PACKAGE_HEIGHT" "4.6mm"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1283,7 +1335,7 @@
 			)
 		)
 		(property "Package" "None"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1293,7 +1345,7 @@
 			)
 		)
 		(property "Price" "None"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1303,7 +1355,7 @@
 			)
 		)
 		(property "Check_prices" "https://www.snapeda.com/parts/4754/Adafruit+Industries/view-part/?ref=eda"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1313,7 +1365,7 @@
 			)
 		)
 		(property "STANDARD" "Manufacturer Recommendations"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1323,7 +1375,7 @@
 			)
 		)
 		(property "PARTREV" "2021-03-16"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1333,7 +1385,7 @@
 			)
 		)
 		(property "SnapEDA_Link" "https://www.snapeda.com/parts/4754/Adafruit+Industries/view-part/?ref=snap"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1343,7 +1395,7 @@
 			)
 		)
 		(property "MP" "4754"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1353,7 +1405,7 @@
 			)
 		)
 		(property "Description_1" "Adafruit 9-DOF Orientation IMU Fusion Breakout - BNO085 (BNO080) - STEMMA QT / Qwiic"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1363,7 +1415,7 @@
 			)
 		)
 		(property "MANUFACTURER" "Adafruit"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1373,7 +1425,7 @@
 			)
 		)
 		(property "Availability" "In Stock"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1383,7 +1435,7 @@
 			)
 		)
 		(property "SNAPEDA_PN" "4754"
-			(at 133.35 57.15 0)
+			(at 176.53 97.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1439,7 +1491,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 118.11 44.45 90)
+		(at 161.29 85.09 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1447,7 +1499,7 @@
 		(dnp no)
 		(uuid "f5840042-08a7-4b85-a939-11f122f3a9d3")
 		(property "Reference" "#PWR020"
-			(at 121.92 44.45 0)
+			(at 165.1 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1456,7 +1508,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 113.03 44.45 0)
+			(at 156.21 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1464,7 +1516,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 118.11 44.45 0)
+			(at 161.29 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1473,7 +1525,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 118.11 44.45 0)
+			(at 161.29 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1482,7 +1534,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 118.11 44.45 0)
+			(at 161.29 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
