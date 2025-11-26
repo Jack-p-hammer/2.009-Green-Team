@@ -32,7 +32,7 @@ void updateCompressions() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateCompressionController(computeCompressionSetpoint()), false);
+    sendCommands(computeCompressionSetpoint(), POSITION);
 
     // Only print our status every 25th cycle.
     if (loopCount % 25 == 0) {
@@ -46,6 +46,8 @@ double computeCompressionSetpoint() {
     double cycleTime = fmod(time_sec, 0.56);  // One complete cycle = 0.56 s
     double outputPos_cm = 0.0;                 // Compression position in centimeters
 
+    static double depth = 7.0; // cm
+
     // Piecewise trapezoidal profile (periodic)
     // Positive rotation of motor is down on rack, so down is positive up is negative
     if (cycleTime < 0.12) {
@@ -54,15 +56,17 @@ double computeCompressionSetpoint() {
     } 
     else if (cycleTime < 0.24) {
         // Downstroke (compression phase)
-        outputPos_cm = 41.6666667 * (cycleTime - .12);
+        // outputPos_cm = 41.6666667 * (cycleTime - .12);
+        outputPos_cm = depth*((cycleTime - 0.12)/0.12);
     } 
     else if (cycleTime < 0.323) {
         // Top hold
-        outputPos_cm = 5.0;
+        outputPos_cm = depth;
     } 
     else if (cycleTime < 0.56) {
         // Return stroke (release)
-        outputPos_cm = -21.0965609 * (cycleTime - 0.323) + 5.0;
+        // outputPos_cm = -21.0965609 * (cycleTime - 0.323) + 5.0;
+        outputPos_cm = depth - depth*((cycleTime - 0.323)/(0.56-0.323));
     }
 
     // Convert to meters if needed by the rest of your control code
@@ -85,7 +89,7 @@ void returnToCompressionZero() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateCompressionController(0), false);
+    sendCommands(0, POSITION);
 
     // Only print our status every 25th cycle.
     if (loopCount % 25 == 0) {

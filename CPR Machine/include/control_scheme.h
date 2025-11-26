@@ -27,11 +27,19 @@ enum cprState {
     ABORT
 };
 
+// State enumeration for state machine
+enum controlMode {
+    POSITION,
+    VELOCITY,
+    TORQUE
+};
 // State variables (declared here, defined in a single .cpp)
 extern cprState currentState;
 
 // Track previous state to handle state transitions
 extern cprState prevState;
+
+extern controlMode control_mode;
 
 // Control Loop Timing variables
 // Declared here, defined in a single .cpp
@@ -66,7 +74,7 @@ void initializeMotor();
 // General functions
 
 // Send controller command to motor
-void sendCommands(double controlOutput, bool velocityControl);
+void sendCommands(double controlOutput, controlMode control_mode);
 
 // Print current motor status
 void printStatus(uint32_t currentTime);

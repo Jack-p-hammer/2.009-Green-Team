@@ -84,7 +84,7 @@ bool updateZeroing() {
     // cmd.velocity = zeroingVelocity/(2*PI*pinionRadius); // in revolutions per second
     // moteus.SetPosition(cmd);
 
-    sendCommands(zeroingVelocity/(2*PI*pinionRadius), true);
+    sendCommands(zeroingVelocity/(2*PI*pinionRadius), VELOCITY);
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
@@ -114,7 +114,7 @@ void returnToPreZeroingZero() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateZeroingController(0), true);
+    sendCommands(updateZeroingController(0), VELOCITY);
 
 }
 double updateZeroingController(double setpoint_m) {

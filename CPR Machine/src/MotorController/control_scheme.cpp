@@ -83,23 +83,34 @@ void initializeMotor() {
 }
 
 
-void sendCommands(double controlOutput, bool velocityControl) {
+void sendCommands(double controlOutput, controlMode control_mode) {
     // TODO: This needs to be changed into torque control!!!
     // Moteus::PositionMode::Command cmd;
     Moteus::PositionMode::Command cmd;
 
-    if (velocityControl) {
+    switch (control_mode) {
+    case POSITION:
+       cmd.position = ((controlOutput + linearZeroPos)/(2*PI*pinionRadius));
+
+      break;
+
+    case VELOCITY:  
         cmd.position = std::numeric_limits<double>::quiet_NaN();
         cmd.velocity = controlOutput; // in revolutions per second
-    } else {
+
+      break;
+
+    case TORQUE:
         cmd.position = std::numeric_limits<double>::quiet_NaN();
         cmd.velocity = 0.0;
         cmd.kp_scale = 0.0;
         cmd.kd_scale = 0.0;
 
-        cmd.feedforward_torque = controlOutput/10;
-    
-}
+        cmd.feedforward_torque = controlOutput/10; 
+
+      break;
+    }
+
     moteus.SetPosition(cmd, &positionModeOptions);
 }
 

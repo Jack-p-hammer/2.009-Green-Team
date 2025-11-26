@@ -23,8 +23,15 @@ void loop() {
   // if(currentState != ABORT) {
   //   DPRINT(currentState); DPRINT(" | "); DPRINTLN(linearPos);
   // }
+  long timer = millis();
+  
   DPRINT(">");
-  DPRINT("LinearPos:"); DPRINTLN(linearPos);
+  DPRINT("State:"); DPRINT(currentState);
+  DPRINT(", Zero:"); DPRINT(linearZeroPos*39.37);
+  DPRINT(", Setpoint:"); DPRINT((computeCompressionSetpoint()+ linearZeroPos)*39.37);
+  DPRINT(", LinearPos:"); DPRINT(linearPos*39.37);
+
+
   switch (currentState) {
     case BATTERY_CHECK:
       // Immediately check battery state
@@ -152,4 +159,7 @@ void loop() {
       // TODO: Handle reset after use
       break;
   }
+
+  DPRINTLN(millis() - timer);
+  Serial.println(millis() - timer);
 }
