@@ -15,24 +15,38 @@
 AudioPlaySdWav playWav1;
 AudioAmplifier   amp1;
 AudioOutputI2S i2s1;
+// AudioAmplifier   amp2;
+// AudioOutputI2S i2s2;
+
 
 // playWav1 -> amp1 -> i2s1 (L+R)
 AudioConnection  patchCord1(playWav1, 0, amp1, 0);
 AudioConnection  patchCord2(amp1, 0, i2s1, 0);  // left
 AudioConnection  patchCord3(amp1, 0, i2s1, 1);  // right
 
+// AudioConnection  patchCord4(playWav1, 0, amp2, 0);
+// AudioConnection  patchCord5(amp2, 0, i2s2, 0);  // left
+// AudioConnection  patchCord6(amp2, 0, i2s2, 1);  // right
+
+
 
 
 
 // Pin definitions
 const int SD_CHIP_SELECT = BUILTIN_SDCARD;
-const int BUTTON_PIN = 4; //green "next/resume"
-const int PAUSE_BUTTON_PIN = 2; //pause button 
-const int POWER_BUTTON_PIN = 5; //start button 
-const int RA8875_CS = 37;
-const int RA8875_RESET = 9;
+const int BUTTON_PIN = 28; //green "next/resume"
+const int PAUSE_BUTTON_PIN = 26; //pause button 
+const int POWER_BUTTON_PIN = 25; //start button 
 
-int count = 0;
+
+const int BUTTON_LED_PIN = 29;
+const int PAUSE_LED_PIN = 27;
+int button_light_count = 0;
+
+const int RA8875_CS = 16;
+const int RA8875_RESET = 15;
+
+
 
 // Display object
 Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
@@ -78,14 +92,14 @@ bool lastPauseButtonReading = HIGH;
 unsigned long lastPauseDebounceTime = 0;
 
 
-const unsigned long DEBOUNCE_DELAY = 40;  // ms
+const unsigned long DEBOUNCE_DELAY = 5;  // ms - reduced for instant button response
 
 // NEW: audio gain / pause state
-float audioGainDefault = 0.3f;    // your chosen normal gain
+float audioGainDefault = 0.7f;    // your chosen normal gain
 bool audioPaused = false;
 
 // NEW: path to pause image
-const char *pauseBmpFile = "/bmp0/ezgif-frame-001/.bmp";
+const char *pauseBmpFile = "/bmp04/start_img.bmp";
 
 void showPauseScreen() {  // NEW
   Serial.println("Showing pause screen...");
@@ -101,6 +115,11 @@ void showPauseScreen() {  // NEW
 
 
 void playCurrentWav() {
+  // Only play if not paused
+  if (audioPaused) {
+    return;  // Don't play audio if we're paused
+  }
+
   // Stop any currently playing WAV
   if (playWav1.isPlaying()) {
     playWav1.stop();
@@ -115,7 +134,7 @@ void playCurrentWav() {
   Serial.println(wavFilename);
   
   if (SD.exists(wavFilename)) {
-    audioPaused = false;         //  ensure not paused when starting new file
+    amp1.gain(audioGainDefault);  // ensure gain is restored
     playWav1.play(wavFilename);
   } else {
     Serial.print("ERROR: WAV file not found: ");
@@ -205,6 +224,11 @@ void setup() {
   Serial.print(", initial state: ");
   Serial.println(lastPowerButtonReading == HIGH ? "HIGH (not pressed)" : "LOW (pressed)");
 
+  Serial.print("Pause button on pin ");
+  Serial.print(PAUSE_BUTTON_PIN);
+  Serial.print(", initial state: ");
+  Serial.println(lastPauseButtonReading == HIGH ? "HIGH (not pressed)" : "LOW (pressed)");
+
 
 
   if (!SD.begin(SD_CHIP_SELECT)) {
@@ -253,12 +277,22 @@ void setup() {
 
 }
 
-void loop() {
-  // Handle button with debounce
-  unsigned long PowerNow = millis();
-  unsigned long TimeLoop = micros();
+void buttonBlink (int ButtonPin){
+    // each time period of blink is 0.8s
+    digitalWrite(ButtonPin, HIGH);
+    delay(400);
+    digitalWrite(ButtonPin, LOW);
+    delay(400);
+}
 
-  // ====== 1) Handle POWER button (pin 5) with debounce ======
+void loop() {
+  // Get current time once for all buttons
+  unsigned long GreenNow = millis();
+  unsigned long PowerNow = millis();
+  unsigned long PauseNow = millis();
+
+  digitalWrite(BUTTON_LED_PIN, HIGH);
+
   bool rawPowerReading = digitalRead(POWER_BUTTON_PIN);  // LOW = pressed
   if (rawPowerReading != lastPowerButtonReading) {
     lastPowerDebounceTime = PowerNow;
@@ -276,16 +310,17 @@ void loop() {
     }
   
   lastPowerButtonReading = rawPowerReading;
+  
+  // ====== 2) Handle GREEN button (pin 4) with debounce ======
   bool rawReading = digitalRead(BUTTON_PIN);  // LOW = pressed (INPUT_PULLUP)
-  unsigned long now = millis();
 
   // If the reading changed from last time, reset the debounce timer
   if (rawReading != lastButtonReading) {
-    lastDebounceTime = now;
+    lastDebounceTime = GreenNow;
   }
 
   // Has the reading been stable for long enough to be considered valid?
-  if ((now - lastDebounceTime) > DEBOUNCE_DELAY) {
+  if ((GreenNow - lastDebounceTime) > DEBOUNCE_DELAY) {
     // If the stable reading is different from the current debounced state
     if (rawReading != buttonState) {
       buttonState = rawReading;
@@ -321,19 +356,19 @@ void loop() {
   }
   lastButtonReading = rawReading;
 
-  // ====== 3) Handle PAUSE button (pin 2) with debounce ======
+  // ====== 3) Handle PAUSE button with debounce ======
   bool rawPauseReading = digitalRead(PAUSE_BUTTON_PIN);  // LOW = pressed
   if (rawPauseReading != lastPauseButtonReading) {
-    lastPauseDebounceTime = now;
+    lastPauseDebounceTime = PauseNow;
   }
 
-  if ((now - lastPauseDebounceTime) > DEBOUNCE_DELAY) {
+  if ((GreenNow - lastPauseDebounceTime) > DEBOUNCE_DELAY) {
     if (rawPauseReading != pauseButtonState) {
       pauseButtonState = rawPauseReading;
 
       if (pauseButtonState == LOW) {
         if (screenOn && !audioPaused) {
-          // Enter PAUSE state
+          // PAUSE: enter pause state (only if not already paused)
           Serial.println("Pause button: entering PAUSE state");
           audioPaused = true;
 
@@ -342,20 +377,18 @@ void loop() {
           }
           amp1.gain(0.0f);       // ensure muted
           showPauseScreen();     // show pause.bmp
-        } else {
-          Serial.println("Pause button pressed but already paused or screen off.");
+        } else if (!screenOn) {
+          Serial.println("Pause button pressed but screen is OFF; ignoring.");
+        } else if (audioPaused) {
+          Serial.println("Pause button pressed but already paused. Use green button to resume.");
         }
       }
     }
   }
 
-
-
   // Save raw reading for next pass
-  lastButtonReading = rawReading;
-  if (count < 100){
-    Serial.println(TimeLoop);
-    count++;
-  }
+  lastPauseButtonReading = rawPauseReading;
+
+
   
 }
