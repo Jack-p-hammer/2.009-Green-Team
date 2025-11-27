@@ -3,15 +3,17 @@
 #include "compression_control.h"
 #include "zeroing_control.h"
 #include "sensors.h"
-#include "utils.h"
+#include "HMI_utils.h"
 #include "interrupt_control.h"
 #include <Moteus.h>
 #include <ACAN2517FD.h>
+
 
 void setup() {
   // Do everything that needs to occur on power up
   initializeMotor();
   initializeSensors();
+  HMI_util_setup();
   // TODO: Does anything else need to happen here?
 }
 
@@ -24,6 +26,9 @@ void loop() {
   //   DPRINT(currentState); DPRINT(" | "); DPRINTLN(linearPos);
   // }
   long timer = millis();
+    // Get current time once for all buttons
+  GreenNow = millis();
+  PauseNow = millis();
   
   DPRINT(">");
   DPRINT("State:"); DPRINT(currentState);
@@ -33,6 +38,18 @@ void loop() {
 
 
   switch (currentState) {
+    case START_UP:  
+      showScreen(startBmpFile);
+      playAudio(startWavFile);
+
+      if(checkUserConfirmation()) {
+        // User has pressed start, get started
+        prevState = currentState;
+        currentState = BATTERY_CHECK;
+      }
+
+      break;
+
     case BATTERY_CHECK:
       // Immediately check battery state
       if(!verifyBatteryPercentage()) {
@@ -42,12 +59,24 @@ void loop() {
       } else {
         // Battery good, move to startup
         prevState = currentState;
-        currentState = START_UP;
+        currentState = CUT_CLOTHING;
       }
       break;
 
-    case START_UP:  
-      displaySetupInstructions();
+    case CUT_CLOTHING:  
+      displayCutClothingInstructions();
+
+      if(checkUserConfirmation()) {
+        // User has pressed start, get started
+        prevState = currentState;
+        currentState = UNFOLD;
+      }
+
+      break;
+    
+      
+    case UNFOLD:  
+      displayUnfoldInstructions();
 
       if(checkUserConfirmation()) {
         // User has pressed start, get started
@@ -56,6 +85,7 @@ void loop() {
       }
 
       break;
+
 
     case ALIGNMENT:
       displayAlignmentInstructions();

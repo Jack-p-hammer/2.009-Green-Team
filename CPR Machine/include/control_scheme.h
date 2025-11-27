@@ -15,8 +15,10 @@
 
 // State enumeration for state machine
 enum cprState {
-    BATTERY_CHECK,
     START_UP,
+    BATTERY_CHECK,
+    CUT_CLOTHING,
+    UNFOLD,
     ALIGNMENT,
     ZEROING_PREP,
     ZEROING,
