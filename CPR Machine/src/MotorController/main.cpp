@@ -39,8 +39,8 @@ void loop() {
 
   switch (currentState) {
     case START_UP:  
-      showScreen(startBmpFile);
-      playAudio(startWavFile);
+      showScreen(startUpBmpFile);
+      playAudio(startUpWavFile);
 
       if(nextButtonLoop()) {
         // User has pressed start, get started
@@ -64,7 +64,8 @@ void loop() {
       break;
 
     case CUT_CLOTHING:  
-      displayCutClothingInstructions();
+      showScreen(cutClothingBmpFile);
+      playAudio(cutClothingWavFile);
 
       if(nextButtonLoop()) {
         // User has pressed start, get started
@@ -76,7 +77,8 @@ void loop() {
     
       
     case UNFOLD:  
-      displayUnfoldInstructions();
+      showScreen(unfoldBmpFile);
+      playAudio(unfoldWavFile);
 
       if(nextButtonLoop()) {
         // User has pressed start, get started
@@ -88,7 +90,8 @@ void loop() {
 
 
     case ALIGNMENT:
-      displayAlignmentInstructions();
+      showScreen(alignmentBmpFile);
+      playAudio(alignmentWavFile);
 
       if(nextButtonLoop()) {
         // User has confirmed alignment, move to zeroing
@@ -99,7 +102,8 @@ void loop() {
     
     case ZEROING_PREP:
       // Prepare for zeroing, then move to zeroing state
-      displayZeroingInstructions();
+      showScreen(zeroingPrepBmpFile);
+      playAudio(zeroingPrepWavFile);
 
       if(nextButtonLoop()) {
         // User has confirmed alignment, move to zeroing
@@ -109,6 +113,8 @@ void loop() {
       break;
     
     case ZEROING:
+      showScreen(zeroingBmpFile);
+      playAudio(zeroingWavFile);
       // Initialize zeroing state, with error handling
       // Only do this when we switch states
       if(prevState != currentState) {
@@ -128,6 +134,8 @@ void loop() {
       }
       break;
     case COMPRESSION_PREP:
+      showScreen(compressionPrepBmpFile);
+      playAudio(compressionPrepWavFile);
       
       if (playWav1.isPlaying()) {
         audioWasPlaying = true;
@@ -140,7 +148,10 @@ void loop() {
         currentState = COMPRESSIONS;
     } 
       break;
+
     case COMPRESSIONS:
+      showScreen(compressionsBmpFile);
+      playAudio(compressionsWavFile);
 
       if(prevState != currentState) {
         initializeCompressions();
@@ -159,8 +170,11 @@ void loop() {
         prevState = currentState;
       }
       break;
+
     case PAUSED:
-      displayPauseMessage();
+      showScreen(pausedBmpFile);
+      playAudio(pausedWavFile);
+
 
       // If not paused, resume compressions
       if(nextButtonLoop()) {
@@ -172,7 +186,8 @@ void loop() {
     case KNEEL_FAILURE:
       // Command zero setpoint, don't necessarily need to get there before re-kneel
       returnToCompressionZero(); 
-      displayKneelFailureMessage();
+      showScreen(kneeFailureBmpFile);
+      playAudio(kneeFailureWavFile);
 
       // If they re-kneel, get back to rib breaking
       if(!isKneelingFailure()) {
@@ -183,7 +198,8 @@ void loop() {
       break;
     case ABORT:
       // Shit's fucked, get plunger out of there and tell people to do manual compressions
-      displayAbortMessage();
+      showScreen(abortBmpFile);
+      playAudio(abortWavFile);
       updateAbort();
 
       if(prevState != currentState) {

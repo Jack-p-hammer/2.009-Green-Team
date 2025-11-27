@@ -32,7 +32,7 @@ float audioGainDefault = 0.7f;    // your chosen normal gain
 bool audioWasPlaying;
 
 // NEW: path to pause image
-const char *startWavFile = "/mainwav/startUpWav.wav";
+const char *startUpWavFile = "/mainwav/startUpWav.wav";
 const char *cutClothingWavFile = "/mainwav/cutClothingWav.wav";
 const char *unfoldWavFile = "/mainwav/unfoldWav.wav";
 const char *alignmentWavFile = "/mainwav/alignmentWav.wav";
@@ -81,7 +81,7 @@ bool screenOn = false;
 
 
 // NEW: path to pause image
-const char *startBmpFile = "/mainbmp/startUpBmp.bmp";
+const char *startUpBmpFile = "/mainbmp/startUpBmp.bmp";
 const char *cutClothingBmpFile = "/mainbmp/cutClothingBmp.bmp";
 const char *unfoldBmpFile = "/mainbmp/unfoldBmp.bmp";
 const char *alignmentBmpFile = "/mainbmp/alignmentBmp.bmp";

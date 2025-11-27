@@ -23,5 +23,27 @@ bool audioWasPlaying;
 
 extern AudioPlaySdWav playWav1;
 
-extern const char *startBmpFile;
-extern const char *startWavFile; 
+extern const char *startUpBmpFile;
+extern const char *cutClothingBmpFile;
+extern const char *unfoldBmpFile;
+extern const char *alignmentBmpFile;
+extern const char *zeroingPrepBmpFile;
+extern const char *zeroingBmpFile;
+extern const char *compressionPrepBmpFile;
+extern const char *compressionsBmpFile;
+extern const char *pausedBmpFile;
+extern const char *kneeFailureBmpFile;
+extern const char *abortBmpFile;
+
+
+extern const char *startUpWavFile; 
+extern const char *cutClothingWavFile;
+extern const char *unfoldWavFile;
+extern const char *alignmentWavFile;
+extern const char *zeroingPrepWavFile;
+extern const char *zeroingWavFile;
+extern const char *compressionPrepWavFile;
+extern const char *compressionsWavFile;
+extern const char *pausedWavFile;
+extern const char *kneeFailureWavFile;
+extern const char *abortWavFile;
