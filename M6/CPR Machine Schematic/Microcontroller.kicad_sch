@@ -1876,10 +1876,6 @@
 		(uuid "dfe2102f-abc7-40f6-8b17-2364269414e4")
 	)
 	(no_connect
-		(at 114.3 73.66)
-		(uuid "e058331a-f254-4bd0-aa63-c900ab8913d0")
-	)
-	(no_connect
 		(at 170.18 120.65)
 		(uuid "e235eb16-30a9-4652-990e-99deee02f9f0")
 	)
@@ -1991,6 +1987,17 @@
 			(justify left)
 		)
 		(uuid "10b5318c-a04d-4a1b-b633-dcf67b0f1e73")
+	)
+	(hierarchical_label "FORCE_IN"
+		(shape input)
+		(at 170.18 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "217613a8-3661-4c43-bc75-d26925c85dc2")
 	)
 	(hierarchical_label "I2S1_LRC"
 		(shape output)
@@ -2115,12 +2122,12 @@
 	)
 	(hierarchical_label "I2S1_DIN"
 		(shape output)
-		(at 170.18 63.5 0)
+		(at 114.3 73.66 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
 		(uuid "df45e553-ce1e-46f0-9ea3-f2bc6411c0ce")
 	)

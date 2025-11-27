@@ -1855,6 +1855,343 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Transistor_FET:FDMS8350LET40"
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "Q"
+				(at 5.08 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "FDMS8350LET40"
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:TDSON-8-1"
+				(at 5.08 -1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.onsemi.com/pub/Collateral/FDMS8350LET40-D.pdf"
+				(at 5.08 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "49A Id, 40V Vds, N-Channel PowerTrench MOSFET, 0.85mOhm Ron, 242nC Qgmax, -55 to 175 °C, 5x6mm SON8"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "powertrench-MOSFET MOSFET fairchild"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TDSON*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "FDMS8350LET40_0_1"
+				(polyline
+					(pts
+						(xy 0.254 1.905) (xy 0.254 -1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.254 0) (xy -2.54 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 2.286) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 0.508) (xy 0.762 -0.508)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -1.27) (xy 0.762 -2.286)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -1.778) (xy 3.302 -1.778) (xy 3.302 1.778) (xy 0.762 1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 0) (xy 2.032 0.381) (xy 2.032 -0.381) (xy 1.016 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.651 0)
+					(radius 2.794)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 2.54) (xy 2.54 1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.54 1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 2.54 -1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.794 0.508) (xy 2.921 0.381) (xy 3.683 0.381) (xy 3.81 0.254)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.302 0.381) (xy 2.921 -0.254) (xy 3.683 -0.254) (xy 3.302 0.381)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "FDMS8350LET40_1_1"
+				(pin input line
+					(at -5.08 0 0)
+					(length 5.08)
+					(name "G"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 5.08 270)
+					(length 2.54)
+					(name "D"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "S"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(hide yes)
+					(name "S"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(hide yes)
+					(name "S"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:+3.3V"
 			(power)
 			(pin_numbers
@@ -2208,7 +2545,7 @@
 		)
 	)
 	(junction
-		(at 191.77 73.66)
+		(at 191.77 64.77)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "0389f43c-5472-4211-a322-aab686f03845")
@@ -2298,7 +2635,7 @@
 		(uuid "a164faa7-5a9c-4a6b-897a-108b704b295b")
 	)
 	(no_connect
-		(at 199.39 64.77)
+		(at 199.39 55.88)
 		(uuid "a415c86d-2064-40fb-9de8-c0f43a333b81")
 	)
 	(no_connect
@@ -2310,7 +2647,7 @@
 		(uuid "de64d594-0209-400b-9d5c-4c925dc2243b")
 	)
 	(no_connect
-		(at 198.12 45.72)
+		(at 198.12 36.83)
 		(uuid "df3631bb-b4b5-48f1-ae0d-b05a96f29341")
 	)
 	(no_connect
@@ -2399,7 +2736,7 @@
 	)
 	(wire
 		(pts
-			(xy 184.15 69.85) (xy 186.69 69.85)
+			(xy 184.15 60.96) (xy 186.69 60.96)
 		)
 		(stroke
 			(width 0)
@@ -2409,7 +2746,7 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 69.85) (xy 200.66 73.66)
+			(xy 200.66 60.96) (xy 200.66 64.77)
 		)
 		(stroke
 			(width 0)
@@ -2449,17 +2786,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 69.85) (xy 176.53 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "410f4623-f500-42d0-97c7-96da3945654a")
-	)
-	(wire
-		(pts
-			(xy 199.39 69.85) (xy 200.66 69.85)
+			(xy 199.39 60.96) (xy 200.66 60.96)
 		)
 		(stroke
 			(width 0)
@@ -2569,7 +2896,7 @@
 	)
 	(wire
 		(pts
-			(xy 200.66 73.66) (xy 191.77 73.66)
+			(xy 200.66 64.77) (xy 191.77 64.77)
 		)
 		(stroke
 			(width 0)
@@ -2586,16 +2913,6 @@
 			(type default)
 		)
 		(uuid "99cde1c0-a7a3-4f74-8fc0-d26bac58ec9f")
-	)
-	(wire
-		(pts
-			(xy 191.77 74.93) (xy 191.77 73.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9e9fbf0e-2716-4adf-853a-ea0167892217")
 	)
 	(wire
 		(pts
@@ -2759,16 +3076,6 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 93.98) (xy 177.8 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f9a552b6-ab19-4be0-917d-b17a0cc4547d")
-	)
-	(wire
-		(pts
 			(xy 44.45 57.15) (xy 46.99 57.15)
 		)
 		(stroke
@@ -2779,7 +3086,7 @@
 	)
 	(hierarchical_label "White_Button"
 		(shape input)
-		(at 187.96 48.26 180)
+		(at 187.96 39.37 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2790,7 +3097,7 @@
 	)
 	(hierarchical_label "Green_LED"
 		(shape input)
-		(at 173.99 93.98 180)
+		(at 184.15 104.14 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2845,7 +3152,7 @@
 	)
 	(hierarchical_label "Red_LED"
 		(shape input)
-		(at 173.99 69.85 180)
+		(at 184.15 69.85 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2867,7 +3174,7 @@
 	)
 	(hierarchical_label "Red_Button"
 		(shape input)
-		(at 186.69 67.31 180)
+		(at 186.69 58.42 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3448,6 +3755,88 @@
 		)
 	)
 	(symbol
+		(lib_id "Transistor_FET:FDMS8350LET40")
+		(at 189.23 69.85 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2c6711f2-b974-454a-94df-912d8a57c90a")
+		(property "Reference" "Q1"
+			(at 195.58 68.5799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDMS8350LET40"
+			(at 195.58 71.1199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TDSON-8-1"
+			(at 194.31 71.755 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/FDMS8350LET40-D.pdf"
+			(at 194.31 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "49A Id, 40V Vds, N-Channel PowerTrench MOSFET, 0.85mOhm Ron, 242nC Qgmax, -55 to 175 °C, 5x6mm SON8"
+			(at 189.23 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "5"
+			(uuid "39cae948-62c7-41be-9683-4fb190ddf506")
+		)
+		(pin "2"
+			(uuid "0bf054fe-f3b0-41a4-9342-286d97ff8c5f")
+		)
+		(pin "1"
+			(uuid "709cd3f9-4312-4917-9be6-b7e85dc09f8e")
+		)
+		(pin "4"
+			(uuid "d3b8b2f8-f002-40c1-a2b6-0eb4c027e879")
+		)
+		(pin "3"
+			(uuid "43ff92a1-c74c-40d3-9319-be9e65a51223")
+		)
+		(instances
+			(project ""
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
+					(reference "Q1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 116.84 71.12 270)
 		(unit 1)
@@ -3585,7 +3974,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 198.12 50.8 0)
+		(at 198.12 41.91 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3594,7 +3983,7 @@
 		(fields_autoplaced yes)
 		(uuid "40b70009-1bc2-4abd-835f-b11e2fb78a37")
 		(property "Reference" "#PWR036"
-			(at 198.12 57.15 0)
+			(at 198.12 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3603,7 +3992,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 198.12 55.88 0)
+			(at 198.12 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3611,7 +4000,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 198.12 50.8 0)
+			(at 198.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3620,7 +4009,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 198.12 50.8 0)
+			(at 198.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3629,7 +4018,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 198.12 50.8 0)
+			(at 198.12 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3777,6 +4166,72 @@
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
 					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 191.77 109.22 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "512971d9-157d-40ad-afde-6271f686127d")
+		(property "Reference" "#PWR030"
+			(at 191.77 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 191.77 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 191.77 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 191.77 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 191.77 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "31a6319d-162a-4a5b-a9fa-048decdf1710")
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
+					(reference "#PWR030")
 					(unit 1)
 				)
 			)
@@ -4036,7 +4491,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_Push_SPDT")
-		(at 193.04 48.26 0)
+		(at 193.04 39.37 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4045,7 +4500,7 @@
 		(fields_autoplaced yes)
 		(uuid "7fd7c27e-5a7f-4139-afc7-d07e2b6ed57c")
 		(property "Reference" "SW7"
-			(at 193.04 39.37 0)
+			(at 193.04 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4053,7 +4508,7 @@
 			)
 		)
 		(property "Value" "Non-LED Button"
-			(at 193.04 41.91 0)
+			(at 193.04 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4061,7 +4516,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 193.04 48.26 0)
+			(at 193.04 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4070,7 +4525,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 193.04 48.26 0)
+			(at 193.04 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4079,7 +4534,7 @@
 			)
 		)
 		(property "Description" "Momentary Switch, single pole double throw"
-			(at 193.04 48.26 0)
+			(at 193.04 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4197,7 +4652,7 @@
 	(symbol
 		(lib_name "SW_Push_SPDT_2")
 		(lib_id "Switch:SW_Push_SPDT")
-		(at 191.77 67.31 0)
+		(at 191.77 58.42 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4206,7 +4661,7 @@
 		(fields_autoplaced yes)
 		(uuid "9c204f07-5f9c-4f10-9dee-4de65e52c104")
 		(property "Reference" "SW5"
-			(at 193.3575 58.42 0)
+			(at 193.3575 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4214,7 +4669,7 @@
 			)
 		)
 		(property "Value" "LED Button"
-			(at 193.3575 60.96 0)
+			(at 193.3575 52.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4222,7 +4677,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 191.77 67.31 0)
+			(at 191.77 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4231,7 +4686,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 191.77 67.31 0)
+			(at 191.77 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4240,7 +4695,7 @@
 			)
 		)
 		(property "Description" "Momentary Switch, single pole double throw"
-			(at 191.77 67.31 0)
+			(at 191.77 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4273,8 +4728,75 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+5V")
+		(at 177.8 93.98 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a945ba09-0d93-49b7-aefa-da9491cd5f61")
+		(property "Reference" "#PWR035"
+			(at 181.61 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 173.99 93.9799 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 177.8 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 177.8 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 177.8 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "12969e92-2c8e-4690-96e7-911b0c536473")
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
+					(reference "#PWR035")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_US")
-		(at 180.34 69.85 270)
+		(at 180.34 60.96 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -4282,7 +4804,7 @@
 		(dnp no)
 		(uuid "ba3e00aa-eb53-4ee5-9ef0-6155975f8b78")
 		(property "Reference" "R3"
-			(at 180.34 76.2 90)
+			(at 180.34 67.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4290,7 +4812,7 @@
 			)
 		)
 		(property "Value" "50 Ohm"
-			(at 180.34 73.66 90)
+			(at 180.34 64.77 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4298,7 +4820,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 180.086 70.866 90)
+			(at 180.086 61.976 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4307,7 +4829,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 180.34 69.85 0)
+			(at 180.34 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4316,7 +4838,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 180.34 69.85 0)
+			(at 180.34 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4334,72 +4856,6 @@
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
 					(reference "R3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 191.77 99.06 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "bad1c54c-e015-4983-8da0-30e4f05cf4b1")
-		(property "Reference" "#PWR035"
-			(at 191.77 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 191.77 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 191.77 99.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 191.77 99.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 191.77 99.06 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b26eade0-e405-4f84-85c9-3a1fb3dcf662")
-		)
-		(instances
-			(project "CPR Machine Schematic"
-				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
-					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -4466,6 +4922,73 @@
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
 					(reference "#PWR038")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 176.53 60.96 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c6df249b-afb8-4203-ab47-c96ecefdc309")
+		(property "Reference" "#PWR027"
+			(at 180.34 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 172.72 60.9599 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 176.53 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 176.53 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 176.53 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2d9ec108-79fb-4a6d-a1c5-c678286507a5")
+		)
+		(instances
+			(project ""
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
@@ -4677,6 +5200,88 @@
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
 					(reference "SW6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Transistor_FET:FDMS8350LET40")
+		(at 189.23 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d9c48ffc-4bf2-47a5-9cb0-d167d06b8d54")
+		(property "Reference" "Q2"
+			(at 195.58 102.8699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDMS8350LET40"
+			(at 195.58 105.4099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TDSON-8-1"
+			(at 194.31 106.045 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/FDMS8350LET40-D.pdf"
+			(at 194.31 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "49A Id, 40V Vds, N-Channel PowerTrench MOSFET, 0.85mOhm Ron, 242nC Qgmax, -55 to 175 °C, 5x6mm SON8"
+			(at 189.23 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "5"
+			(uuid "78c7fd51-7fc3-4c0d-bc8c-1464c378f730")
+		)
+		(pin "2"
+			(uuid "3eccd786-ddd3-4be0-b120-2d085cadf3fa")
+		)
+		(pin "1"
+			(uuid "3c237f72-b56f-464f-b8fa-515a6c3b90bf")
+		)
+		(pin "4"
+			(uuid "25f74545-9147-4c2a-800d-123bfcf10bb9")
+		)
+		(pin "3"
+			(uuid "73c40096-b3a9-4969-9623-faedc0c499c6")
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/709433ac-4f95-432e-b356-28cd0d53ea85"
+					(reference "Q2")
 					(unit 1)
 				)
 			)

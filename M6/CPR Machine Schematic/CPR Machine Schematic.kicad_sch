@@ -25,6 +25,16 @@
 	)
 	(wire
 		(pts
+			(xy 110.49 129.54) (xy 134.62 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0afde02f-6da3-485e-8d6d-49de053a4e94")
+	)
+	(wire
+		(pts
 			(xy 193.04 73.66) (xy 187.96 73.66)
 		)
 		(stroke
@@ -440,6 +450,16 @@
 		(pin "I2C_SDA" bidirectional
 			(at 110.49 125.73 0)
 			(uuid "6b1999c8-d6ae-43eb-a6c9-6482f9496040")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "FORCE_PIN" output
+			(at 110.49 129.54 0)
+			(uuid "95d1cdf5-a8db-4e84-8552-a7e9d1df4293")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1071,6 +1091,16 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+		(pin "FORCE_IN" input
+			(at 134.62 129.54 180)
+			(uuid "7aad3bb5-12db-47ee-8f29-1ee6cad5b786")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
