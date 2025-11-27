@@ -29,8 +29,20 @@ AudioConnection  patchCord3(amp1, 0, i2s1, 1);  // right
 // NEW: audio gain / pause state
 float audioGainDefault = 0.7f;    // your chosen normal gain
 
+bool audioWasPlaying;
+
 // NEW: path to pause image
 const char *startWavFile = "/mainwav/startUpWav.wav";
+const char *cutClothingWavFile = "/mainwav/cutClothingWav.wav";
+const char *unfoldWavFile = "/mainwav/unfoldWav.wav";
+const char *alignmentWavFile = "/mainwav/alignmentWav.wav";
+const char *zeroingPrepWavFile = "/mainwav/zeroingPrepWav.wav";
+const char *zeroingWavFile = "/mainwav/zeroingWav.wav";
+const char *compressionPrepWavFile = "/mainwav/compressionPrepWav.wav";
+const char *compressionsWavFile = "/mainwav/compressionsWav.wav";
+const char *pausedWavFile = "/mainwav/pausedWav.wav";
+const char *kneelFailureWavFile = "/mainwav/kneelFailureWav.wav";
+const char *abortWavFile = "/mainwav/abortWav.wav";
 
 // BUTTONS
 // Pin definitions
@@ -47,9 +59,14 @@ const int RA8875_CS = 16;
 const int RA8875_RESET = 15;
 
 // Button state variables
-bool buttonState = HIGH;
-bool lastButtonReading = HIGH;
+bool nextButtonState = HIGH;
+bool lastNextButtonReading = HIGH;
 unsigned long lastDebounceTime = 0;
+
+// NEW: Pause button debounce
+bool pauseButtonState = HIGH;
+bool lastPauseButtonReading = HIGH;
+unsigned long lastPauseDebounceTime = 0;
 
 const unsigned long DEBOUNCE_DELAY = 5;  // ms - reduced for instant button response
 
@@ -62,8 +79,19 @@ Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
 // Track if the screen is “on” (backlight & display enabled)
 bool screenOn = false;
 
+
 // NEW: path to pause image
 const char *startBmpFile = "/mainbmp/startUpBmp.bmp";
+const char *cutClothingBmpFile = "/mainbmp/cutClothingBmp.bmp";
+const char *unfoldBmpFile = "/mainbmp/unfoldBmp.bmp";
+const char *alignmentBmpFile = "/mainbmp/alignmentBmp.bmp";
+const char *zeroingPrepBmpFile = "/mainbmp/zeroingPrepBmp.bmp";
+const char *zeroingBmpFile = "/mainbmp/zeroingBmp.bmp";
+const char *compressionPrepBmpFile = "/mainbmp/compressionPrepBmp.bmp";
+const char *compressionsBmpFile = "/mainbmp/compressionsBmp.bmp";
+const char *pausedBmpFile = "/mainbmp/pausedBmp.bmp";
+const char *kneelFailureBmpFile = "/mainbmp/kneelFailureBmp.bmp";
+const char *abortBmpFile = "/mainbmp/abortBmp.bmp";
 
 
 void HMI_util_setup() {
@@ -73,14 +101,14 @@ void HMI_util_setup() {
   pinMode(PAUSE_BUTTON_PIN, INPUT_PULLUP);   // NEW: pause button
 
 
-  lastButtonReading = digitalRead(NEXT_BUTTON_PIN);  // Initialize button state
+  lastNextButtonReading = digitalRead(NEXT_BUTTON_PIN);  // Initialize button state
   //lastPauseButtonReading = digitalRead(PAUSE_BUTTON_PIN);  // NEW
 
   
   Serial.print("Button initialized on pin ");
   Serial.print(NEXT_BUTTON_PIN);
   Serial.print(", initial state: ");
-  Serial.println(lastButtonReading == HIGH ? "HIGH (not pressed)" : "LOW (pressed)");
+  Serial.println(lastNextButtonReading == HIGH ? "HIGH (not pressed)" : "LOW (pressed)");
 
 
 //   Serial.print("Pause button on pin ");
@@ -131,14 +159,9 @@ void HMI_util_setup() {
 
 }
 
-bool checkUserConfirmation() {  
-    // TODO: Implement HMI user confirmation check
-    DPRINTLN("Waiting for user start confirmation...");
-    return true;
-}
-
 
 void showScreen(const char *file) {  // NEW
+
   Serial.println("Showing screen...");
   if (SD.exists(file)) {
     bmpDraw(&tft, file, 0, 0);
@@ -151,7 +174,6 @@ void showScreen(const char *file) {  // NEW
 
 
 void playAudio(const char *wavFileName) {
-
   // Stop any currently playing WAV
   //if (playWav1.isPlaying()) {
    // playWav1.stop();
@@ -175,21 +197,21 @@ bool nextButtonLoop() {
   bool rawReading = digitalRead(NEXT_BUTTON_PIN);  // LOW = pressed (INPUT_PULLUP)
 
   // If the reading changed from last time, reset the debounce timer
-  if (rawReading != lastButtonReading) {
+  if (rawReading != lastNextButtonReading) {
     lastDebounceTime = GreenNow;
   }
 
-    lastButtonReading = rawReading;
+    lastNextButtonReading = rawReading;
   // Has the reading been stable for long enough to be considered valid?
   if ((GreenNow - lastDebounceTime) > DEBOUNCE_DELAY) {
     // If the stable reading is different from the current debounced state
-    if (rawReading != buttonState) {
-      buttonState = rawReading;
+    if (rawReading != nextButtonState) {
+      nextButtonState = rawReading;
 
       // We just got a clean transition
       // Detect a press on HIGH -> LOW (button down)
      // Transition: HIGH -> LOW = button pressed
-      if (buttonState == LOW) {
+      if (nextButtonState == LOW) {
         // Only do anything if screen is ON
         return true;
         }
@@ -198,6 +220,30 @@ bool nextButtonLoop() {
 
   return false;
 
+}
+
+
+bool pauseButtonLoop() {
+     // ====== Handle PAUSE button with debounce ======
+  bool rawPauseReading = digitalRead(PAUSE_BUTTON_PIN);  // LOW = pressed
+
+  if (rawPauseReading != lastPauseButtonReading) {
+    lastPauseDebounceTime = PauseNow;
+  }
+
+  lastPauseButtonReading = rawPauseReading;
+
+  if ((PauseNow - lastPauseDebounceTime) > DEBOUNCE_DELAY) {
+    if (rawPauseReading != pauseButtonState) {
+      pauseButtonState = rawPauseReading;
+
+      if (pauseButtonState == LOW) {
+          return true;     // show pause.bmp
+        } 
+      }
+    }
+
+    return false;
 }
 
 

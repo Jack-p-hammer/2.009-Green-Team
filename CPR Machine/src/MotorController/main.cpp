@@ -42,7 +42,7 @@ void loop() {
       showScreen(startBmpFile);
       playAudio(startWavFile);
 
-      if(checkUserConfirmation()) {
+      if(nextButtonLoop()) {
         // User has pressed start, get started
         prevState = currentState;
         currentState = BATTERY_CHECK;
@@ -66,7 +66,7 @@ void loop() {
     case CUT_CLOTHING:  
       displayCutClothingInstructions();
 
-      if(checkUserConfirmation()) {
+      if(nextButtonLoop()) {
         // User has pressed start, get started
         prevState = currentState;
         currentState = UNFOLD;
@@ -78,7 +78,7 @@ void loop() {
     case UNFOLD:  
       displayUnfoldInstructions();
 
-      if(checkUserConfirmation()) {
+      if(nextButtonLoop()) {
         // User has pressed start, get started
         prevState = currentState;
         currentState = ALIGNMENT;
@@ -90,7 +90,7 @@ void loop() {
     case ALIGNMENT:
       displayAlignmentInstructions();
 
-      if(checkUserConfirmation()) {
+      if(nextButtonLoop()) {
         // User has confirmed alignment, move to zeroing
         prevState = currentState;
         currentState = ZEROING_PREP;
@@ -101,7 +101,7 @@ void loop() {
       // Prepare for zeroing, then move to zeroing state
       displayZeroingInstructions();
 
-      if(checkUserConfirmation()) {
+      if(nextButtonLoop()) {
         // User has confirmed alignment, move to zeroing
         prevState = currentState;
         currentState = ZEROING;
@@ -119,23 +119,29 @@ void loop() {
         // updateZeroing returned true, indicating zeroing is complete
         // Error cases handled in zeroing control
         DPRINTLN("ZEROING COMPLETE");
-        prevState = COMPRESSIONS;
-        currentState = COMPRESSIONS;
+        prevState = currentState; //I changed this from COMPRESSIONS
+        currentState = COMPRESSION_PREP;
       }
       
       if(currentState == ZEROING) {
         prevState = currentState;
       }
       break;
-    case WAIT_FOR_COMPRESSION_CONFIRMATION:
-      if(displayCompressionConfirmation()) {
-        // User has confirmed, move to compressions
+    case COMPRESSION_PREP:
+      
+      if (playWav1.isPlaying()) {
+        audioWasPlaying = true;
+    }
+
+    // Trigger when playback *finishes*
+    if (audioWasPlaying && !playWav1.isPlaying()) {
+        audioWasPlaying = false;  // reset
         prevState = currentState;
         currentState = COMPRESSIONS;
-      }
-
+    } 
       break;
     case COMPRESSIONS:
+
       if(prevState != currentState) {
         initializeCompressions();
       }
@@ -144,7 +150,7 @@ void loop() {
       updateCompressions();
 
       // Check for pause command
-      if(checkPauseCommand()) {
+      if(pauseButtonLoop()) {
         prevState = currentState;
         currentState = PAUSED;
       }
@@ -157,7 +163,7 @@ void loop() {
       displayPauseMessage();
 
       // If not paused, resume compressions
-      if(!checkPauseCommand()) {
+      if(nextButtonLoop()) {
         prevState = currentState;
         currentState = COMPRESSIONS;
       }
