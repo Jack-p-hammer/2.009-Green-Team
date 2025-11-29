@@ -16,7 +16,7 @@ double prev_error_gain = -113.9;
 double prev_prev_command_gain = -.00201;
 double prev_prev_error_gain = 50.2;
 
-const double extensionStrokeLimit = 0.0254*8; // 10 inches, in meters
+const double extensionStrokeLimit = 0.0254*12;//8; // 10 inches, in meters
 long zeroing_start_time = 0;
 const double zeroingVelocity = 0.02; // m/s
 

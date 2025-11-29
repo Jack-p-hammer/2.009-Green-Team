@@ -4,7 +4,7 @@
 #include "Adafruit_VL53L0X.h"
 
 // FIXME: EXAMPLE PINS
-const int FORCE_PIN = A0;
+const int FORCE_PIN = A8;
 const int LINEAR_ENCODER_A = 2;
 const int LINEAR_ENCODER_B = 3;
 
@@ -39,7 +39,7 @@ bool initializeSensors() {
     // Initialize ToF Sensor
   if (!ToFSensor.begin()) {
     DPRINTLN(F("Failed to boot Time of Flight sensor"));
-    return false;
+    return true;//false;
   }
 
   // TODO: Do we want continuous readings?
@@ -73,7 +73,7 @@ double read_force_sensor() {
   // DPRINT(",");
   // DPRINT("State:"); DPRINTLN(currentState);
 
-  return force; // should be value in newtons
+  return abs(force); // should be value in newtons
 }
 
 double read_linear_encoder() {

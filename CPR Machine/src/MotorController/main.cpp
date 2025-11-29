@@ -25,11 +25,7 @@ void loop() {
   // }
   long timer = millis();
   
-  DPRINT(">");
-  DPRINT("State:"); DPRINT(currentState);
-  DPRINT(", Zero:"); DPRINT(linearZeroPos*39.37);
-  DPRINT(", Setpoint:"); DPRINT((computeCompressionSetpoint()+ linearZeroPos)*39.37);
-  DPRINT(", LinearPos:"); DPRINT(linearPos*39.37);
+  
 
 
   switch (currentState) {
@@ -85,6 +81,12 @@ void loop() {
         initializeZeroing();
       }
 
+      DPRINT(">");
+      DPRINT("State:"); DPRINT(currentState);
+      DPRINT(", Zero:"); DPRINT(linearZeroPos*39.37);
+      DPRINT(", Setpoint:"); DPRINT((computeCompressionSetpoint()+ linearZeroPos)*39.37);
+      DPRINT(", LinearPos:"); DPRINTLN(linearPos*39.37);
+
       if(updateZeroing()) {
         // updateZeroing returned true, indicating zeroing is complete
         // Error cases handled in zeroing control
@@ -109,6 +111,12 @@ void loop() {
       if(prevState != currentState) {
         initializeCompressions();
       }
+
+      DPRINT(">");
+      DPRINT("State:"); DPRINT(currentState);
+      DPRINT(", Zero:"); DPRINT(linearZeroPos*39.37);
+      DPRINT(", Setpoint:"); DPRINT((computeCompressionSetpoint()+ linearZeroPos)*39.37);
+      DPRINT(", LinearPos:"); DPRINT(linearPos*39.37);
 
       // Error handling handled within updateCompressions()
       updateCompressions();
@@ -151,7 +159,7 @@ void loop() {
       updateAbort();
 
       if(prevState != currentState) {
-        DPRINTLN("ABORT");
+        DPRINT("ABORT FROM: "); DPRINTLN(prevState);
         prevState = currentState;
       }
       
@@ -160,6 +168,6 @@ void loop() {
       break;
   }
 
-  DPRINTLN(millis() - timer);
-  Serial.println(millis() - timer);
+  // DPRINTLN(millis() - timer);
+  // Serial.println(millis() - timer);
 }
