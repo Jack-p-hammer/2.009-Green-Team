@@ -246,11 +246,9 @@ void setup() {
 
   Serial.println("Found RA8875");
 
-  tft.displayOn(false);
   tft.GPIOX(true);      // Enable TFT - display enable tied to GPIOX
   tft.PWM1config(true, RA8875_PWM_CLK_DIV1024); // PWM output for backlight
-  tft.PWM1out(0);   // <<< backlight off (0 = dark)
-
+  
   Serial.print("(");
   Serial.print(tft.width());
   Serial.print(", ");
@@ -260,9 +258,11 @@ void setup() {
   tft.fillScreen(RA8875_BLACK);
   tft.graphicsMode();
 
-  // Draw the first frame of the first group
+  // Turn on the screen automatically on startup
   currentGroup = 0;
-  screenOn = false;       // <<< start with screen off
+  screenOn = true;
+  tft.displayOn(true);   // enable display
+  tft.PWM1out(255);      // backlight full
 
 
   AudioMemory(30);
@@ -274,6 +274,9 @@ void setup() {
 
   amp1.gain(audioGainDefault);
   audioPaused = false;
+
+  // Show first frame and start first WAV file automatically on startup
+  showCurrentFrameAndAudio();
 
 }
 
