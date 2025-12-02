@@ -85,7 +85,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 135.89) (xy 193.04 135.89)
+			(xy 173.99 123.19) (xy 193.04 123.19)
 		)
 		(stroke
 			(width 0)
@@ -125,7 +125,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 130.81) (xy 193.04 130.81)
+			(xy 173.99 118.11) (xy 193.04 118.11)
 		)
 		(stroke
 			(width 0)
@@ -165,7 +165,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 138.43) (xy 193.04 138.43)
+			(xy 173.99 125.73) (xy 193.04 125.73)
 		)
 		(stroke
 			(width 0)
@@ -255,7 +255,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 133.35) (xy 193.04 133.35)
+			(xy 173.99 120.65) (xy 193.04 120.65)
 		)
 		(stroke
 			(width 0)
@@ -265,7 +265,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 140.97) (xy 193.04 140.97)
+			(xy 173.99 128.27) (xy 193.04 128.27)
 		)
 		(stroke
 			(width 0)
@@ -345,16 +345,6 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 121.92) (xy 193.04 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ca8c4949-8276-4fcb-9f12-71ac2d562c47")
-	)
-	(wire
-		(pts
 			(xy 121.92 85.09) (xy 134.62 85.09)
 		)
 		(stroke
@@ -365,16 +355,6 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 124.46) (xy 193.04 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dac5886b-cfdf-40be-b3ed-bbdaae23efd4")
-	)
-	(wire
-		(pts
 			(xy 173.99 105.41) (xy 193.04 105.41)
 		)
 		(stroke
@@ -382,16 +362,6 @@
 			(type default)
 		)
 		(uuid "dba23227-556f-400a-9233-7c1e7a675a53")
-	)
-	(wire
-		(pts
-			(xy 173.99 119.38) (xy 193.04 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e3ab2cd7-565d-4ff7-8c46-52dc77f0e6c5")
 	)
 	(wire
 		(pts
@@ -712,7 +682,7 @@
 			)
 		)
 		(pin "Green_Button" input
-			(at 193.04 138.43 180)
+			(at 193.04 125.73 180)
 			(uuid "57ea00c3-c9a2-417e-81b7-151bcfd5bb2f")
 			(effects
 				(font
@@ -722,7 +692,7 @@
 			)
 		)
 		(pin "Green_LED" input
-			(at 193.04 140.97 180)
+			(at 193.04 128.27 180)
 			(uuid "1bee65cb-46c5-4d01-82d2-5e2c36ea3496")
 			(effects
 				(font
@@ -732,7 +702,7 @@
 			)
 		)
 		(pin "Red_Button" input
-			(at 193.04 133.35 180)
+			(at 193.04 120.65 180)
 			(uuid "a7e80941-7a4e-47fa-bb78-c61a016c6dc0")
 			(effects
 				(font
@@ -742,7 +712,7 @@
 			)
 		)
 		(pin "Red_LED" input
-			(at 193.04 135.89 180)
+			(at 193.04 123.19 180)
 			(uuid "4184213e-7df5-4c99-b88f-a10cd5e7ee73")
 			(effects
 				(font
@@ -752,7 +722,7 @@
 			)
 		)
 		(pin "White_Button" input
-			(at 193.04 130.81 180)
+			(at 193.04 118.11 180)
 			(uuid "9340eaff-6850-4fd6-b3f1-932bf49e5819")
 			(effects
 				(font
@@ -771,59 +741,29 @@
 				(justify left)
 			)
 		)
-		(pin "I2S2_BCLK" input
-			(at 193.04 124.46 180)
-			(uuid "f7147600-9ace-4ed2-b043-8e13b004572f")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "I2S2_LRCLK" input
-			(at 193.04 121.92 180)
-			(uuid "73df63b3-f1ed-4793-b716-d2830e656330")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "I2S2_DIN" input
-			(at 193.04 119.38 180)
-			(uuid "b1068e98-37cd-4c39-9b5f-0ce3a9264222")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "I2S1_LRCLK" input
-			(at 193.04 105.41 180)
-			(uuid "2db9d8b7-99d4-4097-a20b-a2b1d0b2aff8")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "I2S1_DIN" input
-			(at 193.04 102.87 180)
-			(uuid "0bdca42a-321b-44c1-9f89-bba6eb9884ec")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "I2S1_BCLK" input
+		(pin "I2S_LRCLK" input
 			(at 193.04 107.95 180)
-			(uuid "873232ce-20c0-449c-9fb7-c26ce6edda9f")
+			(uuid "69d814ed-97a2-4df2-abf0-98db4b592b62")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "I2S_DIN" input
+			(at 193.04 102.87 180)
+			(uuid "17495492-9802-41df-8a8f-80192f5be073")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "I2S_BCLK" input
+			(at 193.04 105.41 180)
+			(uuid "40c62743-bab9-4c95-8d84-ba31c78e6ad4")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -984,7 +924,7 @@
 			)
 		)
 		(pin "Red_Button" output
-			(at 173.99 133.35 0)
+			(at 173.99 120.65 0)
 			(uuid "45ad2647-a01d-4da7-9ddd-e09b706fd72b")
 			(effects
 				(font
@@ -994,7 +934,7 @@
 			)
 		)
 		(pin "White_Button" output
-			(at 173.99 130.81 0)
+			(at 173.99 118.11 0)
 			(uuid "4699cb35-da76-4d6d-a440-ff0885818bd1")
 			(effects
 				(font
@@ -1004,7 +944,7 @@
 			)
 		)
 		(pin "Green_Button" output
-			(at 173.99 138.43 0)
+			(at 173.99 125.73 0)
 			(uuid "9ad44e2b-2168-4415-a016-c68d8744e178")
 			(effects
 				(font
@@ -1014,7 +954,7 @@
 			)
 		)
 		(pin "Green_LED" output
-			(at 173.99 140.97 0)
+			(at 173.99 128.27 0)
 			(uuid "c3f5660f-c299-4661-a729-2ca7f6ddb4dc")
 			(effects
 				(font
@@ -1024,68 +964,8 @@
 			)
 		)
 		(pin "Red_LED" output
-			(at 173.99 135.89 0)
+			(at 173.99 123.19 0)
 			(uuid "570b3cd4-9d80-42f5-8f6f-1c98d27a4abe")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "I2S2_DIN" output
-			(at 173.99 119.38 0)
-			(uuid "65d747d6-5cfa-43fe-ae7c-b157ac2602c7")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "I2S2_LRC" output
-			(at 173.99 121.92 0)
-			(uuid "45846bd5-ea41-4cd1-8223-0f6ddd405897")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "I2S2_BCLK" output
-			(at 173.99 124.46 0)
-			(uuid "bb4411b4-e555-47dc-8084-b4ed0cdcb9fd")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "I2S1_BCLK" output
-			(at 173.99 107.95 0)
-			(uuid "572628fd-12d1-4549-b880-de53c75ee9c2")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "I2S1_LRC" output
-			(at 173.99 105.41 0)
-			(uuid "23a344e9-51a6-42c9-96a2-2b14a605dffa")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "I2S1_DIN" output
-			(at 173.99 102.87 0)
-			(uuid "ccab8773-ad4f-4a63-944b-55656c3ecaed")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1101,6 +981,36 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+			)
+		)
+		(pin "I2S_DIN" output
+			(at 173.99 102.87 0)
+			(uuid "09005e38-9ae7-4d38-8c63-69fca51a0e51")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "I2S_LRC" output
+			(at 173.99 107.95 0)
+			(uuid "798e297e-5206-4b44-8d66-b9e52b388417")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "I2S_BCLK" output
+			(at 173.99 105.41 0)
+			(uuid "129919a4-e9a0-4f4d-807c-722f8a098bda")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances

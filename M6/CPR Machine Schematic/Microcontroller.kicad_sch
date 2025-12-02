@@ -1824,6 +1824,10 @@
 		(uuid "7d4ad8a2-d1b6-4e6b-b964-4f34b7a27b9a")
 	)
 	(no_connect
+		(at 114.3 60.96)
+		(uuid "82100ef9-b5d7-4ed0-835d-e5d95f368b6b")
+	)
+	(no_connect
 		(at 170.18 91.44)
 		(uuid "8af10fd0-1d96-4520-99c3-5ddcf53d5b27")
 	)
@@ -1888,6 +1892,10 @@
 		(uuid "e5894f06-258e-41b8-bd1c-b4ae1a69075b")
 	)
 	(no_connect
+		(at 114.3 63.5)
+		(uuid "ea537283-3f53-4b4f-a2a7-abf197a03255")
+	)
+	(no_connect
 		(at 170.18 49.53)
 		(uuid "ecd35e51-3d0d-44c0-9cc9-82138267db00")
 	)
@@ -1902,6 +1910,10 @@
 	(no_connect
 		(at 170.18 130.81)
 		(uuid "fef25202-7d0d-4bb9-a45d-7060acbb52fd")
+	)
+	(no_connect
+		(at 114.3 66.04)
+		(uuid "ffb2f246-118e-4264-b0d6-8a4486ae3a47")
 	)
 	(wire
 		(pts
@@ -1955,17 +1967,6 @@
 		)
 		(uuid "0a9d916a-5d53-493b-8b13-695fcda0fbb1")
 	)
-	(hierarchical_label "I2S2_DIN"
-		(shape output)
-		(at 114.3 60.96 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "0d0f41bc-d44d-4895-93fe-ea38abff4a93")
-	)
 	(hierarchical_label "Red_Button"
 		(shape output)
 		(at 114.3 96.52 180)
@@ -1977,7 +1978,7 @@
 		)
 		(uuid "0f7cb356-2a75-494a-be7e-4dc65e7face8")
 	)
-	(hierarchical_label "I2S1_BCLK"
+	(hierarchical_label "I2S_BCLK"
 		(shape output)
 		(at 170.18 66.04 0)
 		(effects
@@ -1999,7 +2000,7 @@
 		)
 		(uuid "217613a8-3661-4c43-bc75-d26925c85dc2")
 	)
-	(hierarchical_label "I2S1_LRC"
+	(hierarchical_label "I2S_LRC"
 		(shape output)
 		(at 170.18 68.58 0)
 		(effects
@@ -2120,7 +2121,7 @@
 		)
 		(uuid "ce9f7c71-7422-48ab-ab5b-064b687aa28b")
 	)
-	(hierarchical_label "I2S1_DIN"
+	(hierarchical_label "I2S_DIN"
 		(shape output)
 		(at 114.3 73.66 180)
 		(effects
@@ -2130,17 +2131,6 @@
 			(justify right)
 		)
 		(uuid "df45e553-ce1e-46f0-9ea3-f2bc6411c0ce")
-	)
-	(hierarchical_label "I2S2_LRC"
-		(shape output)
-		(at 114.3 63.5 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e3cefddf-6901-4e48-a497-2baccf609221")
 	)
 	(hierarchical_label "SPI_CS"
 		(shape output)
@@ -2174,17 +2164,6 @@
 			(justify left)
 		)
 		(uuid "f32c5228-1ebc-4dbd-8f2a-73273168a4e1")
-	)
-	(hierarchical_label "I2S2_BCLK"
-		(shape output)
-		(at 114.3 66.04 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "fbaa8f9d-dbc8-4cd3-9468-3cf234ef83fa")
 	)
 	(symbol
 		(lib_id "teensy:Teensy4.1")
