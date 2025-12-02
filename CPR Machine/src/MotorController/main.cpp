@@ -48,6 +48,11 @@ void loop() {
         currentState = BATTERY_CHECK;
       }
 
+      // Now that one loop has passed, update prevState
+      if(currentState == START_UP) {
+        prevState = currentState;
+      }
+
       break;
 
     case BATTERY_CHECK:
@@ -61,6 +66,12 @@ void loop() {
         prevState = currentState;
         currentState = CUT_CLOTHING;
       }
+      
+      // Now that one loop has passed, update prevState
+      if(currentState == BATTERY_CHECK) {
+        prevState = currentState;
+      }
+
       break;
 
     case CUT_CLOTHING:  
@@ -73,9 +84,13 @@ void loop() {
         currentState = UNFOLD;
       }
 
+      // Now that one loop has passed, update prevState
+      if(currentState == CUT_CLOTHING) {
+        prevState = currentState;
+      }
+
       break;
     
-      
     case UNFOLD:  
       showScreen(unfoldBmpFile);
       playAudio(unfoldWavFile);
@@ -86,8 +101,12 @@ void loop() {
         currentState = ALIGNMENT;
       }
 
-      break;
+      // Now that one loop has passed, update prevState
+      if(currentState == UNFOLD) {
+        prevState = currentState;
+      }
 
+      break;
 
     case ALIGNMENT:
       showScreen(alignmentBmpFile);
@@ -98,6 +117,12 @@ void loop() {
         prevState = currentState;
         currentState = ZEROING_PREP;
       }
+
+      // Now that one loop has passed, update prevState
+      if(currentState == ALIGNMENT) {
+        prevState = currentState;
+      }
+
       break;
     
     case ZEROING_PREP:
@@ -110,6 +135,12 @@ void loop() {
         prevState = currentState;
         currentState = ZEROING;
       }
+
+      // Now that one loop has passed, update prevState
+      if(currentState == ZEROING_PREP) {
+        prevState = currentState;
+      }
+
       break;
     
     case ZEROING:
@@ -129,25 +160,34 @@ void loop() {
         currentState = COMPRESSION_PREP;
       }
       
+      // Now that one loop has passed, update prevState
       if(currentState == ZEROING) {
         prevState = currentState;
       }
+
       break;
+
     case COMPRESSION_PREP:
       showScreen(compressionPrepBmpFile);
       playAudio(compressionPrepWavFile);
       
       if (playWav1.isPlaying()) {
         audioWasPlaying = true;
-    }
+      }
 
-    // Trigger when playback *finishes*
-    if (audioWasPlaying && !playWav1.isPlaying()) {
-        audioWasPlaying = false;  // reset
+      // Trigger when playback *finishes*
+      if (audioWasPlaying && !playWav1.isPlaying()) {
+          audioWasPlaying = false;  // reset
+          prevState = currentState;
+          currentState = COMPRESSIONS;
+      } 
+      
+      // Now that one loop has passed, update prevState
+      if(currentState == COMPRESSION_PREP) {
         prevState = currentState;
-        currentState = COMPRESSIONS;
-    } 
-      break;
+      }
+
+      break; 
 
     case COMPRESSIONS:
       showScreen(compressionsBmpFile);
@@ -166,9 +206,11 @@ void loop() {
         currentState = PAUSED;
       }
 
+      // Now that one loop has passed, update prevState
       if(currentState == COMPRESSIONS) {
         prevState = currentState;
       }
+
       break;
 
     case PAUSED:
@@ -182,7 +224,13 @@ void loop() {
         currentState = COMPRESSIONS;
       }
 
+      // Now that one loop has passed, update prevState
+      if(currentState == PAUSED) {
+        prevState = currentState;
+      }
+
       break;
+
     case KNEEL_FAILURE:
       // Command zero setpoint, don't necessarily need to get there before re-kneel
       returnToCompressionZero(); 
@@ -195,7 +243,13 @@ void loop() {
         currentState = COMPRESSIONS;
       }
 
+      // Now that one loop has passed, update prevState
+      if(currentState == KNEEL_FAILURE) {
+        prevState = currentState;
+      }
+
       break;
+
     case ABORT:
       // Shit's fucked, get plunger out of there and tell people to do manual compressions
       showScreen(abortBmpFile);
@@ -204,6 +258,8 @@ void loop() {
 
       if(prevState != currentState) {
         DPRINTLN("ABORT");
+
+        // Update prevState now, no backing out of this one
         prevState = currentState;
       }
       
