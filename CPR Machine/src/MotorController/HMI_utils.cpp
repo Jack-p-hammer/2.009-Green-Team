@@ -29,33 +29,45 @@ AudioConnection  patchCord3(amp1, 0, i2s1, 1);  // right
 // NEW: audio gain / pause state
 float audioGainDefault = 0.7f;    // your chosen normal gain
 
-bool audioWasPlaying;
-
 // NEW: path to pause image
-const char *startUpWavFile = "/mainwav/startUpWav.wav";
-const char *cutClothingWavFile = "/mainwav/cutClothingWav.wav";
-const char *unfoldWavFile = "/mainwav/unfoldWav.wav";
-const char *alignmentWavFile = "/mainwav/alignmentWav.wav";
-const char *zeroingPrepWavFile = "/mainwav/zeroingPrepWav.wav";
-const char *zeroingWavFile = "/mainwav/zeroingWav.wav";
-const char *compressionPrepWavFile = "/mainwav/compressionPrepWav.wav";
-const char *compressionsWavFile = "/mainwav/compressionsWav.wav";
-const char *pausedWavFile = "/mainwav/pausedWav.wav";
-const char *kneelFailureWavFile = "/mainwav/kneelFailureWav.wav";
-const char *abortWavFile = "/mainwav/abortWav.wav";
+const char *startUpWavFile = "startUpWav.wav";
+const char *cutClothingWavFile = "cutClothingWav.wav";
+const char *unfoldWavFile = "unfoldWav.wav";
+const char *alignmentWavFile = "alignmentWav.wav";
+const char *zeroingPrepWavFile = "zeroingPrepWav.wav";
+const char *zeroingWavFile = "zeroingWav.wav";
+const char *compressionPrepWavFile = "compressionPrepWav.wav";
+const char *compressionsWavFile = "compressionsWav.wav";
+const char *pausedWavFile = "pausedWav.wav";
+const char *kneelFailureWavFile = "kneelFailureWav.wav";
+const char *abortWavFile = "abortWav.wav";
 
 // BUTTONS
 // Pin definitions
+// const int SD_CHIP_SELECT = BUILTIN_SDCARD;
+// const int NEXT_BUTTON_PIN = 28; //green "next/resume"
+// const int PAUSE_BUTTON_PIN = 26; //pause button 
+
+
+// const int BUTTON_LED_PIN = 29;
+// const int PAUSE_LED_PIN = 27;
+// int button_light_count = 0;
+
+// const int RA8875_CS = 16;
+// const int RA8875_RESET = 15;
+
+// Pin definitions
 const int SD_CHIP_SELECT = BUILTIN_SDCARD;
-const int NEXT_BUTTON_PIN = 28; //green "next/resume"
-const int PAUSE_BUTTON_PIN = 26; //pause button 
+const int NEXT_BUTTON_PIN = 28; //blue "next/resume"
+const int NEXT_LED_PIN = 29; // green
 
 
-const int BUTTON_LED_PIN = 29;
-const int PAUSE_LED_PIN = 27;
+const int PAUSE_BUTTON_PIN = 16; //orange //pause button 
+const int PAUSE_LED_PIN = 14; //yellow
+
 int button_light_count = 0;
 
-const int RA8875_CS = 16;
+const int RA8875_CS = 17;
 const int RA8875_RESET = 15;
 
 // Button state variables
@@ -81,20 +93,26 @@ bool screenOn = false;
 
 
 // NEW: path to pause image
-const char *startUpBmpFile = "/mainbmp/startUpBmp.bmp";
-const char *cutClothingBmpFile = "/mainbmp/cutClothingBmp.bmp";
-const char *unfoldBmpFile = "/mainbmp/unfoldBmp.bmp";
-const char *alignmentBmpFile = "/mainbmp/alignmentBmp.bmp";
-const char *zeroingPrepBmpFile = "/mainbmp/zeroingPrepBmp.bmp";
-const char *zeroingBmpFile = "/mainbmp/zeroingBmp.bmp";
-const char *compressionPrepBmpFile = "/mainbmp/compressionPrepBmp.bmp";
-const char *compressionsBmpFile = "/mainbmp/compressionsBmp.bmp";
-const char *pausedBmpFile = "/mainbmp/pausedBmp.bmp";
-const char *kneelFailureBmpFile = "/mainbmp/kneelFailureBmp.bmp";
-const char *abortBmpFile = "/mainbmp/abortBmp.bmp";
+const char *startUpBmpFile = "startUpBmp.bmp";
+const char *cutClothingBmpFile = "cutClothingBmp.bmp";
+const char *unfoldBmpFile = "unfoldBmp.bmp";
+const char *alignmentBmpFile = "alignmentBmp.bmp";
+const char *zeroingPrepBmpFile = "zeroingPrepBmp.bmp";
+const char *zeroingBmpFile = "zeroingBmp.bmp";
+const char *compressionPrepBmpFile = "compressionPrepBmp.bmp";
+const char *compressionsBmpFile = "compressionsBmp.bmp";
+const char *pausedBmpFile = "pausedBmp.bmp";
+const char *kneelFailureBmpFile = "kneelFailureBmp.bmp";
+const char *abortBmpFile = "abortBmp.bmp";
 
 
 void HMI_util_setup() {
+
+  SPI.setMOSI(11);
+  SPI.setMISO(12); 
+  SPI.setSCK(13);
+
+  SPI.begin();
 
   // ---- Button setup ----
   pinMode(NEXT_BUTTON_PIN, INPUT_PULLUP);   // button to GND, so LOW = pressed
@@ -157,6 +175,8 @@ void HMI_util_setup() {
 
   amp1.gain(audioGainDefault);
 
+ 
+
 }
 
 
@@ -194,6 +214,9 @@ void playAudio(const char *wavFileName) {
 bool nextButtonLoop() {
   
   // ====== Handle GREEN button (pin 4) with debounce ======
+  digitalWrite(NEXT_LED_PIN, HIGH); 
+  digitalWrite(PAUSE_LED_PIN, LOW);
+
   bool rawReading = digitalRead(NEXT_BUTTON_PIN);  // LOW = pressed (INPUT_PULLUP)
 
   // If the reading changed from last time, reset the debounce timer
@@ -225,6 +248,9 @@ bool nextButtonLoop() {
 
 bool pauseButtonLoop() {
      // ====== Handle PAUSE button with debounce ======
+  digitalWrite(NEXT_LED_PIN, LOW); 
+  digitalWrite(PAUSE_LED_PIN, HIGH);
+
   bool rawPauseReading = digitalRead(PAUSE_BUTTON_PIN);  // LOW = pressed
 
   if (rawPauseReading != lastPauseButtonReading) {

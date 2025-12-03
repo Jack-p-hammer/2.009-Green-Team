@@ -19,8 +19,6 @@ bool pauseButtonLoop();
 extern unsigned long GreenNow;
 extern unsigned long PauseNow;
 
-bool audioWasPlaying;
-
 extern AudioPlaySdWav playWav1;
 
 extern const char *startUpBmpFile;
@@ -32,7 +30,7 @@ extern const char *zeroingBmpFile;
 extern const char *compressionPrepBmpFile;
 extern const char *compressionsBmpFile;
 extern const char *pausedBmpFile;
-extern const char *kneeFailureBmpFile;
+extern const char *kneelFailureBmpFile;
 extern const char *abortBmpFile;
 
 
@@ -45,5 +43,5 @@ extern const char *zeroingWavFile;
 extern const char *compressionPrepWavFile;
 extern const char *compressionsWavFile;
 extern const char *pausedWavFile;
-extern const char *kneeFailureWavFile;
+extern const char *kneelFailureWavFile;
 extern const char *abortWavFile;

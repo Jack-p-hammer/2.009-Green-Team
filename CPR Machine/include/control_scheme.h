@@ -59,12 +59,20 @@ extern uint32_t nextSendMillis;
 extern uint16_t loopCount;
 const uint8_t controller_period = 10;
 
-static const uint8_t MCP2517_SCK = 13 ; // SCK input of MCP2517
-static const uint8_t MCP2517_SDI =  11 ; // SDI input of MCP2517
-static const uint8_t MCP2517_SDO =  12 ; // SDO output of MCP2517
+// static const uint8_t MCP2517_SCK = 13 ; // SCK input of MCP2517
+// static const uint8_t MCP2517_SDI =  11 ; // SDI input of MCP2517
+// static const uint8_t MCP2517_SDO =  12 ; // SDO output of MCP2517
 
-static const uint8_t MCP2517_CS  = 10 ; // CS input of MCP2517
-static const uint8_t MCP2517_INT = 9 ; // INT output of MCP2517
+// static const uint8_t MCP2517_CS  = 10 ; // CS input of MCP2517
+// static const uint8_t MCP2517_INT = 9 ; // INT output of MCP2517
+
+static const byte MCP2517_SCK = 27;//13 ; // SCK input of MCP2517
+static const byte MCP2517_SDI =  26;//11 ; // MOSI SDI input of MCP2517
+static const byte MCP2517_SDO =  1;//12 ; // MISO SDO output of MCP2517
+
+static const byte MCP2517_CS  = 10 ; // CS input of MCP2517
+static const byte MCP2517_INT = 9 ; // INT output of MCP2517
+//static uint32_t gNextSendMillis = 0;
 
 extern ACAN2517FD can;
 

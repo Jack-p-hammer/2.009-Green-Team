@@ -8,6 +8,7 @@
 #include <Moteus.h>
 #include <ACAN2517FD.h>
 
+long prepTimer = millis();
 
 void setup() {
   // Do everything that needs to occur on power up
@@ -145,7 +146,7 @@ void loop() {
     
     case ZEROING:
       showScreen(zeroingBmpFile);
-      playAudio(zeroingWavFile);
+      //playAudio(zeroingWavFile);
       // Initialize zeroing state, with error handling
       // Only do this when we switch states
       if(prevState != currentState) {
@@ -171,16 +172,26 @@ void loop() {
       showScreen(compressionPrepBmpFile);
       playAudio(compressionPrepWavFile);
       
-      if (playWav1.isPlaying()) {
-        audioWasPlaying = true;
+      if(prevState != currentState) {
+        prepTimer = millis();
       }
 
-      // Trigger when playback *finishes*
-      if (audioWasPlaying && !playWav1.isPlaying()) {
-          audioWasPlaying = false;  // reset
-          prevState = currentState;
-          currentState = COMPRESSIONS;
-      } 
+      if(millis() - prepTimer >= 10000) {
+        prevState = currentState;
+        currentState = COMPRESSIONS;
+      }
+      // if (playWav1.isPlaying()) {
+      //   audioWasPlaying = true;
+      // }
+
+      // // Trigger when playback *finishes*
+      // if (audioWasPlaying && !playWav1.isPlaying()) {
+      //     audioWasPlaying = false;  // reset
+      //     prevState = currentState;
+      //     currentState = COMPRESSIONS;
+      // } 
+
+
       
       // Now that one loop has passed, update prevState
       if(currentState == COMPRESSION_PREP) {
@@ -234,8 +245,8 @@ void loop() {
     case KNEEL_FAILURE:
       // Command zero setpoint, don't necessarily need to get there before re-kneel
       returnToCompressionZero(); 
-      showScreen(kneeFailureBmpFile);
-      playAudio(kneeFailureWavFile);
+      showScreen(kneelFailureBmpFile);
+      playAudio(kneelFailureWavFile);
 
       // If they re-kneel, get back to rib breaking
       if(!isKneelingFailure()) {

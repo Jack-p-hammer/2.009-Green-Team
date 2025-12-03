@@ -29,7 +29,7 @@ double prevPrevCommand = 0;
 double prevPrevError = 0;
 
 // Driver object
-ACAN2517FD can(MCP2517_CS, SPI, MCP2517_INT);
+ACAN2517FD can(MCP2517_CS, SPI1, MCP2517_INT);
 
 // Moteus motor
 Moteus moteus(can, []() {
@@ -57,7 +57,11 @@ void initializeMotor() {
     while (!Serial) {}
     DPRINTLN(F("control_scheme: initializeMotor()"));
 
-    SPI.begin();
+    SPI1.setMOSI(26); 
+    SPI1.setMISO(1);
+    SPI1.setSCK(27);
+
+    SPI1.begin();
 
     // CAN-FD configuration
     ACAN2517FDSettings settings(
