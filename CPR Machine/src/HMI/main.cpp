@@ -12,6 +12,35 @@
 #include "sd_to_display.h"
 #include <Audio.h>
 
+//
+// Controller ID 1 is moved through a sine wave pattern, while
+// controller ID 2 just has a brake command sent.
+// ——————————————————————————————————————————————————————————————————————————————
+#include <ACAN2517FD.h>
+#include <Moteus.h>
+//——————————————————————————————————————————————————————————————————————————————
+//  The following pins are selected for the CANBed FD board.
+//——————————————————————————————————————————————————————————————————————————————
+static const byte MCP2517_SCK = 27;//13 ; // SCK input of MCP2517
+static const byte MCP2517_SDI =  26;//11 ; // MOSI SDI input of MCP2517
+static const byte MCP2517_SDO =  1;//12 ; // MISO SDO output of MCP2517
+static const byte MCP2517_CS  = 10 ; // CS input of MCP2517
+static const byte MCP2517_INT = 9 ; // INT output of MCP2517
+static uint32_t gNextSendMillis = 0;
+//——————————————————————————————————————————————————————————————————————————————
+//  ACAN2517FD Driver object
+//——————————————————————————————————————————————————————————————————————————————
+//ACAN2517FD can (MCP2517_CS, SPI, MCP2517_INT) ;
+ACAN2517FD can (MCP2517_CS, SPI1, MCP2517_INT);
+
+Moteus moteus1(can, []() {
+  Moteus::Options options;
+  options.id = 1;
+  return options;
+}());
+
+Moteus::PositionMode::Command position_cmd;
+
 AudioPlaySdWav playWav1;
 AudioAmplifier   amp1;
 AudioOutputI2S i2s1;
@@ -34,16 +63,16 @@ AudioConnection  patchCord3(amp1, 0, i2s1, 1);  // right
 
 // Pin definitions
 const int SD_CHIP_SELECT = BUILTIN_SDCARD;
-const int BUTTON_PIN = 28; //green "next/resume"
-const int PAUSE_BUTTON_PIN = 26; //pause button 
-const int POWER_BUTTON_PIN = 25; //start button 
+const int BUTTON_PIN = 28; //blue "next/resume"
+const int BUTTON_LED_PIN = 29; // green
 
 
-const int BUTTON_LED_PIN = 29;
-const int PAUSE_LED_PIN = 27;
+const int PAUSE_BUTTON_PIN = 16; //orange //pause button 
+const int PAUSE_LED_PIN = 14; //yellow
+
 int button_light_count = 0;
 
-const int RA8875_CS = 16;
+const int RA8875_CS = 17;
 const int RA8875_RESET = 15;
 
 
@@ -200,17 +229,57 @@ void toggleScreen() {
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial && millis() < 2000) {}
+
+  pinMode (LED_BUILTIN, OUTPUT);
+  while (!Serial) {}
+  Serial.println(F("started"));
+
+  SPI.setMOSI(11);
+  SPI.setMISO(12); 
+  SPI.setSCK(13);
+
+  SPI1.setMOSI(26); 
+  SPI1.setMISO(1);
+  SPI1.setSCK(27); // teensy 4.1 -- [B]CORRECTED TO USE ALT SPI BUS[/B]
+
+  SPI.begin();
+  SPI1.begin();
+
+  // This operates the CAN-FD bus at 1Mbit for both the arbitration
+  // and data rate.  Most arduino shields cannot operate at 5Mbps
+  // correctly, so the moteus Arduino library permanently disables
+  // BRS.
+  ACAN2517FDSettings settings(
+      ACAN2517FDSettings::OSC_40MHz, 1000ll * 1000ll, DataBitRateFactor::x1);
+  //settings.mBitRateClosedToDesiredRate = true;
+
+  // The atmega32u4 on the CANbed has only a tiny amount of memory.
+  // The ACAN2517FD driver needs custom settings so as to not exhaust
+  // all of SRAM just with its buffers.
+  settings.mArbitrationSJW = 2;
+  settings.mDriverTransmitFIFOSize = 1;
+  settings.mDriverReceiveFIFOSize = 2;
+  const uint32_t errorCode = can.begin(settings, [] { can.isr(); });
+  while (errorCode != 0) {
+    Serial.print(F("CAN error 0x"));
+    Serial.println(errorCode, HEX);
+    delay(1000);
+  }
+  // To clear any faults the controllers may have, we start by sending
+  // a stop command to each.
+  moteus1.SetStop();
+  Serial.println(F("all stopped"));
 
   // ---- Button setup ----
   pinMode(BUTTON_PIN, INPUT_PULLUP);   // button to GND, so LOW = pressed
-  pinMode(POWER_BUTTON_PIN, INPUT_PULLUP);  // power button
+  //pinMode(POWER_BUTTON_PIN, INPUT_PULLUP);  // power button
   pinMode(PAUSE_BUTTON_PIN, INPUT_PULLUP);   // NEW: pause button
 
 
   lastButtonReading = digitalRead(BUTTON_PIN);  // Initialize button state
-  lastPowerButtonReading = digitalRead(POWER_BUTTON_PIN);
+  //lastPowerButtonReading = digitalRead(POWER_BUTTON_PIN);
   lastPauseButtonReading = digitalRead(PAUSE_BUTTON_PIN);  // NEW
 
   
@@ -220,7 +289,7 @@ void setup() {
   Serial.println(lastButtonReading == HIGH ? "HIGH (not pressed)" : "LOW (pressed)");
 
   Serial.print("Power button on pin ");
-  Serial.print(POWER_BUTTON_PIN);
+  //Serial.print(POWER_BUTTON_PIN);
   Serial.print(", initial state: ");
   Serial.println(lastPowerButtonReading == HIGH ? "HIGH (not pressed)" : "LOW (pressed)");
 
@@ -288,31 +357,33 @@ void buttonBlink (int ButtonPin){
     delay(400);
 }
 
+uint16_t gLoopCount = 0;
+
 void loop() {
   // Get current time once for all buttons
   unsigned long GreenNow = millis();
-  unsigned long PowerNow = millis();
+  //unsigned long PowerNow = millis();
   unsigned long PauseNow = millis();
 
   digitalWrite(BUTTON_LED_PIN, HIGH);
 
-  bool rawPowerReading = digitalRead(POWER_BUTTON_PIN);  // LOW = pressed
-  if (rawPowerReading != lastPowerButtonReading) {
-    lastPowerDebounceTime = PowerNow;
-  }
+  //bool rawPowerReading = digitalRead(POWER_BUTTON_PIN);  // LOW = pressed
+  // if (rawPowerReading != lastPowerButtonReading) {
+  //   lastPowerDebounceTime = PowerNow;
+  // }
 
-  if ((PowerNow - lastPowerDebounceTime) > DEBOUNCE_DELAY) {
-    if (rawPowerReading != powerButtonState) {
-      powerButtonState = rawPowerReading;
+  // if ((PowerNow - lastPowerDebounceTime) > DEBOUNCE_DELAY) {
+  //   if (rawPowerReading != powerButtonState) {
+  //     powerButtonState = rawPowerReading;
 
-      if (powerButtonState == LOW) {
-        toggleScreen();
-        }
+  //     if (powerButtonState == LOW) {
+  //       toggleScreen();
+  //       }
 
-      }
-    }
+  //     }
+  //   }
   
-  lastPowerButtonReading = rawPowerReading;
+  // lastPowerButtonReading = rawPowerReading;
   
   // ====== 2) Handle GREEN button (pin 4) with debounce ======
   bool rawReading = digitalRead(BUTTON_PIN);  // LOW = pressed (INPUT_PULLUP)
@@ -379,7 +450,7 @@ void loop() {
             playWav1.stop();     // stop audio
           }
           amp1.gain(0.0f);       // ensure muted
-          showPauseScreen();     // show pause.bmp
+         showPauseScreen();     // show pause.bmp
         } else if (!screenOn) {
           Serial.println("Pause button pressed but screen is OFF; ignoring.");
         } else if (audioPaused) {
@@ -393,5 +464,28 @@ void loop() {
   lastPauseButtonReading = rawPauseReading;
 
 
+    // We intend to send control frames every 20ms.
+  const auto time = millis();
+  if (gNextSendMillis >= time) { return; }
+  gNextSendMillis += 20;
+  gLoopCount++;
+  Moteus::PositionMode::Command cmd;
+  cmd.position = NaN;
+  cmd.velocity = 0.2 * ::sin(time / 1000.0);
+  moteus1.SetPosition(cmd);
+
+  if (gLoopCount % 5 != 0) { return; }
+  // Only print our status every 5th cycle, so every 1s.
+  Serial.print(F("time "));
+  Serial.println(gNextSendMillis);
+  auto print_moteus = [](const Moteus::Query::Result& query) {
+    Serial.print(static_cast<int>(query.mode));
+    Serial.print(F(" "));
+    Serial.print(query.position);
+    Serial.print(F("  velocity "));
+    Serial.println(query.velocity);
+  };
+  print_moteus(moteus1.last_result().values);
+  Serial.print(F(" / "));
   
 }
