@@ -3570,6 +3570,17 @@
 		)
 		(uuid "283f88d7-f009-4603-83b1-627ef0b1597d")
 	)
+	(hierarchical_label "SPI_CS2"
+		(shape input)
+		(at 36.83 87.63 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2f3d7507-a83a-46a6-9b45-60c067ae144e")
+	)
 	(hierarchical_label "Green_LED"
 		(shape input)
 		(at 184.15 116.84 180)
@@ -3669,17 +3680,6 @@
 		)
 		(uuid "70af4c20-8262-4991-95ce-ec3abbfacdfe")
 	)
-	(hierarchical_label "SPI_CS3"
-		(shape input)
-		(at 36.83 87.63 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "9ed7ce10-bb49-4534-99c6-e20e33fd0d04")
-	)
 	(hierarchical_label "SPI_CS2"
 		(shape input)
 		(at 36.83 26.67 180)
@@ -3690,6 +3690,17 @@
 			(justify right)
 		)
 		(uuid "b7dfb0bd-e8cc-4108-a7d4-ac49ae47ec14")
+	)
+	(hierarchical_label "RST1"
+		(shape input)
+		(at 97.79 106.68 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "bd5e1958-8d56-4ed2-acb0-3acb16af5702")
 	)
 	(hierarchical_label "SPI_SDO"
 		(shape output)
@@ -3723,17 +3734,6 @@
 			(justify left)
 		)
 		(uuid "ded41b6c-e2cb-41e0-80a4-bbe90d1e34b9")
-	)
-	(hierarchical_label "RST2"
-		(shape input)
-		(at 97.79 106.68 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e8829b5d-538d-4514-9bd0-33dab9907db7")
 	)
 	(hierarchical_label "SPI_SDI"
 		(shape input)

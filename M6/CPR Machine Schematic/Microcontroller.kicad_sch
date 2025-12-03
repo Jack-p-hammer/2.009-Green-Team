@@ -1748,10 +1748,6 @@
 		)
 	)
 	(no_connect
-		(at 114.3 106.68)
-		(uuid "0186ecd5-2dda-4351-b957-9b7985861a5e")
-	)
-	(no_connect
 		(at 142.24 140.97)
 		(uuid "0bb09aef-c731-4814-8a68-5b7bc0455dfd")
 	)
@@ -1796,10 +1792,6 @@
 		(uuid "587a7c0e-c963-4db0-ae75-c4f39157f4de")
 	)
 	(no_connect
-		(at 114.3 109.22)
-		(uuid "5f404e5a-c9ae-4887-911a-4077db82c4b2")
-	)
-	(no_connect
 		(at 114.3 128.27)
 		(uuid "652ee657-0891-4b6d-8171-e5a16d16e68a")
 	)
@@ -1810,10 +1802,6 @@
 	(no_connect
 		(at 170.18 123.19)
 		(uuid "75455c6e-5e04-4aff-9f36-d8b917a07afc")
-	)
-	(no_connect
-		(at 114.3 58.42)
-		(uuid "79e110ad-927c-4447-9935-691f7dce7cf8")
 	)
 	(no_connect
 		(at 114.3 91.44)
@@ -1945,17 +1933,6 @@
 		)
 		(uuid "9aceef49-6ac2-4d7f-8d60-34cf33743237")
 	)
-	(hierarchical_label "SPI_CS3"
-		(shape output)
-		(at 170.18 76.2 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "024d3bdb-15c3-4ea3-b484-e7c08780963c")
-	)
 	(hierarchical_label "SPI_SDO"
 		(shape input)
 		(at 114.3 86.36 180)
@@ -1969,12 +1946,12 @@
 	)
 	(hierarchical_label "Red_Button"
 		(shape output)
-		(at 114.3 96.52 180)
+		(at 170.18 83.82 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
 		(uuid "0f7cb356-2a75-494a-be7e-4dc65e7face8")
 	)
@@ -2013,7 +1990,7 @@
 	)
 	(hierarchical_label "SPI_CS2"
 		(shape output)
-		(at 170.18 78.74 0)
+		(at 170.18 76.2 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2044,6 +2021,17 @@
 		)
 		(uuid "41a22373-1167-4215-ac93-20261bb153a8")
 	)
+	(hierarchical_label "SPI1_MISO"
+		(shape input)
+		(at 114.3 58.42 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "61b6f67b-8fea-4b57-8dac-316ae501963e")
+	)
 	(hierarchical_label "I2C_SCL"
 		(shape output)
 		(at 170.18 71.12 0)
@@ -2066,7 +2054,7 @@
 		)
 		(uuid "71e9dcbc-96f7-4e1e-b553-632ca5ecaeee")
 	)
-	(hierarchical_label "Red_LED"
+	(hierarchical_label "SPI1_SCK"
 		(shape output)
 		(at 114.3 99.06 180)
 		(effects
@@ -2075,20 +2063,20 @@
 			)
 			(justify right)
 		)
-		(uuid "9763e0dc-8b32-41d9-916e-133e81f5f9ba")
+		(uuid "86e020e6-f1a0-432b-9833-7fbd8eb940cd")
 	)
-	(hierarchical_label "RST2"
+	(hierarchical_label "Red_LED"
 		(shape output)
-		(at 170.18 83.82 0)
+		(at 170.18 78.74 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "9829d670-e786-41fe-aac0-57ab62cc7952")
+		(uuid "9763e0dc-8b32-41d9-916e-133e81f5f9ba")
 	)
-	(hierarchical_label "SPI_INT"
+	(hierarchical_label "SPI_INT1"
 		(shape input)
 		(at 114.3 78.74 180)
 		(effects
@@ -2109,6 +2097,17 @@
 			(justify right)
 		)
 		(uuid "a6e80875-9e03-4fe2-b0ac-3805e141768d")
+	)
+	(hierarchical_label "SPI1_MOSI"
+		(shape output)
+		(at 114.3 96.52 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ac5ddddd-2fea-4cfc-93e4-e3a17b3fca01")
 	)
 	(hierarchical_label "Green_LED"
 		(shape output)
@@ -2132,7 +2131,7 @@
 		)
 		(uuid "df45e553-ce1e-46f0-9ea3-f2bc6411c0ce")
 	)
-	(hierarchical_label "SPI_CS"
+	(hierarchical_label "SPI_CS1"
 		(shape output)
 		(at 114.3 81.28 180)
 		(effects
