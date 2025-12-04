@@ -49,7 +49,7 @@ const char *wavGroups[] = {
   "unfoldWav.wav",
   "alignmentWav.wav",
   "zeroingPrepWav.wav",
-  "zeroingWav.wav",
+  "zeroingPrepWav.wav",
   "compressionPrepWav.wav",
   "compressionsWav.wav",
   "pausedWav.wav",
@@ -186,7 +186,7 @@ void HMI_util_setup() {
   tft.displayOn(true);
   tft.GPIOX(true);      // Enable TFT - display enable tied to GPIOX
   tft.PWM1config(true, RA8875_PWM_CLK_DIV1024); // PWM output for backlight
-  tft.PWM1out(0);   // <<< backlight off (0 = dark)
+  tft.PWM1out(255);   // <<< backlight off (0 = dark)
 
   Serial.print("(");
   Serial.print(tft.width());
@@ -209,7 +209,7 @@ void HMI_util_setup() {
 
   amp1.gain(audioGainDefault);
 
- 
+  //showCurrentFrameAndAudio(0);
 
 }
 
@@ -286,7 +286,7 @@ void showCurrentFrame(int cG) {
 }
 
 void showCurrentFrameAndAudio(int cG) {
-  //showCurrentFrame(cG);
+  showCurrentFrame(cG);
   playCurrentWav(cG);
 }
 

@@ -52,9 +52,6 @@ const Moteus::PositionMode::Format positionModeOptions = []() {
 void initializeMotor() {
     pinMode(LED_BUILTIN, OUTPUT);
 
-    Serial.begin(115200);
-    // TODO: Remove this delay for M6
-    while (!Serial) {}
     DPRINTLN(F("control_scheme: initializeMotor()"));
 
     SPI1.setMOSI(26); 
