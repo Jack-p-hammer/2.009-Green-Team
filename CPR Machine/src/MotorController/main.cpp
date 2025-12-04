@@ -10,6 +10,7 @@
 
 long prepTimer = millis();
 int currentGroupNum = 0;
+static bool firstRun = true;
 
 void setup() {
   Serial.begin(115200);
@@ -42,13 +43,14 @@ void loop() {
   DPRINT(", Setpoint:"); DPRINT((computeCompressionSetpoint()+ linearZeroPos)*39.37);
   DPRINT(", LinearPos:"); DPRINT(linearPos*39.37);
 
-
-  static bool firstRun = true;
+ 
   if(firstRun){
-    showCurrentFrameAndAudio(currentState);
+    showCurrentFrameAndAudio(currentGroupNum);
     firstRun = false;
+  } else if ((currentState == BATTERY_CHECK) && (prevState == START_UP)){
+    showCurrentFrame(currentGroupNum);
   } else if (prevState != currentState){
-    showCurrentFrameAndAudio(currentState);
+    showCurrentFrameAndAudio(currentGroupNum);
   }
 
   
@@ -116,7 +118,7 @@ void loop() {
       break;
     
     case UNFOLD:  
-      
+      currentGroupNum = 2;
       // showScreen(unfoldBmpFile);
       // playAudio(unfoldWavFile);
 
@@ -129,13 +131,13 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == UNFOLD) {
         prevState = currentState;
-        currentGroupNum = 2;
+       
       }
 
       break;
 
     case ALIGNMENT:
-      
+      currentGroupNum = 3;
       // showScreen(alignmentBmpFile);
       // playAudio(alignmentWavFile);
 
@@ -148,13 +150,13 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == ALIGNMENT) {
         prevState = currentState;
-        currentGroupNum = 3;
+        
       }
 
       break;
     
     case ZEROING_PREP:
-      
+      currentGroupNum = 4;
       // Prepare for zeroing, then move to zeroing state
       // showScreen(zeroingPrepBmpFile);
       // playAudio(zeroingPrepWavFile);
@@ -168,13 +170,13 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == ZEROING_PREP) {
         prevState = currentState;
-        currentGroupNum = 4;
+        
       }
 
       break;
     
     case ZEROING:
-      
+      currentGroupNum = 5;
       //showScreen(zeroingBmpFile);
       //playAudio(zeroingWavFile);
       // Initialize zeroing state, with error handling
@@ -194,13 +196,13 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == ZEROING) {
         prevState = currentState;
-        currentGroupNum = 5;
+        
       }
 
       break;
 
     case COMPRESSION_PREP:
-      
+      currentGroupNum = 6;
       // showScreen(compressionPrepBmpFile);
       // playAudio(compressionPrepWavFile);
 
@@ -222,13 +224,11 @@ void loop() {
       //     prevState = currentState;
       //     currentState = COMPRESSIONS;
       // } 
-
-
       
       // Now that one loop has passed, update prevState
       if(currentState == COMPRESSION_PREP) {
         prevState = currentState;
-        currentGroupNum = 6;
+     
       }
 
       break; 
