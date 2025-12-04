@@ -45,3 +45,12 @@ extern const char *compressionsWavFile;
 extern const char *pausedWavFile;
 extern const char *kneelFailureWavFile;
 extern const char *abortWavFile;
+
+
+extern const char *frameGroups[11];
+extern const char *wavGroups[11];
+//extern int currentGroup;
+
+void showCurrentFrame(int currentGroup);
+void playCurrentWav(int currentGroup);
+extern void showCurrentFrameAndAudio(int currentGroup);

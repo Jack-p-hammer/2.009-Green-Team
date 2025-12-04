@@ -17,12 +17,6 @@ extern const int RA8875_RESET;
 // Display object
 extern Adafruit_RA8875 tft;
 
-// Frame groups (1D array - just the first BMP from each group)
-extern const char *frameGroups[4];
-
-// Current group state (0, 1, or 2)
-extern uint8_t currentGroup;
-
 // Button state variables
 extern bool buttonState;
 extern bool lastButtonReading;

@@ -9,8 +9,10 @@
 #include <ACAN2517FD.h>
 
 long prepTimer = millis();
+int currentGroupNum = 0;
 
 void setup() {
+ 
   // Do everything that needs to occur on power up
   initializeMotor();
   initializeSensors();
@@ -37,11 +39,16 @@ void loop() {
   DPRINT(", Setpoint:"); DPRINT((computeCompressionSetpoint()+ linearZeroPos)*39.37);
   DPRINT(", LinearPos:"); DPRINT(linearPos*39.37);
 
+  showCurrentFrameAndAudio(currentGroupNum);
+
 
   switch (currentState) {
-    case START_UP:  
-      showScreen(startUpBmpFile);
-      playAudio(startUpWavFile);
+    case START_UP: 
+
+      currentGroupNum = 0; 
+      //showScreen(startUpBmpFile);
+      //playAudio(startUpWavFile); 
+     
 
       if(nextButtonLoop()) {
         // User has pressed start, get started
@@ -52,11 +59,14 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == START_UP) {
         prevState = currentState;
+        // 
       }
 
       break;
 
     case BATTERY_CHECK:
+      currentGroupNum = 0;
+      
       // Immediately check battery state
       if(!verifyBatteryPercentage()) {
         // Handle low battery scenario
@@ -69,15 +79,16 @@ void loop() {
       }
       
       // Now that one loop has passed, update prevState
-      if(currentState == BATTERY_CHECK) {
-        prevState = currentState;
-      }
+      // if(currentState == BATTERY_CHECK) {
+      //   prevState = currentState;
+      // }
 
       break;
 
-    case CUT_CLOTHING:  
-      showScreen(cutClothingBmpFile);
-      playAudio(cutClothingWavFile);
+    case CUT_CLOTHING: 
+      currentGroupNum = 1;
+      //showScreen(cutClothingBmpFile);
+      //playAudio(cutClothingWavFile);
 
       if(nextButtonLoop()) {
         // User has pressed start, get started
@@ -88,13 +99,15 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == CUT_CLOTHING) {
         prevState = currentState;
+       
       }
 
       break;
     
     case UNFOLD:  
-      showScreen(unfoldBmpFile);
-      playAudio(unfoldWavFile);
+      
+      // showScreen(unfoldBmpFile);
+      // playAudio(unfoldWavFile);
 
       if(nextButtonLoop()) {
         // User has pressed start, get started
@@ -105,13 +118,15 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == UNFOLD) {
         prevState = currentState;
+        currentGroupNum = 2;
       }
 
       break;
 
     case ALIGNMENT:
-      showScreen(alignmentBmpFile);
-      playAudio(alignmentWavFile);
+      
+      // showScreen(alignmentBmpFile);
+      // playAudio(alignmentWavFile);
 
       if(nextButtonLoop()) {
         // User has confirmed alignment, move to zeroing
@@ -122,14 +137,16 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == ALIGNMENT) {
         prevState = currentState;
+        currentGroupNum = 3;
       }
 
       break;
     
     case ZEROING_PREP:
+      
       // Prepare for zeroing, then move to zeroing state
-      showScreen(zeroingPrepBmpFile);
-      playAudio(zeroingPrepWavFile);
+      // showScreen(zeroingPrepBmpFile);
+      // playAudio(zeroingPrepWavFile);
 
       if(nextButtonLoop()) {
         // User has confirmed alignment, move to zeroing
@@ -140,12 +157,14 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == ZEROING_PREP) {
         prevState = currentState;
+        currentGroupNum = 4;
       }
 
       break;
     
     case ZEROING:
-      showScreen(zeroingBmpFile);
+      
+      //showScreen(zeroingBmpFile);
       //playAudio(zeroingWavFile);
       // Initialize zeroing state, with error handling
       // Only do this when we switch states
@@ -164,14 +183,16 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == ZEROING) {
         prevState = currentState;
+        currentGroupNum = 5;
       }
 
       break;
 
     case COMPRESSION_PREP:
-      showScreen(compressionPrepBmpFile);
-      playAudio(compressionPrepWavFile);
       
+      // showScreen(compressionPrepBmpFile);
+      // playAudio(compressionPrepWavFile);
+
       if(prevState != currentState) {
         prepTimer = millis();
       }
@@ -196,13 +217,15 @@ void loop() {
       // Now that one loop has passed, update prevState
       if(currentState == COMPRESSION_PREP) {
         prevState = currentState;
+        currentGroupNum = 6;
       }
 
       break; 
 
     case COMPRESSIONS:
-      showScreen(compressionsBmpFile);
-      playAudio(compressionsWavFile);
+      currentGroupNum = 7;
+      // showScreen(compressionsBmpFile);
+      // playAudio(compressionsWavFile);
 
       if(prevState != currentState) {
         initializeCompressions();
@@ -225,8 +248,9 @@ void loop() {
       break;
 
     case PAUSED:
-      showScreen(pausedBmpFile);
-      playAudio(pausedWavFile);
+      currentGroupNum = 8;
+      // showScreen(pausedBmpFile);
+      // playAudio(pausedWavFile);
 
 
       // If not paused, resume compressions
@@ -243,10 +267,11 @@ void loop() {
       break;
 
     case KNEEL_FAILURE:
+      currentGroupNum = 9;
       // Command zero setpoint, don't necessarily need to get there before re-kneel
       returnToCompressionZero(); 
-      showScreen(kneelFailureBmpFile);
-      playAudio(kneelFailureWavFile);
+      // showScreen(kneelFailureBmpFile);
+      // playAudio(kneelFailureWavFile);
 
       // If they re-kneel, get back to rib breaking
       if(!isKneelingFailure()) {
@@ -262,9 +287,10 @@ void loop() {
       break;
 
     case ABORT:
+      currentGroupNum = 10;
       // Shit's fucked, get plunger out of there and tell people to do manual compressions
-      showScreen(abortBmpFile);
-      playAudio(abortWavFile);
+      // showScreen(abortBmpFile);
+      // playAudio(abortWavFile);
       updateAbort();
 
       if(prevState != currentState) {

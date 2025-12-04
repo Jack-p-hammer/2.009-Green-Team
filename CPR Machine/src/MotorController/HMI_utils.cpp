@@ -42,6 +42,21 @@ const char *pausedWavFile = "pausedWav.wav";
 const char *kneelFailureWavFile = "kneelFailureWav.wav";
 const char *abortWavFile = "abortWav.wav";
 
+// WAV files corresponding to each frame group
+const char *wavGroups[] = {
+  "startUpWav.wav",
+  "cutClothingWav.wav",
+  "unfoldWav.wav",
+  "alignmentWav.wav",
+  "zeroingPrepWav.wav",
+  "zeroingWav.wav",
+  "compressionPrepWav.wav",
+  "compressionsWav.wav",
+  "pausedWav.wav",
+  "kneelFailureWav.wav",
+  "abortWav.wav",
+};
+
 // BUTTONS
 // Pin definitions
 // const int SD_CHIP_SELECT = BUILTIN_SDCARD;
@@ -105,6 +120,23 @@ const char *pausedBmpFile = "pausedBmp.bmp";
 const char *kneelFailureBmpFile = "kneelFailureBmp.bmp";
 const char *abortBmpFile = "abortBmp.bmp";
 
+const char *frameGroups[] = {
+  "cutClothingBmp.bmp",//"startUpBmp.bmp",
+  "cutClothingBmp.bmp",
+  "unfoldBmp.bmp",
+  "alignmentBmp.bmp",
+  "zeroingPrepBmp.bmp",
+  "zeroingBmp.bmp",
+  "compressionPrepBmp.bmp",
+  "compressionsBmp.bmp",
+  "pausedBmp.bmp",
+  "kneelFailureBmp.bmp",
+  "abortBmp.bmp",
+};
+
+
+
+
 
 void HMI_util_setup() {
 
@@ -113,6 +145,8 @@ void HMI_util_setup() {
   SPI.setSCK(13);
 
   SPI.begin();
+
+  // Current group state
 
   // ---- Button setup ----
   pinMode(NEXT_BUTTON_PIN, INPUT_PULLUP);   // button to GND, so LOW = pressed
@@ -209,6 +243,51 @@ void playAudio(const char *wavFileName) {
     Serial.print("ERROR: WAV file not found: ");
     Serial.println(wavFileName);
   }
+  delay(5000);
+}
+
+void playCurrentWav(int cG) {
+  // Stop any currently playing WAV
+  if (playWav1.isPlaying()) {
+    playWav1.stop();
+    delay(50);  // Brief delay to ensure stop completes
+  }
+  const char *wavFilename = wavGroups[cG];
+  
+  Serial.print("Playing WAV for group ");
+  Serial.print(cG);
+  Serial.print(" -> ");
+  Serial.println(wavFilename);
+  
+  if (SD.exists(wavFilename)) {
+    amp1.gain(audioGainDefault);  // ensure gain is restored
+    playWav1.play(wavFilename);
+  } else {
+    Serial.print("ERROR: WAV file not found: ");
+    Serial.println(wavFilename);
+  }
+}
+
+void showCurrentFrame(int cG) {
+  const char *filename = frameGroups[cG];
+
+  Serial.print("Showing group ");
+  Serial.print(cG);
+  Serial.print(" -> ");
+  Serial.println(filename);
+
+  if (SD.exists(filename)) {
+    bmpDraw(&tft, filename, 0, 0);
+  } else {
+    Serial.print("ERROR: File not found: ");
+    Serial.println(filename);
+    tft.fillScreen(RA8875_RED);
+  }
+}
+
+void showCurrentFrameAndAudio(int cG) {
+  //showCurrentFrame(cG);
+  playCurrentWav(cG);
 }
 
 bool nextButtonLoop() {
