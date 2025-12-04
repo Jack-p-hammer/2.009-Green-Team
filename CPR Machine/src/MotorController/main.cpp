@@ -12,9 +12,9 @@ long prepTimer = millis();
 int currentGroupNum = 0;
 
 void setup() {
-    Serial.begin(115200);
-    // TODO: Remove this delay for M6
-    while (!Serial) {}
+  Serial.begin(115200);
+  // TODO: Remove this delay for M6
+  while (!Serial) {}
  
   // Do everything that needs to occur on power up
   initializeMotor();
@@ -42,8 +42,16 @@ void loop() {
   DPRINT(", Setpoint:"); DPRINT((computeCompressionSetpoint()+ linearZeroPos)*39.37);
   DPRINT(", LinearPos:"); DPRINT(linearPos*39.37);
 
-  showCurrentFrameAndAudio(currentState);
 
+  static bool firstRun = true;
+  if(firstRun){
+    showCurrentFrameAndAudio(currentState);
+    firstRun = false;
+  } else if (prevState != currentState){
+    showCurrentFrameAndAudio(currentState);
+  }
+
+  
 
   switch (currentState) {
     case START_UP: 
