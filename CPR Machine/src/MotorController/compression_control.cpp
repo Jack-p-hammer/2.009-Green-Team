@@ -41,7 +41,8 @@ void updateCompressions() {
 }
 
 void retract(){
-    sendCommands(rotaryZeroPos, POSITION);
+    // sendCommands(rotaryZeroPos, POSITION);
+    sendCommands(0, RETRACT_POSITION);
 }
 
 double computeCompressionSetpoint() {

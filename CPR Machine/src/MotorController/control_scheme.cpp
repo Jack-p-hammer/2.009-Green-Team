@@ -46,8 +46,10 @@ const Moteus::PositionMode::Format positionModeOptions = []() {
   options.feedforward_torque = Moteus::kFloat;
   options.kd_scale = Moteus::kFloat;
   options.kp_scale = Moteus::kFloat;
+  options.velocity_limit = Moteus::kFloat;
   return options;
 }();
+
 
 void initializeMotor() {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -107,6 +109,12 @@ void sendCommands(double controlOutput, controlMode control_mode) {
         cmd.kd_scale = 0.0;
 
         cmd.feedforward_torque = controlOutput/10; 
+
+      break;
+    case RETRACT_POSITION:
+        cmd.position = ((controlOutput + linearZeroPos)/(2*PI*pinionRadius));
+        cmd.velocity_limit = 0.02/(2*PI*pinionRadius);
+        
 
       break;
     }

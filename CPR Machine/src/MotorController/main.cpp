@@ -16,7 +16,7 @@ int currentGroupNum = 0;
 void setup() {
   Serial.begin(115200);
   // TODO: Remove this delay for M6
-  while (!Serial) {}
+  //while (!Serial) {}
  
   // Do everything that needs to occur on power up
   initializeMotor();
@@ -207,7 +207,7 @@ void loop() {
       // Only do this when we switch states
       if(prevState != currentState) {
         DPRINTLN("Initializing Zeroing...");
-        delay(8000); // Small delay to ensure any previous commands are finished
+        delay(4000); // Small delay to ensure any previous commands are finished
         initializeZeroing();
       }
 
@@ -252,7 +252,7 @@ void loop() {
         prepTimer = millis();
       }
 
-      if(millis() - prepTimer >= 8000) {
+      if(millis() - prepTimer >= 3000) {
         prevState = currentState;
         currentState = COMPRESSIONS;
         currentGroupNum = 7;
@@ -282,9 +282,9 @@ void loop() {
       // playAudio(compressionsWavFile);
 
       if(prevState != currentState) {
-        moteus.SetStop();
+        //moteus.SetBrake();
         DPRINTLN("Initializing Compressions...");
-        delay(8000); // Small delay to ensure any previous commands are finished
+        delay(2000); // Small delay to ensure any previous commands are finished
         initializeCompressions();
       }
 
@@ -296,6 +296,7 @@ void loop() {
         prevState = currentState;
         currentState = PAUSED;
         currentGroupNum = 8;
+        moteus.SetBrake();
       }
 
       // Now that one loop has passed, update prevState
@@ -309,9 +310,9 @@ void loop() {
       //currentGroupNum = 8;
       // showScreen(pausedBmpFile);
       // playAudio(pausedWavFile);
-      if(prevState != currentState) {
-        moteus.SetStop();
-      }
+      // if(prevState != currentState) {
+      //   moteus.SetBrake();
+      // }
 
       retract();
 
@@ -320,6 +321,7 @@ void loop() {
         prevState = currentState;
         currentState = COMPRESSIONS;
         currentGroupNum = 7;
+        moteus.SetStop();
       }
 
       // Now that one loop has passed, update prevState
@@ -337,14 +339,14 @@ void loop() {
       // playAudio(kneelFailureWavFile);
 
       if(prevState != currentState) {
-        moteus.SetStop();
+        moteus.SetBrake();
       }
       // If they re-kneel, get back to rib breaking
       if(!isKneelingFailure()) {
         prevState = currentState;
         currentState = COMPRESSIONS;
         currentGroupNum = 7;
-        moteus.SetStop();
+        moteus.SetBrake();
       }
 
       // Now that one loop has passed, update prevState
@@ -363,7 +365,7 @@ void loop() {
 
       if(prevState != currentState) {
         DPRINTLN("ABORT");
-        moteus.SetStop();
+        moteus.SetBrake();
 
         // Update prevState now, no backing out of this one
         prevState = currentState;

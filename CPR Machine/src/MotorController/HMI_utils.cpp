@@ -50,7 +50,7 @@ const char *wavGroups[] = {
   "unfoldWav.wav",
   "alignmentWav.wav",
   "zeroingPrepWav.wav",
-  "zeroingPrepWav.wav",
+  "zeroingWav.wav",
   "compressionsPrepWav.wav",
   "compressionsWav.wav",
   "pausedWav.wav",
