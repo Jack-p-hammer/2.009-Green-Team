@@ -80,19 +80,47 @@ const int RA8875_RESET = 15;
 // Display object
 Adafruit_RA8875 tft = Adafruit_RA8875(RA8875_CS, RA8875_RESET);
 
+// const char *frameGroups[] = {
+//   "/bmp01/bare_chest.bmp",
+//   "/bmp02/ezgif-frame-002.bmp",
+//   "/bmp03/hold_down.bmp",
+//   "/bmp04/start_img.bmp",
+// };
+
+// // WAV files corresponding to each frame group
+// const char *wavFiles[] = {
+//   "1ExposeChest.WAV",   // Group 0
+//   "2AlignDevice.WAV",   // Group 1
+//   "3Kneel.WAV",   // Group 2
+//   "VoiceFile1.WAV",   // Group 3
+// };
+
 const char *frameGroups[] = {
-  "/bmp01/bare_chest.bmp",
-  "/bmp02/ezgif-frame-002.bmp",
-  "/bmp03/hold_down.bmp",
-  "/bmp04/start_img.bmp",
+  "cutClothingBmp.bmp",//"startUpBmp.bmp",
+  "cutClothingBmp.bmp",
+  "unfoldBmp.bmp",
+  "alignmentBmp.bmp",
+  "zeroingPrepBmp.bmp",
+  "zeroingBmp.bmp",
+  "compressionPrepBmp.bmp",
+  "compressionsBmp.bmp",
+  "pausedBmp.bmp",
+  "kneelFailureBmp.bmp",
+  "abortBmp.bmp",
 };
 
-// WAV files corresponding to each frame group
 const char *wavFiles[] = {
-  "1ExposeChest.WAV",   // Group 0
-  "2AlignDevice.WAV",   // Group 1
-  "3Kneel.WAV",   // Group 2
-  "VoiceFile1.WAV",   // Group 3
+  "startUpWav.wav",
+  "cutClothingWav.wav",
+  "unfoldWav.wav",
+  "alignmentWav.wav",
+  "zeroingPrepWav.wav",
+  "zeroingPrepWav.wav",
+  "compressionPrepWav.wav",
+  "compressionsWav.wav",
+  "pausedWav.wav",
+  "kneelFailureWav.wav",
+  "abortWav.wav",
 };
 
 
@@ -412,7 +440,7 @@ void loop() {
                 showCurrentFrameAndAudio(); // redraw group frame and restart audio
             }else {
             currentGroup++;
-            if (currentGroup >= 4) {
+            if (currentGroup >= 11) {
                 currentGroup = 0;
             }
 
