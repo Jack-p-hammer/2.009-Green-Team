@@ -15,6 +15,7 @@
 #include "sd_to_display.h"
 #include <Audio.h>
 
+
 // AUDIO 
 AudioPlaySdWav playWav1;
 AudioAmplifier amp1;
@@ -271,7 +272,7 @@ void playCurrentWav(int cG) {
 void showCurrentFrame(int cG) {
   const char *filename = frameGroups[cG];
 
-  Serial.print("Showing group ");
+  Serial.print("Showing frame for group ");
   Serial.print(cG);
   Serial.print(" -> ");
   Serial.println(filename);

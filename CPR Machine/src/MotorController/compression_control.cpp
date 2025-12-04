@@ -40,8 +40,7 @@ void updateCompressions() {
     }
 }
 
-void retract() {
-   
+void retract(){
     sendCommands(rotaryZeroPos, POSITION);
 }
 

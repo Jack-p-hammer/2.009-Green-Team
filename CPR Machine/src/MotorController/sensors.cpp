@@ -9,8 +9,8 @@ const int LINEAR_ENCODER_A = 2;
 const int LINEAR_ENCODER_B = 3;
 
 const double forceCalibRate = 1187.7440; // Calibration constants for force sensor
-const double forceCalibOffset = -548.7972 - 180;
-const int samplesToAverage = 10;
+const double forceCalibOffset = -548.7972 - 980 + 200 + 425;
+const int samplesToAverage = 30;
 
 float absRotaryZero = 0.0; // Absolute zero position of rotary encoder on power up
 float absLinearZero = 0.0; // Absolute zero position of rotary encoder on power up

@@ -6,6 +6,7 @@
 #include "control_scheme.h"
 #include "sensors.h"
 #include <assert.h>
+#include "HMI_utils.h"
 
 
 double current_error_gain = 68.58;
@@ -44,45 +45,52 @@ bool updateZeroing() {
     // Update sensor variables and error check
     // readSensors() updates global variables, so call inside if statement works 
     // as if outside the if
-    if(!readSensors()) {
-        prevState = currentState;
-        currentState = ABORT;
-        return false;
-    }
+    // if(!readSensors()) {
+    //     prevState = currentState;
+    //     currentState = ABORT;
+    //     currentGroupNum = 10;
+    //     return false;
+    // }
     DPRINT(">");
-    DPRINT("Force:"); DPRINT(forceVal);
-    DPRINT(",");
-    DPRINT("Prev_State:"); DPRINT(prevState);
-    DPRINT(",");
-    DPRINT("STATE:"); DPRINTLN(currentState);
+    DPRINT("Force:"); DPRINTLN(forceVal);
+    // DPRINT(",");
+    // DPRINT("Prev_State:"); DPRINT(prevState);
+    // DPRINT(",");
+    // DPRINT("STATE:"); DPRINTLN(currentState);
 
-    // Check for zeroing failure conditions
-    if(linearPos > extensionStrokeLimit) {
-        prevState = currentState;
-        currentState = ABORT;
-        return false;
-    }
+    // // Check for zeroing failure conditions
+    // if(linearPos > extensionStrokeLimit) {
+    //     prevState = currentState;
+    //     currentState = ABORT;
+    //     currentGroupNum = 10; // Set to abort group
+    //     return false;
+    // }
 
     // Check for successful zeroing
     // TODO: Refine zeroing setpoint to be weight of plunger-rack system
     
 
-    if(forceVal >= 30) {
+    if(forceVal >= 25) {
         // Handle state change in main state machine, just return true for now
 
         zeroLinearEncoder();
         zeroRotaryEncoder();
         DPRINTLN("ZEROING COMPLETE");
         moteus.SetStop();
+        //currentGroupNum = 6;
         return true;
     }
 
-    // Send control command
-    //Moteus::PositionMode::Command cmd;//cmd = Moteus::PositionMode::Command();
-
-    // cmd.position = std::numeric_limits<double>::quiet_NaN();
-    // cmd.velocity = zeroingVelocity/(2*PI*pinionRadius); // in revolutions per second
-    // moteus.SetPosition(cmd);
+    // Send control command using position mode as a ramp in position,
+    // which approximates constant velocity motion but goes through
+    // the same (working) position-control path as compressions.
+    //
+    // The helper already computes a ramped position in meters from
+    // the zeroing start time using `zeroingVelocity`:
+    //   outputPos_m = zeroingVelocity * time_sec;
+    // and clamps it to `extensionStrokeLimit`.
+    // double zeroingSetpoint_m = computeZeroingSetpoint();
+    // sendCommands(zeroingSetpoint_m, POSITION);
 
     sendCommands(zeroingVelocity/(2*PI*pinionRadius), VELOCITY);
 

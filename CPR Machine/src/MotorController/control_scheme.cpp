@@ -12,7 +12,7 @@ cprState currentState = COMPRESSIONS;
 cprState prevState = COMPRESSIONS;
 #elif defined(ZEROING_TEST)
 cprState currentState = ZEROING;
-cprState prevState = START_UP;
+cprState prevState = ZEROING_PREP;
 #else
 cprState currentState = START_UP;
 cprState prevState = START_UP;
@@ -98,7 +98,6 @@ void sendCommands(double controlOutput, controlMode control_mode) {
     case VELOCITY:  
         cmd.position = std::numeric_limits<double>::quiet_NaN();
         cmd.velocity = controlOutput; // in revolutions per second
-
       break;
 
     case TORQUE:
