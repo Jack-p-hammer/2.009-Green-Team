@@ -36,7 +36,7 @@ const char *unfoldWavFile = "unfoldWav.wav";
 const char *alignmentWavFile = "alignmentWav.wav";
 const char *zeroingPrepWavFile = "zeroingPrepWav.wav";
 const char *zeroingWavFile = "zeroingWav.wav";
-const char *compressionPrepWavFile = "compressionPrepWav.wav";
+const char *compressionsPrepWavFile = "compressionsPrepWav.wav";
 const char *compressionsWavFile = "compressionsWav.wav";
 const char *pausedWavFile = "pausedWav.wav";
 const char *kneelFailureWavFile = "kneelFailureWav.wav";
@@ -50,7 +50,7 @@ const char *wavGroups[] = {
   "alignmentWav.wav",
   "zeroingPrepWav.wav",
   "zeroingPrepWav.wav",
-  "compressionPrepWav.wav",
+  "compressionsPrepWav.wav",
   "compressionsWav.wav",
   "pausedWav.wav",
   "kneelFailureWav.wav",
@@ -114,7 +114,7 @@ const char *unfoldBmpFile = "unfoldBmp.bmp";
 const char *alignmentBmpFile = "alignmentBmp.bmp";
 const char *zeroingPrepBmpFile = "zeroingPrepBmp.bmp";
 const char *zeroingBmpFile = "zeroingBmp.bmp";
-const char *compressionPrepBmpFile = "compressionPrepBmp.bmp";
+const char *compressionsPrepBmpFile = "compressionsPrepBmp.bmp";
 const char *compressionsBmpFile = "compressionsBmp.bmp";
 const char *pausedBmpFile = "pausedBmp.bmp";
 const char *kneelFailureBmpFile = "kneelFailureBmp.bmp";
@@ -127,7 +127,7 @@ const char *frameGroups[] = {
   "alignmentBmp.bmp",
   "zeroingPrepBmp.bmp",
   "zeroingBmp.bmp",
-  "compressionPrepBmp.bmp",
+  "compressionsPrepBmp.bmp",
   "compressionsBmp.bmp",
   "pausedBmp.bmp",
   "kneelFailureBmp.bmp",

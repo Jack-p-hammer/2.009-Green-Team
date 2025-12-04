@@ -40,6 +40,11 @@ void updateCompressions() {
     }
 }
 
+void retract() {
+   
+    sendCommands(rotaryZeroPos, POSITION);
+}
+
 double computeCompressionSetpoint() {
     // Elapsed time in seconds since compression started
     double time_sec = (millis() - compression_start_time) / 1000.0;

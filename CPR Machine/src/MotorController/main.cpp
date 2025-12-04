@@ -239,7 +239,9 @@ void loop() {
       // playAudio(compressionsWavFile);
 
       if(prevState != currentState) {
+        moteus.SetStop();
         initializeCompressions();
+        
       }
 
       // Error handling handled within updateCompressions()
@@ -262,8 +264,12 @@ void loop() {
       currentGroupNum = 8;
       // showScreen(pausedBmpFile);
       // playAudio(pausedWavFile);
+      
+      if(prevState != currentState) {
+        moteus.SetStop();
+      }
 
-
+      retract(); 
       // If not paused, resume compressions
       if(nextButtonLoop()) {
         prevState = currentState;
@@ -275,19 +281,28 @@ void loop() {
         prevState = currentState;
       }
 
+      
+
       break;
 
     case KNEEL_FAILURE:
       currentGroupNum = 9;
       // Command zero setpoint, don't necessarily need to get there before re-kneel
-      returnToCompressionZero(); 
+      //returnToCompressionZero(); 
       // showScreen(kneelFailureBmpFile);
       // playAudio(kneelFailureWavFile);
+      
+      if(prevState != currentState) {
+        moteus.SetStop();
+      }
+
+      retract(); 
 
       // If they re-kneel, get back to rib breaking
       if(!isKneelingFailure()) {
         prevState = currentState;
         currentState = COMPRESSIONS;
+        moteus.SetStop();
       }
 
       // Now that one loop has passed, update prevState
@@ -302,14 +317,17 @@ void loop() {
       // Shit's fucked, get plunger out of there and tell people to do manual compressions
       // showScreen(abortBmpFile);
       // playAudio(abortWavFile);
-      updateAbort();
+      //updateAbort();
 
       if(prevState != currentState) {
         DPRINTLN("ABORT");
+        moteus.SetStop();
 
         // Update prevState now, no backing out of this one
         prevState = currentState;
       }
+
+      retract();
       
       // No getting out of this one, don't change state
       // TODO: Handle reset after use
