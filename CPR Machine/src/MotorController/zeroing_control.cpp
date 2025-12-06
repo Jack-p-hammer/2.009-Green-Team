@@ -70,7 +70,7 @@ bool updateZeroing() {
     // TODO: Refine zeroing setpoint to be weight of plunger-rack system
     
 
-    if(forceVal >= 20) {
+    if(forceVal >= 30) {
         // Handle state change in main state machine, just return true for now
 
         zeroLinearEncoder();

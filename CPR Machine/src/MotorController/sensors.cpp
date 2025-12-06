@@ -9,8 +9,12 @@ const int FORCE_PIN = A8;
 // const int LINEAR_ENCODER_B = 3;
 
 const double forceCalibRate = 1187.7440; // Calibration constants for force sensor
-const double forceCalibOffset = -4295;
-const int samplesToAverage = 30;
+double forceCalibOffset = 0;//-4275;
+const int samplesToAverage = 50;
+const int samples = 500;
+float Fisum = 0;
+float Visum = 0;
+float F_init = 0;
 
 float absRotaryZero = 0.0; // Absolute zero position of rotary encoder on power up
 float absLinearZero = 0.0; // Absolute zero position of rotary encoder on power up
@@ -27,6 +31,19 @@ Adafruit_VL53L0X ToFSensor = Adafruit_VL53L0X();
 
 // Declare variables for sensor validation
 const float pinionRadius = 0.01; // Meters
+
+double calculateForceOffset(){
+    delay(100);
+    for (int j = 0; j < samples; j++){
+    Fisum += analogRead(FORCE_PIN);
+    
+    }
+
+    F_init = Fisum/samples;
+    forceCalibOffset = forceCalibRate*F_init*5.0/1023.0;
+    DPRINT(F("Force Offset Calibrated: ")); DPRINTLN(forceCalibOffset);
+    return forceCalibOffset;
+}
 
 bool initializeSensors() {
   // Set pins
@@ -65,9 +82,8 @@ double read_force_sensor() {
   rawForceVal = total / samplesToAverage;
   // Convert to force in Newtons
   double voltage = (rawForceVal / 1023.0) * 5.0; // Assuming 10-bit ADC and 5V reference
-  double force = forceCalibRate * voltage + forceCalibOffset;
-
-
+  double force = forceCalibRate*voltage-forceCalibOffset;
+  
   // DPRINT(">");
   // DPRINT("Force:"); DPRINT(force);
   // DPRINT(",");

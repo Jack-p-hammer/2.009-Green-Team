@@ -185,6 +185,12 @@ void loop() {
       // Prepare for zeroing, then move to zeroing state
       // showScreen(zeroingPrepBmpFile);
       // playAudio(zeroingPrepWavFile);
+      if (prevState != currentState) {
+        calculateForceOffset();
+        //DPRINTLN("Preparing for Zeroing...");
+        //delay(1500); // Small delay to ensure any previous commands are finished
+      }
+  
 
       if(nextButtonLoop()) {
         // User has confirmed alignment, move to zeroing
@@ -209,7 +215,7 @@ void loop() {
       // Only do this when we switch states
       if(prevState != currentState) {
         DPRINTLN("Initializing Zeroing...");
-        delay(1200); // Small delay to ensure any previous commands are finished
+        delay(1000); // Small delay to ensure any previous commands are finished
         initializeZeroing();
       }
 
@@ -254,7 +260,7 @@ void loop() {
         prepTimer = millis();
       }
 
-      if(millis() - prepTimer >= 1500) {
+      if(millis() - prepTimer >= 1000) {
         prevState = currentState;
         currentState = COMPRESSIONS;
         currentGroupNum = 6;

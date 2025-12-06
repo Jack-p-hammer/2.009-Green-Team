@@ -19,7 +19,7 @@ extern double forceVal;
 
 // Force Sensor Calibration Values
 extern const double forceCalibRate;
-extern const double forceCalibOffset;
+extern double forceCalibOffset;
 
 // ToF Sensor
 extern Adafruit_VL53L0X ToFSensor;
@@ -34,6 +34,8 @@ bool initializeSensors();
 
 // Return force sensor reading
 double read_force_sensor();
+
+double calculateForceOffset();
 
 // Return linear encoder reading, relative to zero position
 double read_linear_encoder();
