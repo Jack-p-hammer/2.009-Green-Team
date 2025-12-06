@@ -33,3 +33,5 @@ void returnToCompressionZero(); // No need to
 
 // Check for user pause
 bool checkPauseCommand();
+
+void retract(); 

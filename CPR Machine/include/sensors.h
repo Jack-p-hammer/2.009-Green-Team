@@ -12,6 +12,9 @@ extern const int ROTARY_ENCODER_B;
 // Sensor outputs
 extern double linearPos; extern double linearZeroPos;
 extern double rotaryPos; extern double rotaryZeroPos;
+extern float absLinearZero;
+extern float absRotaryZero;
+
 extern double forceVal;
 
 // Force Sensor Calibration Values

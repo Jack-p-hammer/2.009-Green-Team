@@ -7,7 +7,7 @@ bool checkUserAlignmentConfirmation();
 
 // Paused
 void displayPauseMessage();
-bool isPaused(); // Returns true if the system is currently paused
+bool checkPauseCommand();
 
 // Kneeling failure
 void displayKneelFailureMessage();

@@ -4,6 +4,7 @@
 #include <ACAN2517FD.h>
 #include <Arduino.h>
 #include <assert.h>
+#include <zeroing_control.h>
 
 // State machine variables
 #if defined(COMPRESSION_TEST)
@@ -11,7 +12,7 @@ cprState currentState = COMPRESSIONS;
 cprState prevState = COMPRESSIONS;
 #elif defined(ZEROING_TEST)
 cprState currentState = ZEROING;
-cprState prevState = START_UP;
+cprState prevState = ZEROING_PREP;
 #else
 cprState currentState = START_UP;
 cprState prevState = START_UP;
@@ -28,7 +29,7 @@ double prevPrevCommand = 0;
 double prevPrevError = 0;
 
 // Driver object
-ACAN2517FD can(MCP2517_CS, SPI, MCP2517_INT);
+ACAN2517FD can(MCP2517_CS, SPI1, MCP2517_INT);
 
 // Moteus motor
 Moteus moteus(can, []() {
@@ -45,18 +46,21 @@ const Moteus::PositionMode::Format positionModeOptions = []() {
   options.feedforward_torque = Moteus::kFloat;
   options.kd_scale = Moteus::kFloat;
   options.kp_scale = Moteus::kFloat;
+  options.velocity_limit = Moteus::kFloat;
   return options;
 }();
+
 
 void initializeMotor() {
     pinMode(LED_BUILTIN, OUTPUT);
 
-    Serial.begin(115200);
-    // TODO: Remove this delay for M6
-    while (!Serial) {}
     DPRINTLN(F("control_scheme: initializeMotor()"));
 
-    SPI.begin();
+    SPI1.setMOSI(26); 
+    SPI1.setMISO(1);
+    SPI1.setSCK(27);
+
+    SPI1.begin();
 
     // CAN-FD configuration
     ACAN2517FDSettings settings(
@@ -82,19 +86,40 @@ void initializeMotor() {
 }
 
 
-void sendCommands(double controlOutput_Nm) {
+void sendCommands(double controlOutput, controlMode control_mode) {
     // TODO: This needs to be changed into torque control!!!
+    // Moteus::PositionMode::Command cmd;
     Moteus::PositionMode::Command cmd;
 
-    cmd.position = std::numeric_limits<double>::quiet_NaN();
-    cmd.velocity = 0.0;
-    cmd.kp_scale = 0.0;
-    cmd.kd_scale = 0.0;
+    switch (control_mode) {
+    case POSITION:
+       cmd.position = ((controlOutput + linearZeroPos)/(2*PI*pinionRadius));
 
-    cmd.feedforward_torque = controlOutput_Nm;
+      break;
+
+    case VELOCITY:  
+        cmd.position = std::numeric_limits<double>::quiet_NaN();
+        cmd.velocity = controlOutput; // in revolutions per second
+      break;
+
+    case TORQUE:
+        cmd.position = std::numeric_limits<double>::quiet_NaN();
+        cmd.velocity = 0.0;
+        cmd.kp_scale = 0.0;
+        cmd.kd_scale = 0.0;
+
+        cmd.feedforward_torque = controlOutput/10; 
+
+      break;
+    case RETRACT_POSITION:
+        cmd.position = ((controlOutput + linearZeroPos)/(2*PI*pinionRadius));
+        cmd.velocity_limit = 0.02/(2*PI*pinionRadius);
+        
+
+      break;
+    }
 
     moteus.SetPosition(cmd, &positionModeOptions);
-    // New attempt
 }
 
 void printStatus(uint32_t currentTime){

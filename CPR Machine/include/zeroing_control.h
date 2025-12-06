@@ -1,5 +1,9 @@
 #pragma once
 #include <cstdint>
+#include <ACAN2517FD.h>
+#include <Moteus.h>
+
+
 
 // Declare variables that would be useful in other files
 extern const double extensionStrokeLimit;

@@ -1,5 +1,5 @@
 #pragma once
-#include <cstdint>
+// #include <cstdint>
 #include <ACAN2517FD.h>
 #include <Moteus.h>
 
@@ -16,20 +16,33 @@
 // State enumeration for state machine
 enum cprState {
     START_UP,
+    BATTERY_CHECK,
+    CUT_CLOTHING,
+    UNFOLD,
+    ALIGNMENT,
+    ZEROING_PREP,
     ZEROING,
-    ZERO_FAILED,
-    WAIT_FOR_COMPRESSION_CONFIRMATION,
+    COMPRESSION_PREP,
     COMPRESSIONS,
     PAUSED,
     KNEEL_FAILURE,
     ABORT
 };
 
+// State enumeration for state machine
+enum controlMode {
+    POSITION,
+    VELOCITY,
+    TORQUE,
+    RETRACT_POSITION
+};
 // State variables (declared here, defined in a single .cpp)
 extern cprState currentState;
 
 // Track previous state to handle state transitions
 extern cprState prevState;
+
+extern controlMode control_mode;
 
 // Control Loop Timing variables
 // Declared here, defined in a single .cpp
@@ -47,12 +60,20 @@ extern uint32_t nextSendMillis;
 extern uint16_t loopCount;
 const uint8_t controller_period = 10;
 
-static const uint8_t MCP2517_SCK = 13;//27;//13 ; // SCK input of MCP2517
-static const uint8_t MCP2517_SDI =  11;//26; //11 ; // SDI input of MCP2517
-static const uint8_t MCP2517_SDO =  12;//39; //12 ; // SDO output of MCP2517
+// static const uint8_t MCP2517_SCK = 13 ; // SCK input of MCP2517
+// static const uint8_t MCP2517_SDI =  11 ; // SDI input of MCP2517
+// static const uint8_t MCP2517_SDO =  12 ; // SDO output of MCP2517
 
-static const uint8_t MCP2517_CS  = 10;//38; //10 ; // CS input of MCP2517
-static const uint8_t MCP2517_INT = 9;//28; //9 ; // INT output of MCP2517
+// static const uint8_t MCP2517_CS  = 10 ; // CS input of MCP2517
+// static const uint8_t MCP2517_INT = 9 ; // INT output of MCP2517
+
+static const byte MCP2517_SCK = 27;//13 ; // SCK input of MCP2517
+static const byte MCP2517_SDI =  26;//11 ; // MOSI SDI input of MCP2517
+static const byte MCP2517_SDO =  1;//12 ; // MISO SDO output of MCP2517
+
+static const byte MCP2517_CS  = 10 ; // CS input of MCP2517
+static const byte MCP2517_INT = 9 ; // INT output of MCP2517
+//static uint32_t gNextSendMillis = 0;
 
 extern ACAN2517FD can;
 
@@ -64,7 +85,7 @@ void initializeMotor();
 // General functions
 
 // Send controller command to motor
-void sendCommands(double controlOutput);
+void sendCommands(double controlOutput, controlMode control_mode);
 
 // Print current motor status
 void printStatus(uint32_t currentTime);

@@ -6,6 +6,7 @@
 #include "control_scheme.h"
 #include "sensors.h"
 #include <assert.h>
+#include "HMI_utils.h"
 
 
 double current_error_gain = 68.58;
@@ -16,7 +17,7 @@ double prev_error_gain = -113.9;
 double prev_prev_command_gain = -.00201;
 double prev_prev_error_gain = 50.2;
 
-const double extensionStrokeLimit = 0.0254*10; // 10 inches, in meters
+const double extensionStrokeLimit = 0.0254*8; // 10 inches, in meters
 long zeroing_start_time = 0;
 const double zeroingVelocity = 0.02; // m/s
 
@@ -27,6 +28,8 @@ void initializeZeroing() {
 
     // Record zeroing start time
     zeroing_start_time = millis();
+    // absLinearZero = read_linear_encoder();
+    // absRotaryZero = read_rotary_encoder();
 }
 
 bool updateZeroing() {
@@ -42,48 +45,65 @@ bool updateZeroing() {
     // Update sensor variables and error check
     // readSensors() updates global variables, so call inside if statement works 
     // as if outside the if
-    if(!readSensors()) {
-        prevState = currentState;
-        currentState = ABORT;
-        return false;
-    }
+    // if(!readSensors()) {
+    //     prevState = currentState;
+    //     currentState = ABORT;
+    //     currentGroupNum = 10;
+    //     return false;
+    // }
+    DPRINT(">");
+    DPRINT("Force:"); DPRINTLN(forceVal);
+    // DPRINT(",");
+    // DPRINT("Prev_State:"); DPRINT(prevState);
+    // DPRINT(",");
+    // DPRINT("STATE:"); DPRINTLN(currentState);
 
-    // Check for zeroing failure conditions
-    if(linearPos > extensionStrokeLimit) {
-        prevState = currentState;
-        currentState = ZERO_FAILED;
-        return false;
-    }
+    // // Check for zeroing failure conditions
+    // if(linearPos > extensionStrokeLimit) {
+    //     prevState = currentState;
+    //     currentState = ABORT;
+    //     currentGroupNum = 10; // Set to abort group
+    //     return false;
+    // }
 
     // Check for successful zeroing
     // TODO: Refine zeroing setpoint to be weight of plunger-rack system
     
 
-    if(forceVal >= 10) {
+    if(forceVal >= 25) {
         // Handle state change in main state machine, just return true for now
+
+        zeroLinearEncoder();
+        zeroRotaryEncoder();
+        DPRINTLN("ZEROING COMPLETE");
+        moteus.SetStop();
+        //currentGroupNum = 6;
         return true;
     }
 
-    // Send control command
-    Moteus::PositionMode::Command cmd;
+    // Send control command using position mode as a ramp in position,
+    // which approximates constant velocity motion but goes through
+    // the same (working) position-control path as compressions.
+    //
+    // The helper already computes a ramped position in meters from
+    // the zeroing start time using `zeroingVelocity`:
+    //   outputPos_m = zeroingVelocity * time_sec;
+    // and clamps it to `extensionStrokeLimit`.
+    // double zeroingSetpoint_m = computeZeroingSetpoint();
+    // sendCommands(zeroingSetpoint_m, POSITION);
 
-    cmd.position = std::numeric_limits<double>::quiet_NaN();
-    cmd.velocity = zeroingVelocity/(2*PI*pinionRadius); // in revolutions per second
-
-    moteus.SetPosition(cmd);
+    sendCommands(zeroingVelocity/(2*PI*pinionRadius), VELOCITY);
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {
-        printStatus(nextSendMillis);
+        // printStatus(nextSendMillis);
                 
         DPRINT(">");
-        DPRINT("Linear Pos:"); DPRINT(linearPos);
-        DPRINT(",");  
-        DPRINT("Rotary Pos:"); DPRINT(rotaryPos);
+        DPRINT("LINEAR POS:"); DPRINT(linearPos-linearZeroPos);
         DPRINT(",");
-        DPRINT(" | STATE: "); DPRINTLN(currentState);
-        DPRINT(" | STATE: "); DPRINT(currentState);
-        DPRINT(" | CAN TEST: "); DPRINTLN(moteus.last_result().values.temperature);
+        DPRINT("PreviousState:"); DPRINT(prevState);
+                DPRINT(",");
+        DPRINT("STATE:"); DPRINTLN(currentState);
     }
 
     // No errors, return false because setpoint not found
@@ -102,12 +122,7 @@ void returnToPreZeroingZero() {
     loopCount++;
 
     readSensors();
-    sendCommands(updateZeroingController(0));
-
-    // Only print our status every 25th cycle.
-    if (loopCount % 25 == 0) {
-        printStatus(nextSendMillis);
-    }
+    sendCommands(updateZeroingController(0), VELOCITY);
 
 }
 double updateZeroingController(double setpoint_m) {
