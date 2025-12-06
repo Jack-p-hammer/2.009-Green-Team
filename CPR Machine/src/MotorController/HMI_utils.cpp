@@ -32,8 +32,8 @@ float audioGainDefault = 0.7f;    // your chosen normal gain
 
 // NEW: path to pause image
 const char *startUpWavFile = "startUpWav.wav";
-const char *cutClothingWavFile = "cutClothingWav.wav";
-const char *unfoldWavFile = "unfoldWav.wav";
+const char *cutClothingWavFile = "unfoldWav.wav";
+const char *unfoldWavFile = "cutClothingWav.wav";
 const char *alignmentWavFile = "alignmentWav.wav";
 const char *zeroingPrepWavFile = "zeroingPrepWav.wav";
 const char *zeroingWavFile = "zeroingWav.wav";
@@ -46,8 +46,8 @@ const char *abortWavFile = "abortWav.wav";
 // WAV files corresponding to each frame group
 const char *wavGroups[] = {
   "startUpWav.wav",
-  "cutClothingWav.wav",
   "unfoldWav.wav",
+  "cutClothingWav.wav",
   "alignmentWav.wav",
   "zeroingPrepWav.wav",
   "zeroingWav.wav",
@@ -110,8 +110,8 @@ bool screenOn = false;
 
 // NEW: path to pause image
 const char *startUpBmpFile = "startUpBmp.bmp";
-const char *cutClothingBmpFile = "cutClothingBmp.bmp";
-const char *unfoldBmpFile = "unfoldBmp.bmp";
+const char *cutClothingBmpFile = "unfoldBmp.bmp";
+const char *unfoldBmpFile = "cutClothingBmp.bmp";
 const char *alignmentBmpFile = "alignmentBmp.bmp";
 const char *zeroingPrepBmpFile = "zeroingPrepBmp.bmp";
 const char *zeroingBmpFile = "zeroingBmp.bmp";
@@ -122,9 +122,9 @@ const char *kneelFailureBmpFile = "kneelFailureBmp.bmp";
 const char *abortBmpFile = "abortBmp.bmp";
 
 const char *frameGroups[] = {
-  "cutClothingBmp.bmp",//"startUpBmp.bmp",
-  "cutClothingBmp.bmp",
+  "startUpBmp.bmp",//"startUpBmp.bmp",
   "unfoldBmp.bmp",
+  "cutClothingBmp.bmp",
   "alignmentBmp.bmp",
   "zeroingPrepBmp.bmp",
   "zeroingBmp.bmp",

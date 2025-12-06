@@ -107,7 +107,7 @@ void loop() {
       } else {
         // Battery good, move to startup
         prevState = currentState;
-        currentState = CUT_CLOTHING;
+        currentState = UNFOLD;
         currentGroupNum = 1;
       }
       
@@ -118,7 +118,7 @@ void loop() {
 
       break;
 
-    case CUT_CLOTHING: 
+    case UNFOLD: 
       // currentGroupNum = 1;
       //showScreen(cutClothingBmpFile);
       //playAudio(cutClothingWavFile);
@@ -126,19 +126,19 @@ void loop() {
       if(nextButtonLoop()) {
         // User has pressed start, get started
         prevState = currentState;
-        currentState = UNFOLD;
+        currentState = CUT_CLOTHING;
         currentGroupNum = 2;
       }
 
       // Now that one loop has passed, update prevState
-      if(currentState == CUT_CLOTHING) {
+      if(currentState == UNFOLD) {
         prevState = currentState;
        
       }
 
       break;
     
-    case UNFOLD:  
+    case CUT_CLOTHING:  
       // currentGroupNum = 2;
       // showScreen(unfoldBmpFile);
       // playAudio(unfoldWavFile);
@@ -151,7 +151,7 @@ void loop() {
       }
 
       // Now that one loop has passed, update prevState
-      if(currentState == UNFOLD) {
+      if(currentState == CUT_CLOTHING) {
         prevState = currentState;
        
       }
