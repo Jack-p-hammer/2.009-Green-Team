@@ -72,11 +72,15 @@ bool updateZeroing() {
 
     if(forceVal >= 25) {
         // Handle state change in main state machine, just return true for now
-
+        sendCommands(0.0, VELOCITY); // Stop movement
         zeroLinearEncoder();
         zeroRotaryEncoder();
+
         DPRINTLN("ZEROING COMPLETE");
-        moteus.SetStop();
+        moteus.SetStop(); // Clear commands to prep for swap to pos'n control
+
+        // TODO: Is this a good way to make sure we hold position?
+        sendCommands(linearZeroPos, POSITION);
         //currentGroupNum = 6;
         return true;
     }
