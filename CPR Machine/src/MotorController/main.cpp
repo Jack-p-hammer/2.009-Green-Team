@@ -7,6 +7,7 @@
 #include "interrupt_control.h"
 #include <Moteus.h>
 #include <ACAN2517FD.h>
+#include "HMI_main.h"
 
 long prepTimer = millis();
 static bool firstRun = true;
@@ -69,6 +70,8 @@ void loop() {
   }
 
   
+
+  //HMI_loop();
 
   switch (currentState) {
     case START_UP_BATTERY: 

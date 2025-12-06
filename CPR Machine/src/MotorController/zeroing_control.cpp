@@ -133,7 +133,7 @@ double updateZeroingController(double setpoint_m) {
 
   // Take setpoint relative to linear zero
   //double error = (setpoint_m - linearZeroPos) - linearPos;
-  double error = setpoint_m - rotaryPos*(2*PI)*pinionRadius;
+  double error = setpoint_m - rotaryZeroPos*(2*PI)*pinionRadius;
 
   // See MATLAB file SimulinkSetup.mlx for controller in discrete TF form
   // THIS REQUIRES 10 ms CONTROLLER UPDATE PERIOD

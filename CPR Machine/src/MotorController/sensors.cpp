@@ -2,6 +2,7 @@
 #include "control_scheme.h"
 #include <Arduino.h>
 #include "Adafruit_VL53L0X.h"
+#include <Adafruit_BNO08x.h>
 
 // FIXME: EXAMPLE PINS
 const int FORCE_PIN = A8;
@@ -25,8 +26,23 @@ float rawForceVal = 0;
 // Declare ToF Sensor
 Adafruit_VL53L0X ToFSensor = Adafruit_VL53L0X();
 
+
 // Declare variables for sensor validation
 const float pinionRadius = 0.01; // Meters
+
+// IMU Setup
+Adafruit_BNO08x IMU = Adafruit_BNO08x();
+sh2_SensorValue_t imuValue;
+
+float imu_ax = 0;   // m/s^2
+float imu_ay = 0;
+float imu_az = 0;
+
+// Rack & pinion dimensions
+double rackLength = 12.925*0.0254; // double check this (inches converted to meters)
+double plungerLength = 3.0*0.0254; // double check this (inches converted to meters)
+double bushingLength = 4.355*0.0254; // double check this (inches converted to meters)
+
 
 bool initializeSensors() {
   // Set pins
@@ -47,6 +63,21 @@ bool initializeSensors() {
   
   linearZeroPos = read_linear_encoder();
   // Force sensor is pre-calibrated
+
+  // ----- Initialize BNO085 IMU -----
+  if (!IMU.begin_I2C()) {
+    DPRINTLN(F("Failed to initialize BNO085 IMU"));
+    return true; //changed from false
+  }
+
+  // Enable linear acceleration reports (gravity removed) at ~100 Hz
+  if (!IMU.enableReport(SH2_LINEAR_ACCELERATION, 10000)) { 
+    // 10,000 µs = 10 ms = 100 Hz update rate
+    DPRINTLN(F("Could not enable linear acceleration report"));
+    return true; //changed from false
+  }
+
+  DPRINTLN(F("BNO085 IMU initialized"));
 
   // Initialization successful
   return true;
@@ -78,21 +109,45 @@ double read_force_sensor() {
 
 double read_linear_encoder() {
   // Record reading from ToF Sensor
-  if (ToFSensor.isRangeComplete()) {
-    double reading = ToFSensor.readRange();
+  VL53L0X_RangingMeasurementData_t measure;
+    
+  ToFSensor.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
 
-    // Sensor is in millimeters, want meters
-    reading /= 1000.0;
+  if (measure.RangeStatus != 4) {  // phase failures have incorrect data
+    double reading = measure.RangeMilliMeter/1000.0; // convert millimeters to meters
+    //Serial.print("Distance (mm): "); Serial.println(measure.RangeMilliMeter);
 
     // always return zeroed value 
     // return reading - linearZeroPos; 
     // TODO: DOnt return rotaryPos again
     return 2*PI*rotaryPos*pinionRadius -  absLinearZero;
   }
+
+
   // If no reading is available, return 0
   // This is fine because sensor noise will prevent a real zero reading
   return 2*PI*rotaryPos*pinionRadius - absLinearZero;
 }
+
+bool read_imu() {
+  sh2_SensorValue_t sensorValue;
+
+  // Try to get a new event (non-blocking)
+  if (!IMU.getSensorEvent(&sensorValue)) {
+    return false;  // No new IMU data yet
+  }
+
+  // We only care about linear acceleration
+  if (sensorValue.sensorId == SH2_LINEAR_ACCELERATION) {
+    imu_ax = sensorValue.un.linearAcceleration.x;
+    imu_ay = sensorValue.un.linearAcceleration.y;
+    imu_az = sensorValue.un.linearAcceleration.z;
+    return true;
+  }
+
+  return false;
+}
+
 
 void zeroLinearEncoder() {
   // Go through existing read function to get zero pos
@@ -121,6 +176,8 @@ bool readSensors() {
     rotaryPos = read_rotary_encoder(); // in revolutions
     // ToF sensor only updates at 30ish ms max, if nothing read keep prev. encoder value
     double tempPos = read_linear_encoder();
+    read_imu();
+
     // read_linear_encoder returns zero if no new reading is available
     if(tempPos != 0) {
       linearPos = tempPos;
@@ -132,16 +189,18 @@ bool readSensors() {
     // Change tolerance based on linear encoder precision
     // must convert rotaryPos to radians
     if(abs(2*PI*rotaryPos - rotaryPosFromLinear) > 0.1) {
-      // TODO: Change from a print to state switch
+      // TODO: update state machine
+      //currentState = ABORT; uncomment later!!!
       DPRINTLN("ALERT: LINEAR - ROTARY MISMATCH");
-      return false;
+      return true; // change back to false; later
     }
 
     // Change limit from 550 to whatever we decide is a good worst-case limit
     if (forceVal > 550) {
-      // TODO: Change from a print to a state switch
+      // TODO: update state machine
+      //currentState = ABORT; uncomment later!!!
       DPRINTLN("ALERT: OVER FORCE");
-      return false;
+      return true; //change back to false later
     }
     return true;
 }
