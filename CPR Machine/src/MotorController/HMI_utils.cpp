@@ -28,12 +28,12 @@ AudioConnection  patchCord2(amp1, 0, i2s1, 0);  // left
 AudioConnection  patchCord3(amp1, 0, i2s1, 1);  // right
 
 // NEW: audio gain / pause state
-float audioGainDefault = 0.7f;    // your chosen normal gain
+float audioGainDefault = 0.8f; //0.7f   // your chosen normal gain
 
 // NEW: path to pause image
 const char *startUpWavFile = "startUpWav.wav";
-const char *cutClothingWavFile = "unfoldWav.wav";
-const char *unfoldWavFile = "cutClothingWav.wav";
+const char *unfoldExposeWavFile = "unfoldExposeWav.wav";
+//const char *cutClothingWavFile = "cutClothingWav.wav";
 const char *alignmentWavFile = "alignmentWav.wav";
 const char *zeroingPrepWavFile = "zeroingPrepWav.wav";
 const char *zeroingWavFile = "zeroingWav.wav";
@@ -46,8 +46,8 @@ const char *abortWavFile = "abortWav.wav";
 // WAV files corresponding to each frame group
 const char *wavGroups[] = {
   "startUpWav.wav",
-  "unfoldWav.wav",
-  "cutClothingWav.wav",
+  "unfoldExposeWav.wav",
+  //"cutClothingWav.wav",
   "alignmentWav.wav",
   "zeroingPrepWav.wav",
   "zeroingWav.wav",
@@ -110,8 +110,8 @@ bool screenOn = false;
 
 // NEW: path to pause image
 const char *startUpBmpFile = "startUpBmp.bmp";
-const char *cutClothingBmpFile = "unfoldBmp.bmp";
-const char *unfoldBmpFile = "cutClothingBmp.bmp";
+const char *unfoldExposeBmpFile = "unfoldExposeBmp.bmp";
+//const char *cutClothingBmpFile = "cutClothingBmp.bmp";
 const char *alignmentBmpFile = "alignmentBmp.bmp";
 const char *zeroingPrepBmpFile = "zeroingPrepBmp.bmp";
 const char *zeroingBmpFile = "zeroingBmp.bmp";
@@ -123,8 +123,8 @@ const char *abortBmpFile = "abortBmp.bmp";
 
 const char *frameGroups[] = {
   "startUpBmp.bmp",//"startUpBmp.bmp",
-  "unfoldBmp.bmp",
-  "cutClothingBmp.bmp",
+  "unfoldExposeBmp.bmp",
+  //"cutClothingBmp.bmp",
   "alignmentBmp.bmp",
   "zeroingPrepBmp.bmp",
   "zeroingBmp.bmp",

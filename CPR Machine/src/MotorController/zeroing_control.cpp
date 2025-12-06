@@ -19,7 +19,7 @@ double prev_prev_error_gain = 50.2;
 
 const double extensionStrokeLimit = 0.0254*8; // 10 inches, in meters
 long zeroing_start_time = 0;
-const double zeroingVelocity = 0.02; // m/s
+const double zeroingVelocity = 0.04; // m/s
 
 void initializeZeroing() {
     // Initialize outer loop
@@ -70,12 +70,13 @@ bool updateZeroing() {
     // TODO: Refine zeroing setpoint to be weight of plunger-rack system
     
 
-    if(forceVal >= 25) {
+    if(forceVal >= 20) {
         // Handle state change in main state machine, just return true for now
 
         zeroLinearEncoder();
         zeroRotaryEncoder();
         DPRINTLN("ZEROING COMPLETE");
+        moteus.SetBrake(); // might have to move this
         moteus.SetStop();
         //currentGroupNum = 6;
         return true;

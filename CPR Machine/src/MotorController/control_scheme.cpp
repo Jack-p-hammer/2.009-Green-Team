@@ -14,8 +14,8 @@ cprState prevState = COMPRESSIONS;
 cprState currentState = ZEROING;
 cprState prevState = ZEROING_PREP;
 #else
-cprState currentState = START_UP;
-cprState prevState = START_UP;
+cprState currentState = START_UP_BATTERY;
+cprState prevState = START_UP_BATTERY;
 #endif
 
 // Control Loop Timing variables

@@ -64,9 +64,6 @@ void loop() {
   if(firstRun){
     showCurrentFrameAndAudio(currentGroupNum);
     firstRun = false;
-  } else if ((currentState == BATTERY_CHECK) && (prevState == START_UP)){
-    DPRINT("Showing battery check frame but not audio");
-    showCurrentFrame(currentGroupNum);
   } else if (prevState != currentState){
     showCurrentFrameAndAudio(currentGroupNum);
   }
@@ -74,51 +71,56 @@ void loop() {
   
 
   switch (currentState) {
-    case START_UP: 
+    case START_UP_BATTERY: 
 
       //currentGroupNum = 0; 
       //showScreen(startUpBmpFile);
-      //playAudio(startUpWavFile); 
+      //playAudio(startUpWavFile);
+
+      // This might cut off audio, we will have to test
+       if(!verifyBatteryPercentage()) {
+        // Handle low battery scenario
+        prevState = currentState;
+        currentState = ABORT;
+        currentGroupNum = 9;
+       }
+      // } else {
+      //   // Battery good, move to startup
+      //   prevState = currentState;
+      //   currentState = UNFOLD_EXPOSE;
+      //   currentGroupNum = 1;
+      // }
      
 
       if(nextButtonLoop()) {
         // User has pressed start, get started
         prevState = currentState;
-        currentState = BATTERY_CHECK;
+        currentState = UNFOLD_EXPOSE;
+        currentGroupNum = 1;
       }
 
       // Now that one loop has passed, update prevState
-      if(currentState == START_UP) {
+      if(currentState == START_UP_BATTERY) {
         prevState = currentState;
         // 
       }
 
       break;
 
-    case BATTERY_CHECK:
+    //case BATTERY_CHECK:
       //currentGroupNum = 0;
       
       // Immediately check battery state
-      if(!verifyBatteryPercentage()) {
-        // Handle low battery scenario
-        prevState = currentState;
-        currentState = ABORT;
-        currentGroupNum = 10;
-      } else {
-        // Battery good, move to startup
-        prevState = currentState;
-        currentState = UNFOLD;
-        currentGroupNum = 1;
-      }
+     
       
       // Now that one loop has passed, update prevState
       // if(currentState == BATTERY_CHECK) {
       //   prevState = currentState;
       // }
 
-      break;
+     // break;
 
-    case UNFOLD: 
+    case UNFOLD_EXPOSE: 
       // currentGroupNum = 1;
       //showScreen(cutClothingBmpFile);
       //playAudio(cutClothingWavFile);
@@ -126,37 +128,37 @@ void loop() {
       if(nextButtonLoop()) {
         // User has pressed start, get started
         prevState = currentState;
-        currentState = CUT_CLOTHING;
+        currentState = ALIGNMENT;
         currentGroupNum = 2;
       }
 
       // Now that one loop has passed, update prevState
-      if(currentState == UNFOLD) {
+      if(currentState == UNFOLD_EXPOSE) {
         prevState = currentState;
        
       }
 
       break;
     
-    case CUT_CLOTHING:  
-      // currentGroupNum = 2;
-      // showScreen(unfoldBmpFile);
-      // playAudio(unfoldWavFile);
+    // case CUT_CLOTHING:  
+    //   // currentGroupNum = 2;
+    //   // showScreen(unfoldBmpFile);
+    //   // playAudio(unfoldWavFile);
 
-      if(nextButtonLoop()) {
-        // User has pressed start, get started
-        prevState = currentState;
-        currentState = ALIGNMENT;
-        currentGroupNum = 3;
-      }
+    //   if(nextButtonLoop()) {
+    //     // User has pressed start, get started
+    //     prevState = currentState;
+    //     currentState = ALIGNMENT;
+    //     currentGroupNum = 3;
+    //   }
 
-      // Now that one loop has passed, update prevState
-      if(currentState == CUT_CLOTHING) {
-        prevState = currentState;
+    //   // Now that one loop has passed, update prevState
+    //   if(currentState == CUT_CLOTHING) {
+    //     prevState = currentState;
        
-      }
+    //   }
 
-      break;
+    //   break;
 
     case ALIGNMENT:
       //currentGroupNum = 3;
@@ -167,7 +169,7 @@ void loop() {
         // User has confirmed alignment, move to zeroing
         prevState = currentState;
         currentState = ZEROING_PREP;
-        currentGroupNum = 4;
+        currentGroupNum = 3;
       }
 
       // Now that one loop has passed, update prevState
@@ -188,7 +190,7 @@ void loop() {
         // User has confirmed alignment, move to zeroing
         prevState = currentState;
         currentState = ZEROING;
-        currentGroupNum = 5;
+        currentGroupNum = 4;
       }
 
       // Now that one loop has passed, update prevState
@@ -207,7 +209,7 @@ void loop() {
       // Only do this when we switch states
       if(prevState != currentState) {
         DPRINTLN("Initializing Zeroing...");
-        delay(4000); // Small delay to ensure any previous commands are finished
+        delay(1200); // Small delay to ensure any previous commands are finished
         initializeZeroing();
       }
 
@@ -217,21 +219,21 @@ void loop() {
         DPRINTLN("ZEROING COMPLETE");
         prevState = currentState; //I changed this from COMPRESSIONS
         currentState = COMPRESSION_PREP;
-        currentGroupNum = 6;
+        currentGroupNum = 5;
       }
 
             // Check for zeroing failure conditions
       if(linearPos > extensionStrokeLimit) {
           prevState = currentState;
           currentState = ABORT;
-          currentGroupNum = 10; // Set to abort group
+          currentGroupNum = 9; // Set to abort group
           //return false;
       }
 
       if(!readSensors()) {
         prevState = currentState;
         currentState = ABORT;
-        currentGroupNum = 10;
+        currentGroupNum = 9;
         //return false;
     }
       
@@ -252,10 +254,10 @@ void loop() {
         prepTimer = millis();
       }
 
-      if(millis() - prepTimer >= 3000) {
+      if(millis() - prepTimer >= 1500) {
         prevState = currentState;
         currentState = COMPRESSIONS;
-        currentGroupNum = 7;
+        currentGroupNum = 6;
       }
       // if (playWav1.isPlaying()) {
       //   audioWasPlaying = true;
@@ -284,7 +286,7 @@ void loop() {
       if(prevState != currentState) {
         //moteus.SetBrake();
         DPRINTLN("Initializing Compressions...");
-        delay(2000); // Small delay to ensure any previous commands are finished
+        delay(500); // Small delay to ensure any previous commands are finished
         initializeCompressions();
       }
 
@@ -295,7 +297,7 @@ void loop() {
       if(pauseButtonLoop()) {
         prevState = currentState;
         currentState = PAUSED;
-        currentGroupNum = 8;
+        currentGroupNum = 7;
         moteus.SetBrake();
       }
 
@@ -320,7 +322,7 @@ void loop() {
       if(nextButtonLoop()) {
         prevState = currentState;
         currentState = COMPRESSIONS;
-        currentGroupNum = 7;
+        currentGroupNum = 6;
         moteus.SetStop();
       }
 
@@ -345,7 +347,7 @@ void loop() {
       if(!isKneelingFailure()) {
         prevState = currentState;
         currentState = COMPRESSIONS;
-        currentGroupNum = 7;
+        currentGroupNum = 6;
         moteus.SetBrake();
       }
 
@@ -357,7 +359,7 @@ void loop() {
       break;
 
     case ABORT:
-      //currentGroupNum = 10;
+      //currentGroupNum = 9;
       // Shit's fucked, get plunger out of there and tell people to do manual compressions
       // showScreen(abortBmpFile);
       // playAudio(abortWavFile);
