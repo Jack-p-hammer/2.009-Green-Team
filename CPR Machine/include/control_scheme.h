@@ -32,7 +32,8 @@ enum controlMode {
     POSITION,
     VELOCITY,
     TORQUE,
-    RETRACT_POSITION
+    RETRACT_POSITION,
+    ZEROING_POSITION
 };
 // State variables (declared here, defined in a single .cpp)
 extern cprState currentState;

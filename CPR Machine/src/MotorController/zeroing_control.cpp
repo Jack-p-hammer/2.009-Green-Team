@@ -8,7 +8,7 @@
 #include <assert.h>
 #include "HMI_utils.h"
 
-
+double const zeroPos = 1.72;
 double current_error_gain = 68.58;
 
 double prev_command_gain = 1.002;
@@ -70,17 +70,17 @@ bool updateZeroing() {
     // TODO: Refine zeroing setpoint to be weight of plunger-rack system
     
 
-    if(forceVal >= 30) {
-        // Handle state change in main state machine, just return true for now
+    // if(forceVal >= 35) {
+    //     // Handle state change in main state machine, just return true for now
 
-        zeroLinearEncoder();
-        zeroRotaryEncoder();
-        DPRINTLN("ZEROING COMPLETE");
-        moteus.SetBrake(); // might have to move this
-        moteus.SetStop();
-        //currentGroupNum = 6;
-        return true;
-    }
+    //     zeroLinearEncoder();
+    //     zeroRotaryEncoder();
+    //     DPRINTLN("ZEROING COMPLETE");
+    //     moteus.SetBrake(); // might have to move this
+    //     moteus.SetStop();
+    //     //currentGroupNum = 6;
+    //     return true;
+    // }
 
     // Send control command using position mode as a ramp in position,
     // which approximates constant velocity motion but goes through
@@ -93,7 +93,21 @@ bool updateZeroing() {
     // double zeroingSetpoint_m = computeZeroingSetpoint();
     // sendCommands(zeroingSetpoint_m, POSITION);
 
-    sendCommands(zeroingVelocity/(2*PI*pinionRadius), VELOCITY);
+    //sendCommands(zeroingVelocity/(2*PI*pinionRadius), VELOCITY);
+    sendCommands(zeroPos, ZEROING_POSITION);
+    DPRINT("Zero Error: "); DPRINTLN(moteus.last_result().values.position - zeroPos);
+
+     if(abs(moteus.last_result().values.position - zeroPos) < 0.05) {
+        // Handle state change in main state machine, just return true for now
+
+        zeroLinearEncoder();
+        zeroRotaryEncoder();
+        DPRINTLN("ZEROING COMPLETE");
+        moteus.SetBrake(); // might have to move this
+        moteus.SetStop();
+        //currentGroupNum = 6;
+        return true;
+    }
 
     // Only print status every 25th cycle.
     if (loopCount % 10 == 0) {

@@ -260,7 +260,7 @@ void loop() {
         prepTimer = millis();
       }
 
-      if(millis() - prepTimer >= 1000) {
+      if(millis() - prepTimer >= 1500) {
         prevState = currentState;
         currentState = COMPRESSIONS;
         currentGroupNum = 6;
