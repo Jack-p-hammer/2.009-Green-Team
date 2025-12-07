@@ -119,7 +119,7 @@ void sendCommands(double controlOutput, controlMode control_mode) {
       break;
     case ZEROING_POSITION:
         cmd.position = controlOutput;
-        cmd.velocity_limit = 0.02/(2*PI*pinionRadius);
+        cmd.velocity_limit = 0.04/(2*PI*pinionRadius);
     }
 
     moteus.SetPosition(cmd, &positionModeOptions);
