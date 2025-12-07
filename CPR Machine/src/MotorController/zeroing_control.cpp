@@ -8,7 +8,7 @@
 #include <assert.h>
 #include "HMI_utils.h"
 
-double const zeroPos = 1.72;
+double const zeroPos = 1.6; // 1.72;
 double current_error_gain = 68.58;
 
 double prev_command_gain = 1.002;
@@ -97,7 +97,7 @@ bool updateZeroing() {
     sendCommands(zeroPos, ZEROING_POSITION);
     DPRINT("Zero Error: "); DPRINTLN(moteus.last_result().values.position - zeroPos);
 
-     if(abs(moteus.last_result().values.position - zeroPos) < 0.05) {
+     if(abs(moteus.last_result().values.position - zeroPos) < 0.08) {
         // Handle state change in main state machine, just return true for now
 
         zeroLinearEncoder();
