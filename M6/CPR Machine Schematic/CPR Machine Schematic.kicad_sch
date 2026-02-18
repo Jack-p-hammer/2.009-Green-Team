@@ -1,0 +1,862 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "8991fc77-975f-4978-a089-6b2a5e33f59b")
+	(paper "A4")
+	(lib_symbols)
+	(wire
+		(pts
+			(xy 110.49 81.28) (xy 134.62 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "00595c02-e8cf-4d41-97fe-f404a766fa50")
+	)
+	(wire
+		(pts
+			(xy 110.49 129.54) (xy 134.62 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0afde02f-6da3-485e-8d6d-49de053a4e94")
+	)
+	(wire
+		(pts
+			(xy 110.49 85.09) (xy 134.62 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1234b577-0435-478c-889c-60fcb87a6350")
+	)
+	(wire
+		(pts
+			(xy 173.99 88.9) (xy 193.04 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b1cbe33-3d95-4f7b-a265-de42482ec17e")
+	)
+	(wire
+		(pts
+			(xy 173.99 123.19) (xy 193.04 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3d0e5eb7-55b5-4ad9-a558-9f97d4c6096d")
+	)
+	(wire
+		(pts
+			(xy 110.49 121.92) (xy 134.62 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f4a92fd-7388-48a6-b4ab-c9ee7412337c")
+	)
+	(wire
+		(pts
+			(xy 173.99 118.11) (xy 193.04 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "470f2639-3acd-4a91-b9d5-da4402aaaa9f")
+	)
+	(wire
+		(pts
+			(xy 173.99 73.66) (xy 193.04 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66e83a55-0716-41ed-925d-a1cde82b25ff")
+	)
+	(wire
+		(pts
+			(xy 173.99 125.73) (xy 193.04 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e1e023b-fa80-44de-af69-ff95f164d293")
+	)
+	(wire
+		(pts
+			(xy 173.99 85.09) (xy 193.04 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8052e6bf-0122-4e06-a746-0cf044413f88")
+	)
+	(wire
+		(pts
+			(xy 173.99 81.28) (xy 193.04 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "921ad273-0d9f-4a13-9417-48b492fa59da")
+	)
+	(wire
+		(pts
+			(xy 110.49 125.73) (xy 134.62 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c021501-02e6-4bad-a2af-87e53e4e5459")
+	)
+	(wire
+		(pts
+			(xy 110.49 77.47) (xy 134.62 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f226678-5e68-4ea0-bde6-b847db868a71")
+	)
+	(wire
+		(pts
+			(xy 173.99 120.65) (xy 193.04 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a7e87be8-c9b1-4b07-9ef9-a219fe9a5b31")
+	)
+	(wire
+		(pts
+			(xy 173.99 128.27) (xy 193.04 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "abd899a0-23c3-49e3-b310-d7789ea017a0")
+	)
+	(wire
+		(pts
+			(xy 173.99 107.95) (xy 193.04 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2520018-da4b-4402-b596-2e49b22a3d9f")
+	)
+	(wire
+		(pts
+			(xy 110.49 92.71) (xy 134.62 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bfb03ac1-2a0d-4f3d-a0b5-d4b66402ba3e")
+	)
+	(wire
+		(pts
+			(xy 173.99 102.87) (xy 193.04 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bfb89161-ecab-418d-a47d-b662091137db")
+	)
+	(wire
+		(pts
+			(xy 173.99 105.41) (xy 193.04 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dba23227-556f-400a-9233-7c1e7a675a53")
+	)
+	(wire
+		(pts
+			(xy 173.99 77.47) (xy 193.04 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea77e9f7-fc64-4250-aee1-23268cefe726")
+	)
+	(wire
+		(pts
+			(xy 110.49 88.9) (xy 134.62 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edafe3c4-4203-4736-b706-eb9226691340")
+	)
+	(sheet
+		(at 57.15 115.57)
+		(size 53.34 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "2e704a40-db78-4cf7-9f7e-cfc586f5aeb3")
+		(property "Sheetname" "Sensing"
+			(at 57.15 114.8584 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Sensing.kicad_sch"
+			(at 57.15 144.0946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "I2C_SCL" input
+			(at 110.49 121.92 0)
+			(uuid "27e2b740-ceaa-472e-8ef6-e0832c72d924")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "I2C_SDA" bidirectional
+			(at 110.49 125.73 0)
+			(uuid "6b1999c8-d6ae-43eb-a6c9-6482f9496040")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "FORCE_PIN" output
+			(at 110.49 129.54 0)
+			(uuid "95d1cdf5-a8db-4e84-8552-a7e9d1df4293")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 57.15 26.67)
+		(size 53.34 26.67)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "390cafbd-c317-4387-95c3-e11405a1139f")
+		(property "Sheetname" "Power"
+			(at 57.15 25.9584 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Power.kicad_sch"
+			(at 57.15 53.9246 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 57.15 68.58)
+		(size 53.34 36.83)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "5d577b9a-7e09-4b18-b019-9e51a9486569")
+		(property "Sheetname" "Motor Control"
+			(at 57.15 67.8684 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "MotorControl.kicad_sch"
+			(at 57.15 105.9946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "SPI_SCK" input
+			(at 110.49 77.47 0)
+			(uuid "3b25fb5c-21c6-4742-8544-c86e04418b0d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_SDI" input
+			(at 110.49 81.28 0)
+			(uuid "1c607d64-3e3e-4e2e-be06-6c4527c21310")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_SDO" output
+			(at 110.49 85.09 0)
+			(uuid "a91252a0-2e6c-4c0e-904a-c11ff047176e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_CS" input
+			(at 110.49 88.9 0)
+			(uuid "08808137-c138-4ff1-a88c-aecb1a8da6c9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_INT" output
+			(at 110.49 92.71 0)
+			(uuid "6facb34d-2e43-4507-a0a8-9436a88736ea")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 193.04 67.945)
+		(size 45.085 75.565)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "709433ac-4f95-432e-b356-28cd0d53ea85")
+		(property "Sheetname" "HMI_No_Raspi"
+			(at 193.04 67.2334 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "HMI_No_Raspi.kicad_sch"
+			(at 193.04 144.0946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Field2" ""
+			(at 193.04 67.945 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "SPI_CS2" input
+			(at 193.04 85.09 180)
+			(uuid "b64a584d-7e45-4bd6-adf8-ad3558695b6c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SPI_SCK" input
+			(at 193.04 73.66 180)
+			(uuid "45232bfb-bcea-496b-9606-3b817eeed050")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SPI_SDI" input
+			(at 193.04 77.47 180)
+			(uuid "93748d89-4009-428a-b52b-49dfd87afab2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SPI_SDO" output
+			(at 193.04 81.28 180)
+			(uuid "e80c9d59-b5a8-433d-abf1-d41995a3b5e9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "RST1" input
+			(at 193.04 88.9 180)
+			(uuid "bca6c207-5a1d-4a44-a992-931c08e42b0a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Green_Button" input
+			(at 193.04 125.73 180)
+			(uuid "57ea00c3-c9a2-417e-81b7-151bcfd5bb2f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Green_LED" input
+			(at 193.04 128.27 180)
+			(uuid "1bee65cb-46c5-4d01-82d2-5e2c36ea3496")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Red_Button" input
+			(at 193.04 120.65 180)
+			(uuid "a7e80941-7a4e-47fa-bb78-c61a016c6dc0")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Red_LED" input
+			(at 193.04 123.19 180)
+			(uuid "4184213e-7df5-4c99-b88f-a10cd5e7ee73")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "White_Button" input
+			(at 193.04 118.11 180)
+			(uuid "9340eaff-6850-4fd6-b3f1-932bf49e5819")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "I2S_LRCLK" input
+			(at 193.04 107.95 180)
+			(uuid "69d814ed-97a2-4df2-abf0-98db4b592b62")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "I2S_DIN" input
+			(at 193.04 102.87 180)
+			(uuid "17495492-9802-41df-8a8f-80192f5be073")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "I2S_BCLK" input
+			(at 193.04 105.41 180)
+			(uuid "40c62743-bab9-4c95-8d84-ba31c78e6ad4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 134.62 68.58)
+		(size 39.37 74.93)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "8b2fecf3-fab6-4137-a5b1-aa5c7fdce798")
+		(property "Sheetname" "Microcontroller"
+			(at 134.62 67.8684 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Microcontroller.kicad_sch"
+			(at 134.62 144.0946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "SPI_INT1" input
+			(at 134.62 92.71 180)
+			(uuid "7c33d868-12c8-4f8d-902b-c430c157425f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SPI_CS1" output
+			(at 134.62 88.9 180)
+			(uuid "e9547e5c-2078-4130-903c-bc0949702e99")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SPI_SDI" output
+			(at 173.99 77.47 0)
+			(uuid "20d08e3f-d757-4cf1-91aa-eefd61403aba")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_SDO" input
+			(at 173.99 81.28 0)
+			(uuid "78f7289d-9159-4c32-b8a4-4a34d74f600a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI_SCK" output
+			(at 173.99 73.66 0)
+			(uuid "cb38e524-7e41-42b8-a00b-9c77cf1f4e69")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "I2C_SDA" bidirectional
+			(at 134.62 125.73 180)
+			(uuid "5a5a3c44-0409-4cba-9b0d-fc0049906ac7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "I2C_SCL" output
+			(at 134.62 121.92 180)
+			(uuid "69e43f4f-6714-46c5-9d09-b67763a1b59e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SPI_CS2" output
+			(at 173.99 85.09 0)
+			(uuid "d75e256b-fa15-4b6d-8fbf-972e915691ea")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RST1" output
+			(at 173.99 88.9 0)
+			(uuid "9a87e1ba-80c0-4694-a78d-79a1a579d249")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Red_Button" output
+			(at 173.99 120.65 0)
+			(uuid "45ad2647-a01d-4da7-9ddd-e09b706fd72b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "White_Button" output
+			(at 173.99 118.11 0)
+			(uuid "4699cb35-da76-4d6d-a440-ff0885818bd1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Green_Button" output
+			(at 173.99 125.73 0)
+			(uuid "9ad44e2b-2168-4415-a016-c68d8744e178")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Green_LED" output
+			(at 173.99 128.27 0)
+			(uuid "c3f5660f-c299-4661-a729-2ca7f6ddb4dc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Red_LED" output
+			(at 173.99 123.19 0)
+			(uuid "570b3cd4-9d80-42f5-8f6f-1c98d27a4abe")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "FORCE_IN" input
+			(at 134.62 129.54 180)
+			(uuid "7aad3bb5-12db-47ee-8f29-1ee6cad5b786")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "I2S_DIN" output
+			(at 173.99 102.87 0)
+			(uuid "09005e38-9ae7-4d38-8c63-69fca51a0e51")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "I2S_LRC" output
+			(at 173.99 107.95 0)
+			(uuid "798e297e-5206-4b44-8d66-b9e52b388417")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "I2S_BCLK" output
+			(at 173.99 105.41 0)
+			(uuid "129919a4-e9a0-4f4d-807c-722f8a098bda")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SPI1_MOSI" output
+			(at 134.62 81.28 180)
+			(uuid "d600cd50-1c1b-408e-b37b-9d556bb8b637")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SPI1_SCK" output
+			(at 134.62 77.47 180)
+			(uuid "aa3b44b8-3355-4b18-8a68-4cc758f6da57")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SPI1_MISO" input
+			(at 134.62 85.09 180)
+			(uuid "243a7940-3ae3-4300-8bbe-6d234c55f1a5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
