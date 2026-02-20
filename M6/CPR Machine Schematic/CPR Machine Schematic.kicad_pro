@@ -415,14 +415,6 @@
       "Root"
     ],
     [
-      "5d577b9a-7e09-4b18-b019-9e51a9486569",
-      "Motor Control"
-    ],
-    [
-      "8b2fecf3-fab6-4137-a5b1-aa5c7fdce798",
-      "Microcontroller"
-    ],
-    [
       "390cafbd-c317-4387-95c3-e11405a1139f",
       "Power"
     ],
@@ -431,8 +423,12 @@
       "Sensing"
     ],
     [
-      "709433ac-4f95-432e-b356-28cd0d53ea85",
-      "HMI_No_Raspi"
+      "7b515552-6db1-403d-b6a0-a1579d4772aa",
+      "Raspi"
+    ],
+    [
+      "4742a649-a015-487c-b382-01878b0e2dd4",
+      "HMI_Raspi"
     ]
   ],
   "text_variables": {}
