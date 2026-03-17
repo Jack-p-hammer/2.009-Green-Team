@@ -5,6 +5,414 @@
 	(uuid "d3534ab1-8ce9-40e7-af13-808d89adc5f8")
 	(paper "A4")
 	(lib_symbols
+		(symbol "Connector:Conn_01x02_Pin"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x02_Pin"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x02, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x02_Pin_1_1"
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 0.8636 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -2.54) (xy 0.8636 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Connector:Conn_01x04_Pin"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x04_Pin"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x04, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x04_Pin_1_1"
+				(rectangle
+					(start 0.8636 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 2.54) (xy 0.8636 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 0.8636 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -2.54) (xy 0.8636 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -5.08) (xy 0.8636 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -5.08 180)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:R_US"
 			(pin_numbers
 				(hide yes)
@@ -168,470 +576,6 @@
 						)
 					)
 					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "SW_Push_SPDT_2"
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "SW4"
-				(at 2.2225 8.89 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "LED Button"
-				(at 2.2225 6.35 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Momentary Switch, single pole double throw"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "switch single-pole double-throw spdt ON-ON"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "SW_Push_SPDT_2_0_0"
-				(circle
-					(center 0.508 0)
-					(radius 0.508)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 1.016) (xy 2.54 3.048)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 4.572 -2.54)
-					(radius 0.508)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "SW_Push_SPDT_2_0_1"
-				(polyline
-					(pts
-						(xy -2.54 0) (xy 0 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 -1.27) (xy -2.54 -3.81) (xy -1.27 -2.54) (xy -2.54 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 -1.27) (xy -1.27 -3.81)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 -2.54) (xy 0 -2.54) (xy 0 -3.81)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.016 0.2032) (xy 4.8768 1.9812)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 4.572 2.54)
-					(radius 0.508)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "SW_Push_SPDT_2_1_1"
-				(rectangle
-					(start -3.175 3.81)
-					(end 6.35 -5.08)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 2.54)
-					(name "B"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -5.08 -2.54 0)
-					(length 2.54)
-					(name "LED_IN"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_out line
-					(at 0 -6.35 90)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 2.54 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 -2.54 180)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Switch:SW_Push_SPDT"
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "SW"
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "SW_Push_SPDT"
-				(at 0 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Momentary Switch, single pole double throw"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "switch single-pole double-throw spdt ON-ON"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "SW_Push_SPDT_0_0"
-				(circle
-					(center -2.032 0)
-					(radius 0.508)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 1.016) (xy 0 3.048)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 -2.54)
-					(radius 0.508)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "SW_Push_SPDT_0_1"
-				(polyline
-					(pts
-						(xy -1.524 0.2032) (xy 2.3368 1.9812)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 2.54)
-					(radius 0.508)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "SW_Push_SPDT_1_1"
-				(rectangle
-					(start -3.175 3.81)
-					(end 3.175 -3.81)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 2.54)
-					(name "B"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 2.54 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 -2.54 180)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1208,7 +1152,7 @@
 	)
 	(rectangle
 		(start 121.285 37.465)
-		(end 173.99 140.97)
+		(end 165.735 113.03)
 		(stroke
 			(width 0)
 			(type default)
@@ -1217,6 +1161,68 @@
 			(type none)
 		)
 		(uuid 3b98e000-610d-4be4-98f3-67a688561418)
+	)
+	(rectangle
+		(start 72.39 37.465)
+		(end 120.015 75.565)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 77fbf649-8250-498c-99a4-676b99f21a4d)
+	)
+	(text "Ground 2"
+		(exclude_from_sim no)
+		(at 154.178 52.324 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "04d330c7-f400-456c-8238-00fb64032472")
+	)
+	(text "Ground 1"
+		(exclude_from_sim no)
+		(at 155.448 91.694 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3525b4d6-4db4-4cae-a35d-9379a2d85916")
+	)
+	(text "LED Power"
+		(exclude_from_sim no)
+		(at 156.21 89.154 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "42eaf7f0-c233-4ad7-be07-197d4bdadb61")
+	)
+	(text "LED Power"
+		(exclude_from_sim no)
+		(at 154.94 47.244 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "60ac910e-5403-45cb-b6e4-9694c2120092")
+	)
+	(text "Ground 1"
+		(exclude_from_sim no)
+		(at 154.178 49.784 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "83a4c44f-aa68-43b0-878b-5669ea5fdf02")
 	)
 	(text "Buttons"
 		(exclude_from_sim no)
@@ -1228,9 +1234,39 @@
 		)
 		(uuid "9b42c28f-27b1-477b-bb75-0632ae491ae8")
 	)
+	(text "Button"
+		(exclude_from_sim no)
+		(at 154.178 86.614 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d3353ff3-0218-4b08-a32d-99aafcceb024")
+	)
+	(text "Ground 2"
+		(exclude_from_sim no)
+		(at 155.448 94.234 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "dd50e961-4fb8-48aa-9309-03657b61f8ba")
+	)
+	(text "Laser PWM\n"
+		(exclude_from_sim no)
+		(at 77.216 36.068 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e24923a1-eeb1-4fae-9296-dccafb9d20d8")
+	)
 	(text "NOTE: This setup causes buttons to only enable when LED is on"
 		(exclude_from_sim no)
-		(at 149.098 143.256 0)
+		(at 144.272 115.062 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1238,133 +1274,131 @@
 		)
 		(uuid "e410d8fd-ebe4-4ecc-b78b-24b672c4300e")
 	)
-	(junction
-		(at 147.32 118.11)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5a83f023-a32a-45ca-a0df-5d7458d5f77a")
+	(text "Button"
+		(exclude_from_sim no)
+		(at 152.908 44.704 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "e5486d51-85bb-4b65-b94d-291cd9dd1fbd")
 	)
 	(junction
-		(at 147.32 74.93)
+		(at 144.78 93.98)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "7a56379a-0ae0-4b77-bd40-703e0341f1dc")
+		(uuid "50f706d7-3646-408f-8d9d-a54dbba2d68a")
 	)
-	(no_connect
-		(at 154.94 109.22)
-		(uuid "090c9a3c-a379-423b-98d2-7a5471377780")
-	)
-	(no_connect
-		(at 153.67 46.99)
-		(uuid "12adaa97-cb87-4881-8aa7-82b96708c243")
-	)
-	(no_connect
-		(at 154.94 66.04)
-		(uuid "1eb2a4dc-9851-47ca-9bfc-1fc114e82f5e")
+	(junction
+		(at 143.51 52.07)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e5f84206-769d-46f1-a384-f02d21f5b833")
 	)
 	(wire
 		(pts
-			(xy 156.21 118.11) (xy 147.32 118.11)
+			(xy 144.78 91.44) (xy 144.78 93.98)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "05403006-0d60-4594-b7e2-fa9871f44b61")
+		(uuid "03dfde24-9827-4a60-9648-9e3bf23b081e")
 	)
 	(wire
 		(pts
-			(xy 156.21 71.12) (xy 156.21 74.93)
+			(xy 92.71 62.23) (xy 92.71 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0e3bc542-d620-432b-8da8-f9be9bbfb996")
+		(uuid "0e63daa1-7cbb-43f0-bf52-82e6aa56e23b")
 	)
 	(wire
 		(pts
-			(xy 139.7 71.12) (xy 142.24 71.12)
+			(xy 142.24 88.9) (xy 144.78 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3250f1ee-ae02-49e1-a99b-feccebff94f7")
+		(uuid "1d30763d-346d-4f45-a840-71970fada6cd")
 	)
 	(wire
 		(pts
-			(xy 154.94 71.12) (xy 156.21 71.12)
+			(xy 144.78 93.98) (xy 144.78 96.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "38b2b157-7c68-4090-af40-c970767c9ee8")
+		(uuid "3353eae1-d4f5-4848-adc5-4ffe235bee7b")
 	)
 	(wire
 		(pts
-			(xy 147.32 121.92) (xy 147.32 118.11)
+			(xy 143.51 52.07) (xy 143.51 54.61)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "47ca7e12-1779-4015-814b-ddbdb772dcb6")
+		(uuid "835935fe-661f-476e-b54a-1f4e11931509")
 	)
 	(wire
 		(pts
-			(xy 140.97 114.3) (xy 142.24 114.3)
+			(xy 96.52 66.04) (xy 92.71 66.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4ae51126-4997-482a-a8bc-00623fea41a6")
+		(uuid "b7583c5c-0464-4025-a7b7-14eeb25f002b")
 	)
 	(wire
 		(pts
-			(xy 156.21 114.3) (xy 156.21 118.11)
+			(xy 140.97 46.99) (xy 143.51 46.99)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bc5c8572-e7a1-41ab-8eb2-462e1cf0848c")
+		(uuid "dead69b7-7c40-46ce-aab3-563ccdba6993")
 	)
 	(wire
 		(pts
-			(xy 156.21 74.93) (xy 147.32 74.93)
+			(xy 143.51 49.53) (xy 143.51 52.07)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c13f02e9-fef0-44fe-9754-c3ee045fc9d9")
+		(uuid "e305180c-3853-4400-8fee-0a256b829bb7")
 	)
 	(wire
 		(pts
-			(xy 154.94 114.3) (xy 156.21 114.3)
+			(xy 92.71 63.5) (xy 96.52 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e8c68594-b9db-4f05-8740-df0f8db9a8b0")
+		(uuid "f01516c2-fd0d-4775-9582-797fdc153354")
 	)
 	(wire
 		(pts
-			(xy 147.32 77.47) (xy 147.32 74.93)
+			(xy 92.71 66.04) (xy 92.71 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f2fd576d-bcf8-401e-9850-328397213eda")
+		(uuid "fabb741a-7332-4171-a7ec-0f1a6b45a5c1")
 	)
 	(hierarchical_label "Stop_Enable"
 		(shape input)
-		(at 139.7 82.55 180)
+		(at 135.89 59.69 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1375,7 +1409,7 @@
 	)
 	(hierarchical_label "Go_Enable"
 		(shape input)
-		(at 139.7 127 180)
+		(at 137.16 101.6 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1386,7 +1420,7 @@
 	)
 	(hierarchical_label "Stop_Button"
 		(shape input)
-		(at 142.24 68.58 180)
+		(at 143.51 44.45 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1395,9 +1429,20 @@
 		)
 		(uuid "8e06731c-a2e9-4014-8325-06d860f2b2de")
 	)
+	(hierarchical_label "Laser_PWM"
+		(shape input)
+		(at 85.09 49.53 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c47fc494-8158-48a1-80f0-161dfe98fd49")
+	)
 	(hierarchical_label "Go_Button"
 		(shape input)
-		(at 142.24 111.76 180)
+		(at 144.78 86.36 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1406,29 +1451,163 @@
 		)
 		(uuid "c9953717-da3a-4b13-91e0-6fcfc3319fa7")
 	)
-	(hierarchical_label "White_Button"
-		(shape input)
-		(at 143.51 49.53 180)
-		(effects
-			(font
-				(size 1.27 1.27)
+	(symbol
+		(lib_id "Connector:Conn_01x04_Pin")
+		(at 148.59 49.53 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "084aedce-6cd7-4a98-a07a-50f7babd8f33")
+		(property "Reference" "J10"
+			(at 144.272 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
-			(justify right)
 		)
-		(uuid "de04b24e-7a21-4653-bbe0-a89e2406c8ad")
+		(property "Value" "Stop Button Port"
+			(at 138.176 41.656 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+			(at 148.59 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 148.59 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 148.59 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dfa403a4-fe6b-453b-a133-9c4972d44c0b")
+		)
+		(pin "2"
+			(uuid "d3977711-535d-405d-a575-177d13fbfca5")
+		)
+		(pin "4"
+			(uuid "f68791d1-18fe-4fd8-b31b-bca1d1cfb418")
+		)
+		(pin "3"
+			(uuid "0e255bbc-3aa4-455b-b2a7-364f247a540b")
+		)
+		(instances
+			(project ""
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
+					(reference "J10")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
-		(lib_id "Transistor_FET:FDMS8350LET40")
-		(at 144.78 127 0)
+		(lib_id "Connector:Conn_01x02_Pin")
+		(at 101.6 66.04 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "01dcbbcb-ae2d-4fe5-870c-9fa2e6da1493")
-		(property "Reference" "Q4"
-			(at 151.13 125.7299 0)
+		(uuid "0b93aeeb-df24-45ac-8521-3fb2ea4c74a9")
+		(property "Reference" "J9"
+			(at 102.87 63.4999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Laser Port"
+			(at 102.87 66.0399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+			(at 101.6 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 101.6 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 101.6 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "bb8445a3-8385-4aa4-8777-6aa540caf8e3")
+		)
+		(pin "1"
+			(uuid "3d46c022-65c5-4904-a1de-c06fadab1d61")
+		)
+		(instances
+			(project ""
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
+					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Transistor_FET:FDMS8350LET40")
+		(at 142.24 101.6 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "12c4a189-f764-412d-8924-634964ead342")
+		(property "Reference" "Q7"
+			(at 148.59 100.3299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1437,7 +1616,7 @@
 			)
 		)
 		(property "Value" "FDMS8350LET40"
-			(at 151.13 128.2699 0)
+			(at 148.59 102.8699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1446,7 +1625,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:TDSON-8-1"
-			(at 149.86 128.905 0)
+			(at 147.32 103.505 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1457,7 +1636,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/FDMS8350LET40-D.pdf"
-			(at 149.86 130.81 0)
+			(at 147.32 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1467,7 +1646,7 @@
 			)
 		)
 		(property "Description" "49A Id, 40V Vds, N-Channel PowerTrench MOSFET, 0.85mOhm Ron, 242nC Qgmax, -55 to 175 °C, 5x6mm SON8"
-			(at 144.78 127 0)
+			(at 142.24 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1476,173 +1655,24 @@
 			)
 		)
 		(pin "5"
-			(uuid "934328a2-93c8-4043-baad-44c313ca9606")
+			(uuid "c1a61d06-b541-4cf5-a439-a8886a680320")
 		)
 		(pin "2"
-			(uuid "0819e8c3-e0ed-4282-ae00-a858142374e7")
+			(uuid "cc4732d7-8bbd-4943-8f9a-961c8db627ac")
 		)
 		(pin "1"
-			(uuid "07c0feac-b463-4d33-97b3-fc0de5765e6f")
+			(uuid "b73c5e50-3900-4ad8-a51e-922a91e53352")
 		)
 		(pin "4"
-			(uuid "cca5a885-21ab-4761-921b-5580dc21b76c")
+			(uuid "29b9e665-6795-4ff3-996b-1956b1e965c0")
 		)
 		(pin "3"
-			(uuid "77ece04b-b826-4e86-80e9-36314528bd22")
+			(uuid "76c6de53-34e0-4d02-b6d5-fb6ef68d568b")
 		)
 		(instances
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
-					(reference "Q4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_name "SW_Push_SPDT_2")
-		(lib_id "Switch:SW_Push_SPDT")
-		(at 147.32 111.76 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "02ba751b-aed1-4f15-a814-4c84799b3a80")
-		(property "Reference" "SW3"
-			(at 148.9075 102.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "LED Button"
-			(at 148.9075 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 147.32 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 147.32 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Momentary Switch, single pole double throw"
-			(at 147.32 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "de783145-a435-46a3-8c5f-411d9223ea3d")
-		)
-		(pin "2"
-			(uuid "125f31c0-8a43-4304-84e6-9a82b0dff0ce")
-		)
-		(pin "5"
-			(uuid "197e10fd-3841-4f50-ab27-30733509c175")
-		)
-		(pin "1"
-			(uuid "e8859d35-8d69-4dcc-813a-9fc06f8f75ec")
-		)
-		(pin "3"
-			(uuid "849a23c5-fbad-4b30-8d3a-96fd5100fa95")
-		)
-		(instances
-			(project "CPR Machine Schematic"
-				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
-					(reference "SW3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Push_SPDT")
-		(at 148.59 49.53 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1c8cf1a5-dc3e-4ee1-9a89-6f6c809191ae")
-		(property "Reference" "SW4"
-			(at 148.59 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Non-LED Button"
-			(at 148.59 43.18 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 148.59 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 148.59 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Momentary Switch, single pole double throw"
-			(at 148.59 49.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "d9f6d824-1413-44ec-8845-4b473a4d63ec")
-		)
-		(pin "3"
-			(uuid "253e2e7e-548c-4d9a-9260-9f32e2e52cf9")
-		)
-		(pin "1"
-			(uuid "05786c0a-3fc8-41bf-b5d6-24115f47eab7")
-		)
-		(instances
-			(project "CPR Machine Schematic"
-				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
-					(reference "SW4")
+					(reference "Q7")
 					(unit 1)
 				)
 			)
@@ -1650,16 +1680,16 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 133.35 114.3 90)
+		(at 134.62 88.9 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "4e22669e-5644-4b72-847d-f9f402b45242")
-		(property "Reference" "#PWR04"
-			(at 137.16 114.3 0)
+		(uuid "13e0c5fa-b377-4fd8-be66-c973fafb299f")
+		(property "Reference" "#PWR022"
+			(at 138.43 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1668,7 +1698,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 129.54 114.2999 90)
+			(at 130.81 88.8999 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1677,7 +1707,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 133.35 114.3 0)
+			(at 134.62 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1686,7 +1716,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 114.3 0)
+			(at 134.62 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1695,7 +1725,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 133.35 114.3 0)
+			(at 134.62 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1704,12 +1734,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "9ec4cc7a-2eac-4870-927f-474cd3a8c03a")
+			(uuid "31848c7e-1a59-4cf0-8880-cec52dde9350")
 		)
 		(instances
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
-					(reference "#PWR04")
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -1717,7 +1747,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 135.89 71.12 270)
+		(at 137.16 46.99 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1725,7 +1755,7 @@
 		(dnp no)
 		(uuid "54a8f86b-9748-41cf-8c9b-66ae6e4d5f1e")
 		(property "Reference" "R5"
-			(at 135.89 77.47 90)
+			(at 137.16 53.34 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1733,15 +1763,15 @@
 			)
 		)
 		(property "Value" "50 Ohm"
-			(at 135.89 74.93 90)
+			(at 137.16 50.8 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" ""
-			(at 135.636 72.136 90)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 136.906 48.006 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1750,7 +1780,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 135.89 71.12 0)
+			(at 137.16 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1759,7 +1789,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 135.89 71.12 0)
+			(at 137.16 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1783,8 +1813,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_US")
+		(at 138.43 88.9 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "614e1a96-e85e-4d93-8d21-68f2549bb2c8")
+		(property "Reference" "R15"
+			(at 138.43 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "50 Ohm"
+			(at 138.43 92.71 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 138.176 89.916 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 138.43 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 138.43 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c67f6df3-b737-4b0c-a247-07c46bd7f562")
+		)
+		(pin "1"
+			(uuid "670b6a39-4f7b-4327-a40d-b34083f8d6ea")
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
+					(reference "R15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5V")
-		(at 132.08 71.12 90)
+		(at 133.35 46.99 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1793,7 +1890,7 @@
 		(fields_autoplaced yes)
 		(uuid "751b2f80-02f2-40d8-b68f-774cf8089075")
 		(property "Reference" "#PWR03"
-			(at 135.89 71.12 0)
+			(at 137.16 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1802,7 +1899,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 128.27 71.1199 90)
+			(at 129.54 46.9899 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1811,7 +1908,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 132.08 71.12 0)
+			(at 133.35 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1820,7 +1917,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 132.08 71.12 0)
+			(at 133.35 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1829,7 +1926,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 132.08 71.12 0)
+			(at 133.35 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1850,24 +1947,26 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_US")
-		(at 137.16 114.3 270)
+		(lib_id "power:GND")
+		(at 92.71 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a83e87c4-c206-422f-92bc-a754088e08fa")
-		(property "Reference" "R6"
-			(at 137.16 120.65 90)
+		(fields_autoplaced yes)
+		(uuid "7f2b6468-1c36-4e79-a126-e924ea8e7ad0")
+		(property "Reference" "#PWR058"
+			(at 92.71 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
-		(property "Value" "50 Ohm"
-			(at 137.16 118.11 90)
+		(property "Value" "GND"
+			(at 92.71 73.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1875,7 +1974,71 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 136.906 115.316 90)
+			(at 92.71 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 92.71 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 92.71 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c9909772-1d76-45a1-b7c1-f829bd6a38cb")
+		)
+		(instances
+			(project ""
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
+					(reference "#PWR058")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 92.71 58.42 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "be7ed1fd-84ba-4988-a2ab-90b7c1ee5e48")
+		(property "Reference" "R6"
+			(at 95.25 56.896 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TEMP kOhm"
+			(at 99.568 59.182 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 91.694 58.166 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1884,7 +2047,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 137.16 114.3 0)
+			(at 92.71 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1893,7 +2056,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 137.16 114.3 0)
+			(at 92.71 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1902,10 +2065,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "7dad225a-87dd-4304-92ba-10c17c63ca1f")
+			(uuid "528b3dd1-b962-472f-a08f-36f3f4a72b55")
 		)
 		(pin "1"
-			(uuid "b3f68685-e741-49d9-9796-66564da9453d")
+			(uuid "8e26a796-a99a-4c36-92be-68ef8b6d95e6")
 		)
 		(instances
 			(project "CPR Machine Schematic"
@@ -1917,26 +2080,26 @@
 		)
 	)
 	(symbol
-		(lib_name "SW_Push_SPDT_2")
-		(lib_id "Switch:SW_Push_SPDT")
-		(at 147.32 68.58 0)
+		(lib_id "power:GND")
+		(at 144.78 106.68 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "b4d18694-fc10-4c05-806c-8b6e1c02d4a5")
-		(property "Reference" "SW2"
-			(at 148.9075 59.69 0)
+		(uuid "cc5b2266-bc49-4662-8b9a-134073f35a5a")
+		(property "Reference" "#PWR059"
+			(at 144.78 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
-		(property "Value" "LED Button"
-			(at 148.9075 62.23 0)
+		(property "Value" "GND"
+			(at 144.78 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1944,7 +2107,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 147.32 68.58 0)
+			(at 144.78 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1952,8 +2115,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 147.32 68.58 0)
+		(property "Datasheet" ""
+			(at 144.78 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1961,8 +2124,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Momentary Switch, single pole double throw"
-			(at 147.32 68.58 0)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 144.78 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1970,25 +2133,161 @@
 				(hide yes)
 			)
 		)
-		(pin "4"
-			(uuid "7bd7bc77-eea5-4395-a80a-29fc69d89032")
+		(pin "1"
+			(uuid "67d84547-b95d-4add-bfa4-2a9bba22b6d4")
 		)
-		(pin "2"
-			(uuid "a9b792c4-af29-4501-8b64-f3d51ab280db")
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
+					(reference "#PWR059")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 92.71 44.45 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d61f6927-4e7a-4c41-9f8f-76464c4fb6c2")
+		(property "Reference" "#PWR057"
+			(at 92.71 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 92.71 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 92.71 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 92.71 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 92.71 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2e014fe7-d7cf-4f86-81b8-1d089548c021")
+		)
+		(instances
+			(project ""
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
+					(reference "#PWR057")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Transistor_FET:FDMS8350LET40")
+		(at 90.17 49.53 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "daea0a25-e5e5-4721-9d94-8487852d7c7c")
+		(property "Reference" "Q6"
+			(at 96.52 48.2599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "FDMS8350LET40"
+			(at 96.52 50.7999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TDSON-8-1"
+			(at 95.25 51.435 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/FDMS8350LET40-D.pdf"
+			(at 95.25 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "49A Id, 40V Vds, N-Channel PowerTrench MOSFET, 0.85mOhm Ron, 242nC Qgmax, -55 to 175 °C, 5x6mm SON8"
+			(at 90.17 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
 		(pin "5"
-			(uuid "d3baf0a8-67e7-41d2-a4d2-41c3d72246fc")
+			(uuid "00ef87a0-212a-4b9e-8c03-761e08277d49")
+		)
+		(pin "2"
+			(uuid "e86ca0de-f7f5-4bcb-8bd7-bb334ce923ae")
 		)
 		(pin "1"
-			(uuid "570fdb5e-8204-4c74-a1f7-c73b0dd157b6")
+			(uuid "2c77b592-4b72-4ff0-abd6-240f1972bbd8")
+		)
+		(pin "4"
+			(uuid "78fb35dd-55ee-4f06-bec7-8d01ca342c03")
 		)
 		(pin "3"
-			(uuid "3b8fd654-a2e7-48cd-91b0-44a0474b6066")
+			(uuid "9ae9fb41-8b7f-405a-ba0a-1ae939c0ab70")
 		)
 		(instances
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
-					(reference "SW2")
+					(reference "Q6")
 					(unit 1)
 				)
 			)
@@ -1996,139 +2295,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 147.32 132.08 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b7957bf1-368c-481b-a143-f566d35dc1ef")
-		(property "Reference" "#PWR017"
-			(at 147.32 138.43 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 147.32 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 147.32 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 147.32 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 147.32 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "991abcb0-b41a-424e-be42-eeb750091062")
-		)
-		(instances
-			(project "CPR Machine Schematic"
-				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
-					(reference "#PWR017")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 153.67 52.07 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ceaba466-21e2-4b88-b0c2-d511268eeb53")
-		(property "Reference" "#PWR022"
-			(at 153.67 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 153.67 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 153.67 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 153.67 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 153.67 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1500ae69-95c8-4efc-afcb-ab0fc168f986")
-		)
-		(instances
-			(project "CPR Machine Schematic"
-				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
-					(reference "#PWR022")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 147.32 87.63 0)
+		(at 143.51 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2137,7 +2304,7 @@
 		(fields_autoplaced yes)
 		(uuid "e0ae5056-7af5-4f7c-9c50-93f74fa694bb")
 		(property "Reference" "#PWR016"
-			(at 147.32 93.98 0)
+			(at 143.51 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2146,7 +2313,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 147.32 92.71 0)
+			(at 143.51 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2154,7 +2321,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 147.32 87.63 0)
+			(at 143.51 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2163,7 +2330,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 147.32 87.63 0)
+			(at 143.51 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2172,7 +2339,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 147.32 87.63 0)
+			(at 143.51 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2194,7 +2361,7 @@
 	)
 	(symbol
 		(lib_id "Transistor_FET:FDMS8350LET40")
-		(at 144.78 82.55 0)
+		(at 140.97 59.69 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2203,7 +2370,7 @@
 		(fields_autoplaced yes)
 		(uuid "eb9134ad-780b-461c-a5a1-9448481cfb06")
 		(property "Reference" "Q3"
-			(at 151.13 81.2799 0)
+			(at 147.32 58.4199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2212,7 +2379,7 @@
 			)
 		)
 		(property "Value" "FDMS8350LET40"
-			(at 151.13 83.8199 0)
+			(at 147.32 60.9599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2221,7 +2388,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:TDSON-8-1"
-			(at 149.86 84.455 0)
+			(at 146.05 61.595 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2232,7 +2399,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/FDMS8350LET40-D.pdf"
-			(at 149.86 86.36 0)
+			(at 146.05 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2242,7 +2409,7 @@
 			)
 		)
 		(property "Description" "49A Id, 40V Vds, N-Channel PowerTrench MOSFET, 0.85mOhm Ron, 242nC Qgmax, -55 to 175 °C, 5x6mm SON8"
-			(at 144.78 82.55 0)
+			(at 140.97 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2269,6 +2436,81 @@
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
 					(reference "Q3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x04_Pin")
+		(at 149.86 91.44 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "facf15a0-ef8f-4fb1-b9c5-2771c60c4ffc")
+		(property "Reference" "J11"
+			(at 145.542 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "Go Button Port"
+			(at 139.446 83.566 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+			(at 149.86 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 149.86 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 149.86 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0c7ff3a8-c38e-48de-ab14-4304e39b1c20")
+		)
+		(pin "2"
+			(uuid "6186d5c2-043f-4661-8eec-4a100db89a14")
+		)
+		(pin "4"
+			(uuid "871815bd-afd3-4b69-b19d-03d394b1de2d")
+		)
+		(pin "3"
+			(uuid "22403c22-a2ba-4a34-98f5-32aeea5aacc7")
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/4742a649-a015-487c-b382-01878b0e2dd4"
+					(reference "J11")
 					(unit 1)
 				)
 			)

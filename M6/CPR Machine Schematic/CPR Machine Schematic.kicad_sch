@@ -27,6 +27,16 @@
 	)
 	(wire
 		(pts
+			(xy 166.37 86.36) (xy 176.53 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "094b8247-1cc5-4e7b-b38c-5605f3c8fb6f")
+	)
+	(wire
+		(pts
 			(xy 166.37 83.82) (xy 176.53 83.82)
 		)
 		(stroke
@@ -64,16 +74,6 @@
 			(type default)
 		)
 		(uuid "e4fe22fd-510d-42b1-9af8-b5663be1d5a1")
-	)
-	(wire
-		(pts
-			(xy 166.37 86.36) (xy 176.53 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f1f376fa-f1ed-41db-86f4-38bf55fd79b9")
 	)
 	(wire
 		(pts
@@ -139,9 +139,9 @@
 				(justify right)
 			)
 		)
-		(pin "FORCE_PIN" output
+		(pin "FORCE_IN" output
 			(at 110.49 85.09 0)
-			(uuid "95d1cdf5-a8db-4e84-8552-a7e9d1df4293")
+			(uuid "355b111d-0717-4fb8-bd04-84c80d556f40")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -243,16 +243,6 @@
 				(justify left)
 			)
 		)
-		(pin "White_Button" input
-			(at 176.53 86.36 180)
-			(uuid "87fcd302-14e7-4c69-85be-c8a2edaae48c")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
 		(pin "Stop_Enable" input
 			(at 176.53 83.82 180)
 			(uuid "b496c741-6b88-4e14-93f9-a2a8df0ca25c")
@@ -276,6 +266,16 @@
 		(pin "Go_Enable" input
 			(at 176.53 78.74 180)
 			(uuid "952ff8a3-1b4d-4951-a5f5-f82c8adcb73b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Laser_PWM" input
+			(at 176.53 86.36 180)
+			(uuid "84a6684d-a874-422c-8665-5e483adba8e2")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -375,16 +375,6 @@
 				(justify right)
 			)
 		)
-		(pin "White_Button" output
-			(at 166.37 86.36 0)
-			(uuid "f7802bff-3a9a-46c6-9310-999b499962ea")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
 		(pin "Stop_Enable" output
 			(at 166.37 83.82 0)
 			(uuid "34a39f01-3cdf-4d38-8425-48d626dfc904")
@@ -398,6 +388,16 @@
 		(pin "Go_Enable" output
 			(at 166.37 78.74 0)
 			(uuid "b34006e8-c9d9-40c9-82c9-ff4860f91265")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "Laser_PWM" output
+			(at 166.37 86.36 0)
+			(uuid "ebe77694-f7b5-48b9-b86b-12f95b6275ce")
 			(effects
 				(font
 					(size 1.27 1.27)
