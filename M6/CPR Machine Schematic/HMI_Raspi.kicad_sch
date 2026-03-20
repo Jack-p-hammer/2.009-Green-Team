@@ -1174,56 +1174,6 @@
 		)
 		(uuid 77fbf649-8250-498c-99a4-676b99f21a4d)
 	)
-	(text "Ground 2"
-		(exclude_from_sim no)
-		(at 154.178 52.324 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "04d330c7-f400-456c-8238-00fb64032472")
-	)
-	(text "Ground 1"
-		(exclude_from_sim no)
-		(at 155.448 91.694 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "3525b4d6-4db4-4cae-a35d-9379a2d85916")
-	)
-	(text "LED Power"
-		(exclude_from_sim no)
-		(at 156.21 89.154 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "42eaf7f0-c233-4ad7-be07-197d4bdadb61")
-	)
-	(text "LED Power"
-		(exclude_from_sim no)
-		(at 154.94 47.244 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "60ac910e-5403-45cb-b6e4-9694c2120092")
-	)
-	(text "Ground 1"
-		(exclude_from_sim no)
-		(at 154.178 49.784 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "83a4c44f-aa68-43b0-878b-5669ea5fdf02")
-	)
 	(text "Buttons"
 		(exclude_from_sim no)
 		(at 124.714 36.322 0)
@@ -1233,26 +1183,6 @@
 			)
 		)
 		(uuid "9b42c28f-27b1-477b-bb75-0632ae491ae8")
-	)
-	(text "Button"
-		(exclude_from_sim no)
-		(at 154.178 86.614 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "d3353ff3-0218-4b08-a32d-99aafcceb024")
-	)
-	(text "Ground 2"
-		(exclude_from_sim no)
-		(at 155.448 94.234 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "dd50e961-4fb8-48aa-9309-03657b61f8ba")
 	)
 	(text "Laser PWM\n"
 		(exclude_from_sim no)
@@ -1274,16 +1204,6 @@
 		)
 		(uuid "e410d8fd-ebe4-4ecc-b78b-24b672c4300e")
 	)
-	(text "Button"
-		(exclude_from_sim no)
-		(at 152.908 44.704 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "e5486d51-85bb-4b65-b94d-291cd9dd1fbd")
-	)
 	(junction
 		(at 144.78 93.98)
 		(diameter 0)
@@ -1291,20 +1211,10 @@
 		(uuid "50f706d7-3646-408f-8d9d-a54dbba2d68a")
 	)
 	(junction
-		(at 143.51 52.07)
+		(at 140.97 52.07)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "e5f84206-769d-46f1-a384-f02d21f5b833")
-	)
-	(wire
-		(pts
-			(xy 144.78 91.44) (xy 144.78 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "03dfde24-9827-4a60-9648-9e3bf23b081e")
+		(uuid "919d5cfb-36cd-44f6-a647-e1e605f11042")
 	)
 	(wire
 		(pts
@@ -1318,13 +1228,33 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 88.9) (xy 144.78 88.9)
+			(xy 153.67 93.98) (xy 144.78 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0e8da0c1-007a-40fc-a6b5-f7d6625a75a9")
+	)
+	(wire
+		(pts
+			(xy 142.24 88.9) (xy 153.67 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "1d30763d-346d-4f45-a840-71970fada6cd")
+	)
+	(wire
+		(pts
+			(xy 140.97 52.07) (xy 153.67 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "298feede-0ea8-48e5-8ced-aa112a54c958")
 	)
 	(wire
 		(pts
@@ -1338,13 +1268,43 @@
 	)
 	(wire
 		(pts
-			(xy 143.51 52.07) (xy 143.51 54.61)
+			(xy 132.08 101.6) (xy 137.16 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5bbfc579-176b-4645-88cc-ea4dcc8cb522")
+	)
+	(wire
+		(pts
+			(xy 138.43 44.45) (xy 153.67 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5d219f73-019d-4bfd-a685-d1453a4d4db3")
+	)
+	(wire
+		(pts
+			(xy 140.97 52.07) (xy 140.97 54.61)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "835935fe-661f-476e-b54a-1f4e11931509")
+	)
+	(wire
+		(pts
+			(xy 144.78 91.44) (xy 144.78 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "874f5564-53fb-47d6-aef0-9b5814e89ec5")
 	)
 	(wire
 		(pts
@@ -1358,7 +1318,37 @@
 	)
 	(wire
 		(pts
-			(xy 140.97 46.99) (xy 143.51 46.99)
+			(xy 132.08 59.69) (xy 132.08 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c46bb718-82f2-4b1e-8b46-6ac3a3deb665")
+	)
+	(wire
+		(pts
+			(xy 153.67 86.36) (xy 144.78 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cdebbc34-d69f-4c34-96c4-17fa06eed263")
+	)
+	(wire
+		(pts
+			(xy 132.08 59.69) (xy 133.35 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ceab0c16-4ece-461f-9333-7c65399b461a")
+	)
+	(wire
+		(pts
+			(xy 138.43 46.99) (xy 153.67 46.99)
 		)
 		(stroke
 			(width 0)
@@ -1368,13 +1358,23 @@
 	)
 	(wire
 		(pts
-			(xy 143.51 49.53) (xy 143.51 52.07)
+			(xy 140.97 49.53) (xy 140.97 52.07)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "e305180c-3853-4400-8fee-0a256b829bb7")
+	)
+	(wire
+		(pts
+			(xy 140.97 49.53) (xy 153.67 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e454f364-a7d8-4a41-8720-9e952a8b570b")
 	)
 	(wire
 		(pts
@@ -1388,6 +1388,16 @@
 	)
 	(wire
 		(pts
+			(xy 153.67 91.44) (xy 144.78 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f5b3a5bd-8e9f-4c1e-96bf-dceec7645128")
+	)
+	(wire
+		(pts
 			(xy 92.71 66.04) (xy 92.71 68.58)
 		)
 		(stroke
@@ -1396,9 +1406,69 @@
 		)
 		(uuid "fabb741a-7332-4171-a7ec-0f1a6b45a5c1")
 	)
+	(label "Stop LED Power"
+		(at 138.43 46.99 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4b6218c5-73ee-4db2-b24e-9549ffc52478")
+	)
+	(label "Go Button"
+		(at 146.05 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "74a7931b-882e-4615-995f-c4b51ee2dd09")
+	)
+	(label "Go LED Power"
+		(at 143.51 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "888d5e9b-7cce-4078-a492-ef33d01cb60e")
+	)
+	(label "Go Button Ground"
+		(at 144.78 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "aa1d42fc-8b8e-4f9d-89fd-83cdc7bcb89c")
+	)
+	(label "Stop Button"
+		(at 138.43 44.45 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b6b4d2cf-0362-4f0f-9fc2-0479053b283c")
+	)
+	(label "Stop Button Ground"
+		(at 140.97 49.53 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f24c8c0d-bcc4-4cd5-a31d-822a6941b2ee")
+	)
 	(hierarchical_label "Stop_Enable"
 		(shape input)
-		(at 135.89 59.69 180)
+		(at 132.08 60.96 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1409,7 +1479,7 @@
 	)
 	(hierarchical_label "Go_Enable"
 		(shape input)
-		(at 137.16 101.6 180)
+		(at 132.08 101.6 270)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1420,7 +1490,7 @@
 	)
 	(hierarchical_label "Stop_Button"
 		(shape input)
-		(at 143.51 44.45 180)
+		(at 138.43 44.45 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1453,7 +1523,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x04_Pin")
-		(at 148.59 49.53 180)
+		(at 158.75 49.53 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1461,7 +1531,7 @@
 		(dnp no)
 		(uuid "084aedce-6cd7-4a98-a07a-50f7babd8f33")
 		(property "Reference" "J10"
-			(at 144.272 39.37 0)
+			(at 154.432 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1470,7 +1540,7 @@
 			)
 		)
 		(property "Value" "Stop Button Port"
-			(at 138.176 41.656 0)
+			(at 148.336 41.656 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1479,7 +1549,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
-			(at 148.59 49.53 0)
+			(at 158.75 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1488,7 +1558,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 148.59 49.53 0)
+			(at 158.75 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1497,7 +1567,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 148.59 49.53 0)
+			(at 158.75 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1747,7 +1817,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 137.16 46.99 270)
+		(at 134.62 46.99 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1755,7 +1825,7 @@
 		(dnp no)
 		(uuid "54a8f86b-9748-41cf-8c9b-66ae6e4d5f1e")
 		(property "Reference" "R5"
-			(at 137.16 53.34 90)
+			(at 134.62 53.34 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1763,7 +1833,7 @@
 			)
 		)
 		(property "Value" "50 Ohm"
-			(at 137.16 50.8 90)
+			(at 134.62 50.8 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1771,7 +1841,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
-			(at 136.906 48.006 90)
+			(at 134.366 48.006 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1780,7 +1850,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 137.16 46.99 0)
+			(at 134.62 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1789,7 +1859,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 137.16 46.99 0)
+			(at 134.62 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1881,7 +1951,7 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 133.35 46.99 90)
+		(at 130.81 46.99 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -1890,7 +1960,7 @@
 		(fields_autoplaced yes)
 		(uuid "751b2f80-02f2-40d8-b68f-774cf8089075")
 		(property "Reference" "#PWR03"
-			(at 137.16 46.99 0)
+			(at 134.62 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1899,7 +1969,7 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 129.54 46.9899 90)
+			(at 127 46.9899 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1908,7 +1978,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 133.35 46.99 0)
+			(at 130.81 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1917,7 +1987,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 46.99 0)
+			(at 130.81 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1926,7 +1996,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 133.35 46.99 0)
+			(at 130.81 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2295,7 +2365,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 143.51 64.77 0)
+		(at 140.97 64.77 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2304,7 +2374,7 @@
 		(fields_autoplaced yes)
 		(uuid "e0ae5056-7af5-4f7c-9c50-93f74fa694bb")
 		(property "Reference" "#PWR016"
-			(at 143.51 71.12 0)
+			(at 140.97 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2313,7 +2383,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 143.51 69.85 0)
+			(at 140.97 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2321,7 +2391,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 143.51 64.77 0)
+			(at 140.97 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2330,7 +2400,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 143.51 64.77 0)
+			(at 140.97 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2339,7 +2409,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 143.51 64.77 0)
+			(at 140.97 64.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2361,7 +2431,7 @@
 	)
 	(symbol
 		(lib_id "Transistor_FET:FDMS8350LET40")
-		(at 140.97 59.69 0)
+		(at 138.43 59.69 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2370,7 +2440,7 @@
 		(fields_autoplaced yes)
 		(uuid "eb9134ad-780b-461c-a5a1-9448481cfb06")
 		(property "Reference" "Q3"
-			(at 147.32 58.4199 0)
+			(at 144.78 58.4199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2379,7 +2449,7 @@
 			)
 		)
 		(property "Value" "FDMS8350LET40"
-			(at 147.32 60.9599 0)
+			(at 144.78 60.9599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2388,7 +2458,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:TDSON-8-1"
-			(at 146.05 61.595 0)
+			(at 143.51 61.595 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2399,7 +2469,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.onsemi.com/pub/Collateral/FDMS8350LET40-D.pdf"
-			(at 146.05 63.5 0)
+			(at 143.51 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2409,7 +2479,7 @@
 			)
 		)
 		(property "Description" "49A Id, 40V Vds, N-Channel PowerTrench MOSFET, 0.85mOhm Ron, 242nC Qgmax, -55 to 175 °C, 5x6mm SON8"
-			(at 140.97 59.69 0)
+			(at 138.43 59.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2443,7 +2513,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Conn_01x04_Pin")
-		(at 149.86 91.44 180)
+		(at 158.75 91.44 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2451,7 +2521,7 @@
 		(dnp no)
 		(uuid "facf15a0-ef8f-4fb1-b9c5-2771c60c4ffc")
 		(property "Reference" "J11"
-			(at 145.542 81.28 0)
+			(at 154.432 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2460,7 +2530,7 @@
 			)
 		)
 		(property "Value" "Go Button Port"
-			(at 139.446 83.566 0)
+			(at 148.336 83.566 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2469,7 +2539,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
-			(at 149.86 91.44 0)
+			(at 158.75 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2478,7 +2548,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 149.86 91.44 0)
+			(at 158.75 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2487,7 +2557,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated"
-			(at 149.86 91.44 0)
+			(at 158.75 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
