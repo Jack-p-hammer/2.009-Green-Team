@@ -10175,7 +10175,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "193 Ohm"
+		(property "Value" "220 Ohm"
 			(at 195.834 50.546 0)
 			(effects
 				(font
@@ -14171,8 +14171,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "80 Ohm"
-			(at 207.518 50.546 0)
+		(property "Value" "100 Ohm"
+			(at 208.534 50.546 0)
 			(effects
 				(font
 					(size 1.27 1.27)

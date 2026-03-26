@@ -1754,6 +1754,10 @@
 		(uuid "aeec996c-cbe0-43a7-af28-88e251acfcd1")
 	)
 	(no_connect
+		(at 120.65 115.57)
+		(uuid "b4d10292-7719-46f6-ab01-fb822f89e19e")
+	)
+	(no_connect
 		(at 161.29 105.41)
 		(uuid "b5725d19-4b24-4b2e-ac35-8d88fc0c9faf")
 	)
@@ -1905,17 +1909,6 @@
 			(justify right)
 		)
 		(uuid "3a7d1641-0105-4061-b9d2-93e24c8dde96")
-	)
-	(hierarchical_label "FORCE_IN"
-		(shape input)
-		(at 120.65 115.57 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "4d514934-abd0-4b04-848d-1b9f68e79f87")
 	)
 	(hierarchical_label "I2C_SCL"
 		(shape bidirectional)
