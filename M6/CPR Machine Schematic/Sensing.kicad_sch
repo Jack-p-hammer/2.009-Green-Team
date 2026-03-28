@@ -1513,7 +1513,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 73.9648 50.8 0)
 			(effects
 				(font
@@ -1522,7 +1522,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "http://www.passivecomponent.com/wp-content/uploads/datasheet/WTC_MLCC_Middle_and_High_Voltage.pdf"
 			(at 74.93 54.61 0)
 			(effects
 				(font
@@ -1532,6 +1532,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 74.93 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "digikey" "1292-1206N470J102CT-ND"
 			(at 74.93 54.61 0)
 			(effects
 				(font
@@ -1561,7 +1570,7 @@
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -1728,7 +1737,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/20001805C.pdf"
 			(at 102.87 48.26 0)
 			(effects
 				(font
@@ -1886,6 +1895,15 @@
 				(hide yes)
 			)
 		)
+		(property "digikey" "MCP3021A0T-E/OTCT-ND"
+			(at 102.87 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "3"
 			(uuid "22d61035-17ec-41f3-bf66-679a0f38471c")
 		)
@@ -1944,7 +1962,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/909/1935161.pdf"
 			(at 40.64 86.36 0)
 			(effects
 				(font
@@ -1954,6 +1972,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 40.64 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "digikey" "277-1667-ND"
 			(at 40.64 86.36 0)
 			(effects
 				(font
@@ -2069,7 +2096,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric"
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 			(at 62.23 79.0448 0)
 			(effects
 				(font
@@ -2078,7 +2105,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "http://www.passivecomponent.com/wp-content/uploads/datasheet/WTC_MLCC_Middle_and_High_Voltage.pdf"
 			(at 58.42 80.01 0)
 			(effects
 				(font
@@ -2089,6 +2116,15 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 58.42 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "digikey" "1292-1206N470J102CT-ND"
+			(at 58.42 80.01 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2327,7 +2363,7 @@
 				)
 			)
 		)
-		(property "Value" "80 Ohm"
+		(property "Value" "80.6 Ohm"
 			(at 58.42 66.04 90)
 			(effects
 				(font
@@ -2335,7 +2371,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 			(at 58.166 70.866 90)
 			(effects
 				(font
@@ -2344,7 +2380,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 58.42 69.85 0)
 			(effects
 				(font
@@ -2355,6 +2391,15 @@
 		)
 		(property "Description" "Resistor, US symbol"
 			(at 58.42 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "digikey" "311-80.6FRCT-ND"
+			(at 58.42 69.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2497,6 +2542,15 @@
 				(hide yes)
 			)
 		)
+		(property "digikey" "MCP6004T-I/SLCT-ND"
+			(at 59.69 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "4"
 			(uuid "d678a401-8492-42a5-9f51-cf292aea099f")
 		)
@@ -2592,7 +2646,7 @@
 		(at 34.29 49.53 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
@@ -2615,7 +2669,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 			(at 35.306 49.784 90)
 			(effects
 				(font
@@ -2685,7 +2739,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 			(at 35.306 42.164 90)
 			(effects
 				(font
@@ -2694,7 +2748,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RT_1-TO-0-01_ROHS_L"
 			(at 34.29 41.91 0)
 			(effects
 				(font
@@ -2704,6 +2758,15 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
+			(at 34.29 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "digikey" "13-RT1206DRE0790KLCT-ND"
 			(at 34.29 41.91 0)
 			(effects
 				(font
