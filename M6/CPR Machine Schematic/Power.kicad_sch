@@ -5964,7 +5964,7 @@
 		)
 		(uuid "1d80b474-38dc-4ecc-b6df-a8fb52cfb2c6")
 	)
-	(text "Batt - 12V Regulator"
+	(text "Batt - 5V Regulator"
 		(exclude_from_sim no)
 		(at 49.784 135.382 0)
 		(effects
@@ -5974,9 +5974,9 @@
 		)
 		(uuid "3a82adda-5bdf-4cb0-a865-2c3edfabea6c")
 	)
-	(text "12V - 5V Regulator"
+	(text "12V - 5V Regulator DEPRICATED"
 		(exclude_from_sim no)
-		(at 49.022 62.23 0)
+		(at 55.372 62.23 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6053,6 +6053,12 @@
 		(uuid "124a2ad2-670e-446c-98bb-1252786e873e")
 	)
 	(junction
+		(at 91.44 179.07)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1566d550-a585-45b1-bec3-abbb56d09d25")
+	)
+	(junction
 		(at 83.82 76.2)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6105,6 +6111,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "38967b8b-56fb-49e0-a569-14eea98806b5")
+	)
+	(junction
+		(at 69.85 53.34)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3a657a0b-7de9-407c-9538-25c68c91e0b6")
 	)
 	(junction
 		(at 251.46 26.67)
@@ -6474,7 +6486,7 @@
 	)
 	(wire
 		(pts
-			(xy 127 170.18) (xy 127 194.31)
+			(xy 133.35 170.18) (xy 133.35 194.31)
 		)
 		(stroke
 			(width 0)
@@ -6584,7 +6596,7 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 21.59) (xy 107.95 21.59)
+			(xy 105.41 21.59) (xy 115.57 21.59)
 		)
 		(stroke
 			(width 0)
@@ -7134,6 +7146,16 @@
 	)
 	(wire
 		(pts
+			(xy 133.35 170.18) (xy 127 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9a4ac9d1-ecda-4d65-a408-05c762aa3876")
+	)
+	(wire
+		(pts
 			(xy 76.2 154.94) (xy 77.47 154.94)
 		)
 		(stroke
@@ -7304,7 +7326,7 @@
 	)
 	(wire
 		(pts
-			(xy 127 194.31) (xy 74.93 194.31)
+			(xy 133.35 194.31) (xy 74.93 194.31)
 		)
 		(stroke
 			(width 0)
@@ -7604,6 +7626,16 @@
 	)
 	(wire
 		(pts
+			(xy 83.82 21.59) (xy 87.63 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e280898b-546f-4a66-be23-eb1b8ec28b78")
+	)
+	(wire
+		(pts
 			(xy 251.46 24.13) (xy 251.46 26.67)
 		)
 		(stroke
@@ -7754,7 +7786,7 @@
 	)
 	(wire
 		(pts
-			(xy 53.34 21.59) (xy 87.63 21.59)
+			(xy 53.34 21.59) (xy 76.2 21.59)
 		)
 		(stroke
 			(width 0)
@@ -7772,6 +7804,16 @@
 		)
 		(uuid "1aa23f4c-0b3f-4cc0-bdcf-0133446ddce5")
 	)
+	(label "LX"
+		(at 72.39 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2b2425d5-5143-4e15-b224-38c23e515e7a")
+	)
 	(label "From Switch"
 		(at 58.42 33.02 0)
 		(effects
@@ -7782,7 +7824,7 @@
 		)
 		(uuid "332be6e9-87d0-4242-9150-5598b6d0f963")
 	)
-	(label "Contactor +"
+	(label "Battery +"
 		(at 53.34 21.59 0)
 		(effects
 			(font
@@ -7792,7 +7834,27 @@
 		)
 		(uuid "38580793-cfa7-4ede-b12e-10b62a90256f")
 	)
-	(label "Contactor -"
+	(label "BST"
+		(at 118.11 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "58a4b585-a6f3-4058-b805-fd8f889b5542")
+	)
+	(label "V_in"
+		(at 77.47 138.43 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "98ebd1c6-adc3-4652-bcab-8dcf97eac8ac")
+	)
+	(label "Battery -"
 		(at 53.34 24.13 0)
 		(effects
 			(font
@@ -7801,6 +7863,26 @@
 			(justify left bottom)
 		)
 		(uuid "c6c7cefe-8f0b-43dc-9134-ebfd9d3b6571")
+	)
+	(label "V_out"
+		(at 52.07 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c7f9c19f-cff9-48e7-bacd-fb6e8a2bb25d")
+	)
+	(label "V_in"
+		(at 80.01 179.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d0fa57ed-3ee3-4af7-ae00-8f8b6fa7f8dc")
 	)
 	(symbol
 		(lib_id "power:+24V")
@@ -7939,8 +8021,8 @@
 		(at 83.82 72.39 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "05591ef3-ae19-4c4d-ad2b-8369436de39c")
 		(property "Reference" "C9"
@@ -8230,7 +8312,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0cf8ac30-25d6-44d6-895b-7139cbdb89ee")
-		(property "Reference" "C2"
+		(property "Reference" "COUT1"
 			(at 64.77 154.9399 0)
 			(effects
 				(font
@@ -8239,7 +8321,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "50 uF"
+		(property "Value" "47 uF"
 			(at 64.77 157.4799 0)
 			(effects
 				(font
@@ -8248,7 +8330,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm"
 			(at 59.9948 152.4 0)
 			(effects
 				(font
@@ -8257,7 +8339,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.chemi-con.co.jp/products/relatedfiles/capacitor/catalog/GXFLL-e.PDF"
+		(property "Datasheet" "https://www.we-online.com/components/products/datasheet/870025574002.pdf"
 			(at 60.96 156.21 0)
 			(effects
 				(font
@@ -8275,7 +8357,7 @@
 				(hide yes)
 			)
 		)
-		(property "digikey" "565-EGXF161ELL510MJ20S-ND"
+		(property "digikey" "732-6324-1-ND"
 			(at 60.96 156.21 0)
 			(effects
 				(font
@@ -8293,7 +8375,7 @@
 		(instances
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
-					(reference "C2")
+					(reference "COUT1")
 					(unit 1)
 				)
 			)
@@ -8304,8 +8386,8 @@
 		(at 128.27 77.47 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "17bd6f3d-ef1d-4e01-8534-ddce5d7a8cfb")
@@ -8516,8 +8598,8 @@
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "23992aa6-49c1-439c-ac38-9b40b4e8dfcc")
 		(property "Reference" "C12"
@@ -8757,7 +8839,7 @@
 				)
 			)
 		)
-		(property "Value" "12 uH"
+		(property "Value" "2.2 uH"
 			(at 67.31 162.56 90)
 			(effects
 				(font
@@ -8765,7 +8847,7 @@
 				)
 			)
 		)
-		(property "Footprint" "DR124_120_R:IND_CB_DR124"
+		(property "Footprint" "Imports:IND_1217AS-H-2R2N=P3"
 			(at 67.31 165.1 0)
 			(effects
 				(font
@@ -8774,7 +8856,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.eaton.com/content/dam/eaton/products/electronic-components/resources/data-sheet/eaton-dr124-shielded-drum-core-power-inductors-data-sheet.pdf"
+		(property "Datasheet" "https://www.murata.com/~/media/webrenewal/products/inductor/chip/tokoproducts/wirewoundferritetypeforpl/m_dem8045c.ashx"
 			(at 67.31 165.1 0)
 			(effects
 				(font
@@ -8792,7 +8874,7 @@
 				(hide yes)
 			)
 		)
-		(property "digikey" "513-1432-1-ND"
+		(property "digikey" "490-10787-1-ND"
 			(at 67.31 165.1 90)
 			(effects
 				(font
@@ -8907,7 +8989,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "366ae2a3-659c-4206-ab32-7405b02ced8c")
-		(property "Reference" "C4"
+		(property "Reference" "CIN1"
 			(at 57.15 140.9699 0)
 			(effects
 				(font
@@ -8934,7 +9016,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://weblib.samsungsem.com/mlcc/mlcc-ec-data-sheet.do?partNumber=CL05Y105KP6VPN"
+		(property "Datasheet" "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRJ31CR71H475ME11-01.pdf"
 			(at 53.34 142.24 0)
 			(effects
 				(font
@@ -8952,7 +9034,7 @@
 				(hide yes)
 			)
 		)
-		(property "digikey" "1276-1072-1-ND"
+		(property "digikey" "490-17674-1-ND"
 			(at 53.34 142.24 0)
 			(effects
 				(font
@@ -8970,7 +9052,7 @@
 		(instances
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
-					(reference "C4")
+					(reference "CIN1")
 					(unit 1)
 				)
 			)
@@ -8981,8 +9063,8 @@
 		(at 139.7 95.25 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3777ea2b-bf55-4fd0-b3b6-015de63b7776")
@@ -9114,72 +9196,6 @@
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
 					(reference "J3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+12V")
-		(at 45.72 163.83 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "3a53dd59-798d-460a-a587-c5472b6bec62")
-		(property "Reference" "#PWR05"
-			(at 45.72 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+12V"
-			(at 45.72 158.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 45.72 163.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 45.72 163.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+12V\""
-			(at 45.72 163.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b50c127f-3234-4c3c-88d6-e5566d582f25")
-		)
-		(instances
-			(project ""
-				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
-					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -9398,8 +9414,8 @@
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "454e1a53-5612-446a-8d38-2e9e875ea1d8")
 		(property "Reference" "Q1"
@@ -9645,7 +9661,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-3"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23_Handsoldering"
 			(at 96.52 24.13 0)
 			(effects
 				(font
@@ -9903,7 +9919,7 @@
 				)
 			)
 		)
-		(property "Value" "Contactor 22.2V IN"
+		(property "Value" "Battery 22.2V IN"
 			(at 48.895 26.67 0)
 			(effects
 				(font
@@ -9963,12 +9979,78 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+5V")
+		(at 45.72 163.83 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4f004ef2-1865-4f1f-9dbe-23cdd2989e24")
+		(property "Reference" "#PWR05"
+			(at 45.72 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 45.72 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 45.72 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 45.72 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 45.72 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "eab5775c-c372-40f8-88aa-f073fc8196b1")
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
+					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 74.93 104.14 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "50c4d92a-01a4-410e-8618-ce88961c128f")
@@ -10095,6 +10177,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+12V")
+		(at 69.85 53.34 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "58d2225f-a3fc-40f7-a64d-17f2f562b26b")
+		(property "Reference" "#PWR062"
+			(at 66.04 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+12V"
+			(at 73.66 53.3399 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 69.85 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 69.85 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+12V\""
+			(at 69.85 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0588d7c3-a669-46f7-91e9-5e17e25b7d4f")
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
+					(reference "#PWR062")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 199.39 24.13 180)
 		(unit 1)
@@ -10166,8 +10315,8 @@
 		(at 74.93 91.44 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "60e6020f-5f46-475c-915e-2a0ac9bcfa7a")
@@ -10245,8 +10394,8 @@
 		(at 147.32 109.22 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "62494395-5346-478e-b871-fbe84d3e2916")
 		(property "Reference" "R7"
@@ -10313,6 +10462,73 @@
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
 					(reference "R7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+24V")
+		(at 91.44 179.07 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6504a849-dd9a-41fa-b45f-a6ad17a1f806")
+		(property "Reference" "#PWR063"
+			(at 87.63 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+22.2V"
+			(at 95.25 179.0699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 91.44 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 91.44 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+24V\""
+			(at 91.44 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "208ea4a5-e1a2-4278-bec8-7c113ee27c16")
+		)
+		(instances
+			(project "CPR Machine Schematic"
+				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
+					(reference "#PWR063")
 					(unit 1)
 				)
 			)
@@ -10393,8 +10609,8 @@
 		(at 53.34 80.01 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "72e5f9e1-a79c-46e4-9174-ce76da60cf7f")
 		(property "Reference" "R4"
@@ -10605,8 +10821,8 @@
 		(at 83.82 68.58 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7d32e884-2ede-4b8f-9b1d-c016bceee3a1")
@@ -10738,8 +10954,8 @@
 		(at 54.61 96.52 90)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "87801526-f7aa-423b-820c-a71c8f99b265")
@@ -10950,8 +11166,8 @@
 		(at 132.08 104.14 90)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8b8358d3-f353-47a9-addd-ba70ec125f87")
@@ -11027,8 +11243,8 @@
 		(at 88.9 90.17 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "93565459-981b-410f-ae45-f69edd05f050")
@@ -11262,7 +11478,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRM3195C1H104JA05-01A.pdf"
 			(at 121.92 173.99 0)
 			(effects
 				(font
@@ -11272,6 +11488,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 121.92 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "digikey" "490-GRM3195C1H104JA05DCT-ND"
 			(at 121.92 173.99 0)
 			(effects
 				(font
@@ -11447,8 +11672,8 @@
 		(at 110.49 93.98 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9c9a40c7-dd1e-49b0-9a1b-57c5a30f7490")
@@ -11634,7 +11859,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "3.57 kOhm"
+		(property "Value" "9.5 kOhm"
 			(at 59.69 180.3399 0)
 			(effects
 				(font
@@ -11652,7 +11877,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://bourns.com/docs/product-datasheets/cr.pdf?sfvrsn=574d41f6_14"
+		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/PYU-RC_GROUP_51_ROHS_L"
 			(at 57.15 179.07 0)
 			(effects
 				(font
@@ -11670,7 +11895,7 @@
 				(hide yes)
 			)
 		)
-		(property "digikey" "118-CR1206-FX-3571ELFCT-ND"
+		(property "digikey" "311-9.53KFRCT-ND"
 			(at 57.15 179.07 0)
 			(effects
 				(font
@@ -12109,7 +12334,7 @@
 				)
 			)
 		)
-		(property "Value" "MAX42402AFLB+"
+		(property "Value" "MAX42403AFLB+"
 			(at 97.79 147.32 0)
 			(effects
 				(font
@@ -12127,7 +12352,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "MAX42402AFLB+"
+		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/max42402-max42403.pdf"
 			(at 77.47 154.94 0)
 			(effects
 				(font
@@ -12146,7 +12371,7 @@
 				(hide yes)
 			)
 		)
-		(property "digikey" "505-MAX42402AFLB+-ND"
+		(property "digikey" "505-MAX42403AFLB+-ND"
 			(at 77.47 154.94 0)
 			(effects
 				(font
@@ -12312,8 +12537,8 @@
 		(at 67.31 96.52 90)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "af47687b-9b13-4842-a773-5478515b845b")
 		(property "Reference" "L2"
@@ -12520,8 +12745,8 @@
 		(at 128.27 104.14 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b20ff4bb-9c49-4cac-b5dd-6b5096c4736a")
@@ -12723,7 +12948,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c0f640ec-eb6c-4fab-8984-040a1324db1e")
-		(property "Reference" "C6"
+		(property "Reference" "CIN2"
 			(at 95.25 181.6099 0)
 			(effects
 				(font
@@ -12750,7 +12975,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://weblib.samsungsem.com/mlcc/mlcc-ec-data-sheet.do?partNumber=CL05Y105KP6VPN"
+		(property "Datasheet" "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRJ31CR71H475ME11-01.pdf"
 			(at 91.44 182.88 0)
 			(effects
 				(font
@@ -12768,7 +12993,7 @@
 				(hide yes)
 			)
 		)
-		(property "digikey" "1276-1072-1-ND"
+		(property "digikey" "490-17674-1-ND"
 			(at 91.44 182.88 0)
 			(effects
 				(font
@@ -12786,7 +13011,7 @@
 		(instances
 			(project "CPR Machine Schematic"
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/390cafbd-c317-4387-95c3-e11405a1139f"
-					(reference "C6")
+					(reference "CIN2")
 					(unit 1)
 				)
 			)
@@ -12964,7 +13189,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRM3195C1H104JA05-01A.pdf"
 			(at 66.04 142.24 0)
 			(effects
 				(font
@@ -12974,6 +13199,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 66.04 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "digikey" "490-GRM3195C1H104JA05DCT-ND"
 			(at 66.04 142.24 0)
 			(effects
 				(font
@@ -13082,7 +13316,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "22 pF"
+		(property "Value" "47 pF"
 			(at 49.53 170.1799 0)
 			(effects
 				(font
@@ -13100,7 +13334,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://yageogroup.com/content/datasheet/asset/file/KEM_C1007_X8R_ULTRA_150C_SMD"
+		(property "Datasheet" "http://www.passivecomponent.com/wp-content/uploads/datasheet/WTC_MLCC_Middle_and_High_Voltage.pdf"
 			(at 45.72 168.91 0)
 			(effects
 				(font
@@ -13118,7 +13352,7 @@
 				(hide yes)
 			)
 		)
-		(property "digikey" "399-C1206C220K5HACTUCT-ND"
+		(property "digikey" "1292-1206N470J102CT-ND"
 			(at 45.72 168.91 0)
 			(effects
 				(font
@@ -13179,7 +13413,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://weblib.samsungsem.com/mlcc/mlcc-ec-data-sheet.do?partNumber=CL05Y105KP6VPN"
+		(property "Datasheet" "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRJ31CR71H475ME11-01.pdf"
 			(at 127 166.37 0)
 			(effects
 				(font
@@ -13197,7 +13431,7 @@
 				(hide yes)
 			)
 		)
-		(property "digikey" "1276-1072-1-ND"
+		(property "digikey" "490-17674-1-ND"
 			(at 127 166.37 0)
 			(effects
 				(font
@@ -13359,8 +13593,8 @@
 		(at 128.27 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cc4118ef-1324-46cd-bbdd-a67211b8c003")
@@ -13422,7 +13656,7 @@
 	)
 	(symbol
 		(lib_id "Device:Fuse")
-		(at 111.76 21.59 90)
+		(at 80.01 21.59 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13430,7 +13664,7 @@
 		(dnp no)
 		(uuid "ccf63960-4a03-4261-8c0a-136eeb4d59fd")
 		(property "Reference" "F1"
-			(at 111.76 16.002 90)
+			(at 80.01 16.002 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13438,7 +13672,7 @@
 			)
 		)
 		(property "Value" "5A"
-			(at 111.76 18.542 90)
+			(at 80.01 18.542 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13446,7 +13680,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_1206_3216Metric_Pad1.42x1.75mm_HandSolder"
-			(at 111.76 23.368 90)
+			(at 80.01 23.368 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13455,7 +13689,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.belfuse.com/media/datasheets/products/circuit-protection/ds-cp-c1f-series.pdf"
-			(at 111.76 21.59 0)
+			(at 80.01 21.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13464,7 +13698,7 @@
 			)
 		)
 		(property "Description" "Fuse"
-			(at 111.76 21.59 0)
+			(at 80.01 21.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13473,7 +13707,7 @@
 			)
 		)
 		(property "digikey" "5923-C1F5CT-ND"
-			(at 111.76 21.59 90)
+			(at 80.01 21.59 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13501,8 +13735,8 @@
 		(at 59.69 91.44 270)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cde616c4-111b-47fd-a655-1f4708ac8806")
@@ -13612,7 +13846,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
+		(property "Datasheet" "https://search.murata.co.jp/Ceramy/image/img/A01X/G101/ENG/GRM3195C1H104JA05-01A.pdf"
 			(at 77.47 182.88 0)
 			(effects
 				(font
@@ -13622,6 +13856,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 77.47 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "digikey" "490-GRM3195C1H104JA05DCT-ND"
 			(at 77.47 182.88 0)
 			(effects
 				(font
@@ -13928,8 +14171,8 @@
 		(at 88.9 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d83bf1f9-8ebb-4d2c-afb6-ac64e79797d0")
@@ -14692,8 +14935,8 @@
 		(at 74.93 100.33 270)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(uuid "fd18f3fb-e5bc-440d-a23d-f1f1fa0932a6")
 		(property "Reference" "D2"
@@ -14770,8 +15013,8 @@
 		(at 52.07 76.2 90)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
+		(in_bom no)
+		(on_board no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fdf727c4-95e5-4f0f-a6cb-8bbf0caf79e8")

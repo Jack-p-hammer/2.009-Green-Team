@@ -1215,9 +1215,9 @@
 		)
 		(uuid "29b0b15f-197e-4962-8ac4-e8d57214a292")
 	)
-	(text "Force Sensor & Op-Amps"
+	(text "Force Sensor Op-Amp & ADC"
 		(exclude_from_sim no)
-		(at 33.274 30.226 0)
+		(at 34.29 29.464 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1492,7 +1492,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "04cc5539-6035-4126-8019-08274ec26ca4")
 		(property "Reference" "C_OPT1"

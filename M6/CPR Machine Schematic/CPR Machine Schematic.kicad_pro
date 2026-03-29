@@ -37,9 +37,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.0,
-          "height": 1.75,
-          "width": 1.25
+          "drill": 1.3,
+          "height": 2.8,
+          "width": 2.8
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -591,7 +591,7 @@
           "group_by": false,
           "label": "Datasheet",
           "name": "Datasheet",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
@@ -731,7 +731,7 @@
       "include_excluded_from_bom": false,
       "name": "",
       "sort_asc": false,
-      "sort_field": "digikey"
+      "sort_field": "Value"
     },
     "connection_grid_size": 50.0,
     "drawing": {
