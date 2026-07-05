@@ -188,6 +188,7 @@ def main():
                     actuation.stop_compressions()
                     HMI.enable_next_button()
                     HMI.set_screen_audio(HMI.Image.PAUSE, HMI.AudioPrompt.PAUSE)
+                    logging.debug("Device Paused")
 
                 # Loop
                 if HMI.next_button_pressed():
@@ -201,6 +202,7 @@ def main():
                     HMI.enable_next_button()
                     HMI.set_screen_audio(HMI.Image.KNEEL_FAILURE,
                                         HMI.AudioPrompt.KNEEL_FAILURE)
+                    logging.warning(f"Kneel failure tripped: {error}")
 
                 # Loop
                 if HMI.next_button_pressed():
@@ -213,6 +215,7 @@ def main():
                     HMI.disable_next_button()
                     HMI.disable_pause_button()
                     HMI.set_screen_audio(HMI.Image.ABORT, HMI.AudioPrompt.ABORT)
+                    logging.error(f"Abort state tripped: {error}")
                 # Halt — only a power cycle exits this state
 
             case(_):
