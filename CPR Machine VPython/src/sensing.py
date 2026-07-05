@@ -11,12 +11,14 @@ from adafruit_bno08x.i2c import BNO08X_I2C
 
 # Internal imports
 from Enums.error_codes import ErrorCode
+from motor import MoteusThread, CONTROLLER_ID
 
 # Global variables for shared sensor instances
 _pi: pigpio.pi
 _vl61: adafruit_vl6180x.VL6180X
 _bno: BNO08X_I2C
 _i2c: busio.I2C
+_motor_controller: MoteusThread  # The shared moteus controller instance
 
 # Futureproofing for a possible MUX on our I2C ADC
 # Low - Force Sensor
@@ -27,6 +29,8 @@ ADC_MUX_SIG_PIN = 19
 ADC_ADDR = 0x48   # A0 variant: device code 1001 + address bits 000
 ADC_VDD = 5  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
 
+# Battery voltage threshold for low battery detection. TODO: Calibrate this value based on actual battery performance.
+BATTERY_THRESHOLD = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
 
 def get_pi():
     """Returns the shared pigpio instance for use by hmi.py's button/LED/laser GPIO."""
@@ -79,12 +83,16 @@ def init_sensors() -> ErrorCode:
 
 
 def battery_check() -> ErrorCode:
-    """Ensure sufficient charge for operation
+    """Ensure sufficient charge for operation. 
+    TODO: Split into startup battery check and continuous monitoring. Higher threshold on startup to prevent mid-operation shutdown, but still check battery voltage during operation.
 
     Returns:
         ErrorCode: Normal if battery is sufficient, otherwise ERROR_LOW_BATTERY
     """
-    # TODO: Implement actual battery level checking logic
+    global _motor_controller
+    battery_voltage: float = _motor_controller.get_battery_voltage()
+    if battery_voltage < BATTERY_THRESHOLD:
+        return ErrorCode.ERROR_LOW_BATTERY
     return ErrorCode.NORMAL_OPERATION
 
 

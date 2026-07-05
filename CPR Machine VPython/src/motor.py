@@ -240,3 +240,7 @@ class MoteusThread:
     def get_last_error(self) -> ErrorCode:
         """Returns the ErrorCode describing the failure/lack thereof from the motor controller thread"""
         return self._last_error
+    
+    def get_battery_voltage(self) -> float:
+        """Returns the battery voltage of the 6S Lipo battery pack, as reported by the moteus controller."""
+        return self._state.voltage
