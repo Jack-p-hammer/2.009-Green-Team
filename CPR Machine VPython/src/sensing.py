@@ -261,9 +261,9 @@ def check_sensor_error(sensor_limits: SensorLimits, sensor_readings: tuple) -> E
         
     # Validate position sensors
     # TODO: This is placeholder logic
-    rotary_pos_m: float = sensor_readings[1]*2*math.pi*PINION_RADIUS
+    rotary_pos_m: float = (sensor_readings[1] - rotary_zero_position)*2*math.pi*PINION_RADIUS
     rotary_pos_mm: float = rotary_pos_m*1000
-    ToF_pos_mm: int = sensor_readings[2]
+    ToF_pos_mm: int = sensor_readings[2] - ToF_zero_position
     
     if(abs(rotary_pos_mm-ToF_pos_mm) > POSITION_DISAGREE_THRESHOLD):
         logging.error(f"Position sensor disagreement: Rotary {rotary_pos_mm}, ToF {ToF_pos_mm}")
