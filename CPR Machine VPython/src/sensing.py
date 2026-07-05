@@ -37,7 +37,8 @@ ADC_MUX_SIG_PIN = 19
 
 # I2C address for the analog-to-digital converter. TODO: Use the I2C_scanner.py script to verify this!
 ADC_ADDR = 0x48   # A0 variant: device code 1001 + address bits 000
-ADC_VDD = 5  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
+ADC_VDD: float = 5.0  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
+ADC_BITS: int = 10 
 
 # Battery voltage threshold for low battery detection. TODO: Calibrate this value based on actual battery performance.
 BATTERY_THRESHOLD: float = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
@@ -279,7 +280,7 @@ def read_force_sensor() -> float:
         float: Force sensor reading in Newtons
     """
     raw_reading: int = read_ADC()
-    raw_voltage: float = (raw_reading / 1023.0) * ADC_VDD
+    raw_voltage: float = (raw_reading / (2^ADC_BITS)) * ADC_VDD
 
     # TODO: Calibrate force sensor
     # Placeholder conversion: 1V = 100N
@@ -289,7 +290,7 @@ def read_force_sensor() -> float:
 
 
 def read_ADC() -> int:
-    """Read the analog-to-digital converter (ADC) and return the value in volts
+    """Read the analog-to-digital converter (ADC) and return the raw value
 
     The chip sends 2 bytes:
       Byte 1: 0 0 0 0 0 0 D9 D8   (upper 6 bits are don't-care/zero)
@@ -309,6 +310,7 @@ def read_ADC() -> int:
     # Read ADC
     _i2c.readfrom_into(ADC_ADDR, result)
     raw: int = ((result[0] & 0x03) << 8) | result[1]
+    
     return raw
 
 
