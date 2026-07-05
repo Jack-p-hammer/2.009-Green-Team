@@ -7,17 +7,21 @@ All functions that read sensors return a value assuming a successful read. All r
 BEFORE AND DURING ZEROING, THE zero_position VARIABLES MUST EQUAL THE absolute_zero_position VARIABLES
 """
 # External imports
+import dataclasses
 import pigpio
 import board
 import busio
 import logging
 import adafruit_vl6180x
 import adafruit_bno08x
+import math
 from adafruit_bno08x.i2c import BNO08X_I2C
 
 # Internal imports
 from Enums.error_codes import ErrorCode
 from moteus_thread import MoteusThread
+from Enums.control_modes import ControlMode
+from moteus_thread import PINION_RADIUS
 
 # Global variables for shared sensor instances
 _pi: pigpio.pi
@@ -38,6 +42,39 @@ ADC_VDD = 5  # 5V reference voltage for the ADC, used to convert the raw ADC rea
 # Battery voltage threshold for low battery detection. TODO: Calibrate this value based on actual battery performance.
 BATTERY_THRESHOLD: float = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
 
+ZEROING_FORCE_THRESHOLD: float = 35.0  # Newtons, threshold for detecting contact with the patient during zeroing
+COMPRESSION_FORCE_THRESHOLD: float = 500.0  # Newtons
+
+POSITION_DISAGREE_THRESHOLD: int = 2 # MILLIMETERS
+
+# Global variables for sensor starting positions
+rotary_absolute_zero_position: float = 0.0  # The absolute position of rotary encoder on startup
+ToF_absolute_zero_position: int = 0  # The absolute position of the ToF sensor on startup
+
+# Global variables for sensor zeroed positions
+rotary_zero_position: float = 0.0  # The zeroed position of the rotary encoder after zeroing
+ToF_zero_position: int = 0  # The zeroed position of the ToF sensor after zeroing
+force_zero_value: float = 0.0 # Newtons, force sensor reading under no load
+
+# Define setpoint struct
+# Not including position setpoints because those are validated against e/o
+@dataclasses.dataclass()
+class SensorLimits:
+    force: float  # Force sensor reading in Newtons
+    accel: tuple[float, float, float]  # IMU accelerometer readings in m/s^2 (x, y, z)
+
+# Define setpoints for zeroing and compressions
+zeroing_limits = SensorLimits(
+    force = ZEROING_FORCE_THRESHOLD,
+    accel = (0.0, 0.0, 9.81)  # TODO: Determine method to set this based on IMU orientation. Assuming the IMU is oriented such that gravity is along the z-axis
+)
+
+compression_limits = SensorLimits(
+    force = COMPRESSION_FORCE_THRESHOLD,
+    accel = (0.0, 0.0, 9.81) # TODO: Determine method to set this based on IMU orientation. Assuming the IMU is oriented such that gravity is along the z-axis
+)
+
+
 def get_pi():
     """Returns the shared pigpio instance for use by hmi.py's button/LED/laser GPIO."""
     return _pi
@@ -46,6 +83,7 @@ def get_pi():
 def init_sensors() -> ErrorCode:
     """Initialize the shared GPIO and sensor hardware used by the system."""
     global _pi, _vl61, _bno, _i2c
+    global rotary_absolute_zero_position, ToF_absolute_zero_position, force_zero_value
 
     # pigpio is only used here for the shared GPIO instance passed to hmi.py.
     # The sensors themselves use the Adafruit/Blinka I2C abstraction below.
@@ -83,6 +121,28 @@ def init_sensors() -> ErrorCode:
     except Exception as e:
         logging.error(f"BNO085 initialization failed: {e}")
         return ErrorCode.ERROR_INIT_FAILURE
+    
+    # Zero the position sensors
+    try:
+        rotary_absolute_zero_position = read_rotary_encoder()
+    except Exception as e:
+        logging.error(f"Rotary encoder absolute zeroing failed: {e}")
+        return ErrorCode.ERROR_INIT_FAILURE
+    
+    try:
+        ToF_absolute_zero_position = read_ToF_sensor()
+    except Exception as e:
+        logging.error(f"ToF absolute zeroing failed: {e}")
+        return ErrorCode.ERROR_INIT_FAILURE
+    
+    # Zero the force sensor
+    try:
+        force_zero_value = read_force_sensor()
+    except Exception as e:
+        logging.error(f"Force sensor zeroing failed: {e}")
+        return ErrorCode.ERROR_INIT_FAILURE
+    
+    # TODO: Zero the IMU?
 
     logging.info("Sensors initialized")
     return ErrorCode.NORMAL_OPERATION
@@ -96,39 +156,118 @@ def battery_check() -> ErrorCode:
         ErrorCode: Normal if battery is sufficient, otherwise ERROR_LOW_BATTERY
     """
     global _motor_controller
-    battery_voltage: float = _motor_controller.get_battery_voltage()
+    try:
+        battery_voltage: float = _motor_controller.get_battery_voltage()
+    except Exception as e:
+        logging.error(f"Battery voltage read failed: {e}")
+        # Motor failure because moteus let us down
+        return ErrorCode.ERROR_MOTOR_FAILURE
+    
     if battery_voltage < BATTERY_THRESHOLD:
         return ErrorCode.ERROR_LOW_BATTERY
     return ErrorCode.NORMAL_OPERATION
 
 
-def read_sensors_zeroing() -> ErrorCode:
-    """Read and validate sensor readings for zeroing-appropriate setpoints
+def read_sensors(control_mode: ControlMode) -> ErrorCode:
+    """Read and validate sensor readings for control mode-appropriate setpoints
 
     Returns:
         ErrorCode: Normal if readings are valid, otherwise ERROR_SENSOR_FAILURE
     """
-    return ErrorCode.NORMAL_OPERATION
+    global zeroing_limits, compression_limits
+    sensor_limits: SensorLimits
+    match control_mode:
+        case ControlMode.ZEROING:
+            sensor_limits = zeroing_limits
+        case ControlMode.COMPRESSIONS:
+            sensor_limits = compression_limits
+        case _:
+            logging.error(f"Invalid control mode for sensor reading: {control_mode}")
+            return ErrorCode.ERROR_SENSOR_FAILURE
+        
+    # TODO: Decide whether to store most recent sensor readings in a global variable for use by other functions, or just poll the sensors when needed. For now, just read and validate the sensors.
+    try:
+        current_force: float = read_force_sensor()
+    except Exception as e:
+        logging.error(f"Force sensor read failed: {e}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    try:
+        current_rotary: float = read_rotary_encoder()
+    except Exception as e:
+        logging.error(f"Rotary encoder read failed: {e}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    try:
+        current_ToF: int = read_ToF_sensor()
+    except Exception as e:
+        logging.error(f"ToF sensor read failed: {e}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    try:
+        current_accel: tuple[float, float, float] | None = read_IMU()
+        if current_accel is None:
+            logging.error("IMU read returned None")
+            return ErrorCode.ERROR_SENSOR_FAILURE
+    except Exception as e:
+        logging.error(f"IMU read failed: {e}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    # Defensive programming: default to error, but if all readings are valid return normal operation
+    validation_error: ErrorCode = ErrorCode.ERROR_SENSOR_FAILURE
+    current_readings: tuple = (current_force, current_rotary, current_ToF, current_accel)
+    
+    # Check readings against limits for the current control mode
+    if(check_sensor_error(sensor_limits, current_readings) == ErrorCode.NORMAL_OPERATION):
+        validation_error = ErrorCode.NORMAL_OPERATION
+        
+    return validation_error
 
 
-def read_sensors_compressions() -> ErrorCode:
-    """Read and validate sensor readings for zeroing-appropriate setpoints
 
-    Returns:
-        ErrorCode: Normal if readings are valid, otherwise ERROR_SENSOR_FAILURE
-    """
-    return ErrorCode.NORMAL_OPERATION
-
-
-def check_sensor_error(sensor_setpoints: int) -> ErrorCode:
-    """Determines if any sensor readings are out of intended range
+def check_sensor_error(sensor_limits: SensorLimits, sensor_readings: tuple) -> ErrorCode:
+    """Determines if any sensor readings are out of intended range. 
+    NOTE THAT THIS ASSUMES zero_position == absolute_zero_position FOR BOTH POS SENSORS BEFORE ZEROING IS COMPLETED
 
     Args:
-        sensor_setpoints (int): Sensor setpoints, in order [Rotary, ToF, IMU, Force]
+        sensor_limits (SensorLimits): Sensor limits struct for the current operation 
+        sensor_readings (tuple): Tuple containing the current readings from all sensors of format (force, rotary, ToF, accel)
 
     Returns:
         ErrorCode: Normal if readings are valid, ERROR_KNEEL_FAILURE if IMU error, ERROR_SENSOR_FAILURE otherwise
     """
+    
+    # Validation Method ---------------------------------------------------------------
+    # If force or IMU readings exceed sensor limits, sensor failure
+    # If ToF and rotary encoder disagree by POSITION_DISAGREE_THRESHOLD, sensor failure
+    # ---------------------------------------------------------------------------------
+    
+    
+    # Validate force, IMU
+    if sensor_readings[0] > sensor_limits.force:
+        logging.error(
+            f"Force sensor reading out of range: Read {sensor_readings[0]}, Limit {sensor_limits.force}"
+        )
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    # Loop over accel tuple to validate each
+    for accel_tuple_index in range(3):
+        if sensor_readings[3][accel_tuple_index] > sensor_limits.accel[accel_tuple_index]: 
+            logging.error(
+                f"IMU reading out of range: Read {sensor_readings[3][accel_tuple_index]}, Limit {sensor_limits.accel[accel_tuple_index]} for direction {accel_tuple_index}"
+            )
+            return ErrorCode.ERROR_SENSOR_FAILURE
+        
+    # Validate position sensors
+    # TODO: This is placeholder logic
+    rotary_pos_m: float = sensor_readings[1]*2*math.pi*PINION_RADIUS
+    rotary_pos_mm: float = rotary_pos_m*1000
+    ToF_pos_mm: int = sensor_readings[2]
+    
+    if(abs(rotary_pos_mm-ToF_pos_mm) > POSITION_DISAGREE_THRESHOLD):
+        logging.error(f"Position sensor disagreement: Rotary {rotary_pos_mm}, ToF {ToF_pos_mm}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
     return ErrorCode.NORMAL_OPERATION
 
 
@@ -199,4 +338,33 @@ def read_rotary_encoder() -> float:
         float: Rotary position in rotations
     """
     # TODO: Implement actual rotary encoder reading logic
-    return 0.0
+    global _motor_controller
+    return _motor_controller.get_rotary_position()
+
+def zero_rotary_encoder() -> ErrorCode:
+    """Zero the rotary encoder by setting the current position as zero.
+
+    Returns:
+        ErrorCode: Normal if successful, ERROR_SENSOR_FAILURE if failed
+    """
+    global rotary_zero_position
+    try:
+        rotary_zero_position = read_rotary_encoder()
+        return ErrorCode.NORMAL_OPERATION
+    except Exception as e:
+        logging.error(f"Failed to zero rotary encoder: {e}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+def zero_ToF_sensor() -> ErrorCode:
+    """Zero the time-of-flight sensor by setting the current position as zero.
+
+    Returns:
+        ErrorCode: Normal if successful, ERROR_SENSOR_FAILURE if failed
+    """
+    global ToF_zero_position
+    try:
+        ToF_zero_position = read_ToF_sensor()
+        return ErrorCode.NORMAL_OPERATION
+    except Exception as e:
+        logging.error(f"Failed to zero ToF sensor: {e}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
