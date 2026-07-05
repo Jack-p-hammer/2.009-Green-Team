@@ -11,7 +11,6 @@ from pathlib import Path
 import sensing
 import actuation
 import HMI
-import multi_system
 from Enums.error_codes import ErrorCode
 from Enums.states import CPRState
 
