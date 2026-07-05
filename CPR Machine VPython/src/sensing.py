@@ -1,5 +1,11 @@
 # sensing.py
+"""
+Library of functions for reading and validating sensor readings, including the force sensor, rotary encoder, time-of-flight sensor, and IMU. These functions are non-blocking.
 
+All functions that read sensors return a value assuming a successful read. All reading validation functions return an error code indicating whether the readings are valid or not. Therefore, try/except blocks are used when calling the read functions, all of which is done through the read_sensors() function, which is called by the main loop.
+
+BEFORE AND DURING ZEROING, THE zero_position VARIABLES MUST EQUAL THE absolute_zero_position VARIABLES
+"""
 # External imports
 import pigpio
 import board
@@ -11,7 +17,7 @@ from adafruit_bno08x.i2c import BNO08X_I2C
 
 # Internal imports
 from Enums.error_codes import ErrorCode
-from motor import MoteusThread, CONTROLLER_ID
+from moteus_thread import MoteusThread
 
 # Global variables for shared sensor instances
 _pi: pigpio.pi
@@ -30,7 +36,7 @@ ADC_ADDR = 0x48   # A0 variant: device code 1001 + address bits 000
 ADC_VDD = 5  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
 
 # Battery voltage threshold for low battery detection. TODO: Calibrate this value based on actual battery performance.
-BATTERY_THRESHOLD = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
+BATTERY_THRESHOLD: float = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
 
 def get_pi():
     """Returns the shared pigpio instance for use by hmi.py's button/LED/laser GPIO."""

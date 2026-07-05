@@ -10,9 +10,10 @@ import time
 import math
 
 # Internal imports
+import sensing
 from Enums.error_codes import ErrorCode
 from Enums.control_modes import ControlMode
-from motor import MoteusThread, CONTROLLER_ID
+from moteus_thread import MoteusThread, CONTROLLER_ID
 
 
 COMPRESSION_DEPTH_CM: float = 7.0 # depth of compressions in cm

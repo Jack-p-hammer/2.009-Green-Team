@@ -11,8 +11,7 @@ import threading
 import math
 import time
 import logging
-from typing import List, Optional
-from numpy import long
+from typing import Optional
 
 # Internal imports
 from Enums.error_codes import ErrorCode
@@ -244,3 +243,7 @@ class MoteusThread:
     def get_battery_voltage(self) -> float:
         """Returns the battery voltage of the 6S Lipo battery pack, as reported by the moteus controller."""
         return self._state.voltage
+    
+    def get_rotary_position(self) -> float:
+        """Returns the rotary position of the motor, in rotations, as reported by the moteus controller."""
+        return self._state.position
