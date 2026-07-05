@@ -26,10 +26,12 @@ LOG_FILE = LOG_DIR / f"heartBridge_{RUN_TIMESTAMP}.log"
 
 # Maps error codes to the state they should force the machine into
 ERROR_STATE_MAP = {
-    ErrorCode.ERROR_INIT_FAILURE:          CPRState.ABORT,
-    ErrorCode.ERROR_SENSOR_FAILURE:        CPRState.ABORT,
-    ErrorCode.ERROR_IMU_KNEEL_FAILURE:  CPRState.KNEEL_FAILURE,
-    ErrorCode.ERROR_ZEROING_FAILURE:    CPRState.ABORT,
+    ErrorCode.ERROR_INIT_FAILURE:           CPRState.ABORT,
+    ErrorCode.ERROR_SENSOR_FAILURE:         CPRState.ABORT,
+    ErrorCode.ERROR_IMU_KNEEL_FAILURE:      CPRState.KNEEL_FAILURE,
+    ErrorCode.ERROR_ZEROING_FAILURE:        CPRState.ABORT,
+    ErrorCode.ERROR_LOW_BATTERY:            CPRState.ABORT,
+    ErrorCode.ERROR_MOTOR_FAILURE:          CPRState.ABORT,
 }
 
 FATAL_ERRORS = {ErrorCode.EXIT_UNKNOWN, ErrorCode.ERROR_UNKNOWN_IMAGE}
