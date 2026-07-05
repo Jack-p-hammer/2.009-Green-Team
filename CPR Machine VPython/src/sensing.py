@@ -252,7 +252,8 @@ def check_sensor_error(sensor_limits: SensorLimits, sensor_readings: tuple) -> E
     
     # Loop over accel tuple to validate each
     for accel_tuple_index in range(3):
-        if sensor_readings[3][accel_tuple_index] > sensor_limits.accel[accel_tuple_index]: 
+        # TODO: Check is abs is correct for all 3 cases
+        if abs(sensor_readings[3][accel_tuple_index]) > abs(sensor_limits.accel[accel_tuple_index]): 
             logging.error(
                 f"IMU reading out of range: Read {sensor_readings[3][accel_tuple_index]}, Limit {sensor_limits.accel[accel_tuple_index]} for direction {accel_tuple_index}"
             )
