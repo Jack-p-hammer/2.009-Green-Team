@@ -9,7 +9,7 @@ import sys
 
 # I2C address for the analog-to-digital converter. TODO: Use the I2C_scanner.py script to verify this!
 ADC_ADDR = 0x48   # A0 variant: device code 1001 + address bits 000
-ADC_VDD: float = 5.0  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
+ADC_VDD: float = 4.94  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
 ADC_BITS: int = 10 
 
 _pi: pigpio.pi
