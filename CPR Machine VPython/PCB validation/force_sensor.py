@@ -15,6 +15,7 @@ ADC_BITS: int = 10
 _i2c: busio.I2C
 
 def setup():
+    global _i2c
     
     # Init  i2c
     try:
