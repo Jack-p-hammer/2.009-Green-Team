@@ -12,15 +12,9 @@ ADC_ADDR = 0x48   # A0 variant: device code 1001 + address bits 000
 ADC_VDD: float = 5.0  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
 ADC_BITS: int = 10 
 
-_pi: pigpio.pi
 _i2c: busio.I2C
 
 def setup():
-    # Connect to pi
-    _pi = pigpio.pi()
-    if not _pi.connected:
-        print("Failed to connect to pigpio daemon")
-        sys.exit
     
     # Init  i2c
     try:
@@ -44,6 +38,7 @@ def read_ADC() -> int:
     Returns:
         int: ADC reading in raw counts (0-1023)
     """
+    global _i2c
 
     result: bytearray = bytearray(2)
 
