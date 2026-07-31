@@ -12,17 +12,22 @@ ADC_ADDR = 0x48   # A0 variant: device code 1001 + address bits 000
 ADC_VDD: float = 5.0  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
 ADC_BITS: int = 10 
 
+_pi: pigpio.pi
 _i2c: busio.I2C
 
 def setup():
-    global _i2c
+    global _i2c, _pi
     
+    _pi = pigpio.pi()
+    if not _pi.connected:
+        print("Failed to connect to pigpio daemon")
+        sys.exit()
     # Init  i2c
     try:
         _i2c = busio.I2C(board.SCL, board.SDA)
     except Exception as e:
         print(f"Failed to initialize I2C bus: {e}")
-        sys.exit
+        sys.exit()
         
     print("i2c initialized")
         
