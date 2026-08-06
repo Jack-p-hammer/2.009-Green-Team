@@ -106,6 +106,7 @@ def computeCompressionSetpoint() -> float:
     Returns:
         float: compression setpoint, relative to zeroed position, in meters
     """
+    global compression_start_time
     time_sec: float = (time.monotonic() - compression_start_time)
     cycle_time: float = time_sec % 0.56 # One cycle takes 0.56 seconds
     outputPos_cm: float = 0.0

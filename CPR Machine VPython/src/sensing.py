@@ -237,6 +237,7 @@ def check_sensor_error(sensor_limits: SensorLimits, sensor_readings: tuple) -> E
     Returns:
         ErrorCode: Normal if readings are valid, ERROR_KNEEL_FAILURE if IMU error, ERROR_SENSOR_FAILURE otherwise
     """
+    global rotary_zero_position, ToF_zero_position
     
     # Validation Method ---------------------------------------------------------------
     # If force or IMU readings exceed sensor limits, sensor failure
@@ -301,6 +302,7 @@ def read_ADC() -> int:
     Returns:
         int: ADC reading in raw counts (0-1023)
     """
+    global _pi, _i2c
 
     result: bytearray = bytearray(2)
 
@@ -320,6 +322,7 @@ def read_ToF_sensor() -> int:
     Returns:
         int: ToF sensor reading in millimeters
     """
+    global _vl61
     return _vl61.range
 
 
@@ -329,6 +332,7 @@ def read_IMU() -> tuple[float, float, float] | None:
     Returns:
         tuple [float, float, float]: IMU accelerometer readings in m/s^2 (x, y, z) or None
     """
+    global _bno
     # TODO: Implement actual IMU reading logic
     accel_reading: tuple[float, float, float] | None = _bno.acceleration
     return accel_reading

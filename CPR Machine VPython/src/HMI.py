@@ -119,6 +119,7 @@ def set_screen_image(image: Image):
     Args:
         image (Image): Image enum for current state
     """
+    global _screen
     surf = pygame.image.load(image.value)
     surf = pygame.transform.scale(surf, _screen.get_size())
     _screen.blit(surf, (0, 0))
@@ -142,6 +143,7 @@ def set_screen_audio(image: Image, prompt: AudioPrompt):
 def enable_lasers():
     """Enables alignment lasers
     """
+    global _pi
     # TODO: Implement PWM
     _pi.write(LASER_PIN, 1)
 
@@ -149,6 +151,7 @@ def enable_lasers():
 def disable_lasers():
     """Disables alignment lasers
     """
+    global _pi
     _pi.write(LASER_PIN, 0)
 
 
@@ -171,24 +174,28 @@ def audio_finished() -> bool:
 def enable_next_button():
     """Enable Next button and Next button LED
     """
+    global _pi
     _pi.write(NEXT_ENABLE_PIN, 1)
 
 
 def disable_next_button():
     """Disable Next button and Next button LED
     """
+    global _pi
     _pi.write(NEXT_ENABLE_PIN, 0)
 
 
 def enable_pause_button():
     """Enable Pause button and Pause button LED
     """
+    global _pi
     _pi.write(PAUSE_ENABLE_PIN, 1)
 
 
 def disable_pause_button():
     """Disable Pause button and Pause button LED
     """
+    global _pi
     _pi.write(PAUSE_ENABLE_PIN, 0)
 
 
@@ -198,6 +205,7 @@ def next_button_pressed() -> bool:
     Returns:
         bool: True if button press detected, False otherwise
     """
+    global _pi
     # pygame.event.pump() must be called regularly to keep the pygame window
     # responsive and prevent the OS from marking it as unresponsive
     pygame.event.pump()
@@ -210,5 +218,6 @@ def pause_button_pressed() -> bool:
     Returns:
         bool: True if button press detected, False otherwise
     """
+    global _pi
     pygame.event.pump()
     return bool(_pi.read(PAUSE_BTN_PIN))
