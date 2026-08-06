@@ -200,7 +200,7 @@ def disable_pause_button():
 
 
 def next_button_pressed() -> bool:
-    """Return whether the next button is currently being pressed. Non-blocking.
+    """Return state of next button. Non-blocking.
 
     Returns:
         bool: True if button press detected, False otherwise
@@ -213,7 +213,7 @@ def next_button_pressed() -> bool:
 
 
 def pause_button_pressed() -> bool:
-    """Return whether the pause button is currently being pressed. Non-blocking.
+    """Return state of pause button. Non-blocking.
 
     Returns:
         bool: True if button press detected, False otherwise
