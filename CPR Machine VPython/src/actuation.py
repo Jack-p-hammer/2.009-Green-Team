@@ -25,6 +25,7 @@ zeroed_position: float = 0.0 # The position of the plunger when zeroing is compl
 
 _motor_controller: MoteusThread  # The shared moteus controller instance
 
+
 def init_motor() -> ErrorCode:
     """Initialize moteus-x1 motor driver thread and controller settings.
     Motor controller communication is done via CAN-FD board over USB (from raspi side)
@@ -44,6 +45,7 @@ def init_motor() -> ErrorCode:
 
     return ErrorCode.NORMAL_OPERATION
 
+
 def init_zeroing() -> ErrorCode:
     """Perform pre-zeroing setup. Non-blocking.
 
@@ -55,6 +57,7 @@ def init_zeroing() -> ErrorCode:
     logging.debug("Zeroing initialized")
     
     return ErrorCode.NORMAL_OPERATION
+
 
 def zeroing() -> ErrorCode:
     """Perform the zeroing procedure. Non-blocking.
@@ -99,6 +102,7 @@ def stop_compressions() -> ErrorCode:
     """
     logging.debug("Stopping compressions")
     return ErrorCode.NORMAL_OPERATION
+
 
 def computeCompressionSetpoint() -> float:
     """Computes the current compression setpoint from the trapezoidal waveform, returns position relative to zeroed position
