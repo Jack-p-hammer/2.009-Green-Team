@@ -223,6 +223,14 @@ def read_sensors(control_mode: ControlMode) -> ErrorCode:
     if(check_sensor_error(sensor_limits, current_readings) == ErrorCode.NORMAL_OPERATION):
         validation_error = ErrorCode.NORMAL_OPERATION
         
+    # Zeroing Case: Check for successful zeroing (force threshold exceeded)
+    # At this point, we know that force is below error threshold, so only check for zeroing threshold
+    if (control_mode == ControlMode.ZEROING and 
+        current_force > ZEROING_FORCE_THRESHOLD_N
+    ):
+        logging.info(f"Zeroing complete: Force {current_force} N exceeded threshold {ZEROING_FORCE_THRESHOLD_N} N")
+        return ErrorCode.ZEROING_FINISHED
+        
     return validation_error
 
 

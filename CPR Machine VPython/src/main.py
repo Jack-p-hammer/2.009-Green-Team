@@ -144,6 +144,7 @@ def main():
                     HMI.disable_next_button()
                     HMI.set_screen_audio(HMI.Image.ZEROING,
                                         HMI.AudioPrompt.ZEROING)
+                    error = actuation.init_zeroing()
 
                 # Loop
                 error = actuation.zeroing()
@@ -224,7 +225,7 @@ def main():
         # Record the previous state and sleep for the remainder of the tick duration
         prev_state = state
         elapsed = time.monotonic() - loop_start
-        time.sleep(max(0, LOOP_TICK_SECONDS - elapsed))
+        time.sleep(max(0, LOOP_TICK_SEC - elapsed))
 
     logging.critical(f"Fatal error: {error}")
     sys.exit(1)

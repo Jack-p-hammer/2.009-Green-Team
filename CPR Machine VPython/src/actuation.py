@@ -13,10 +13,18 @@ import math
 import sensing
 from Enums.error_codes import ErrorCode
 from Enums.control_modes import ControlMode
-from moteus_thread import MoteusThread, CONTROLLER_ID
+from moteus_thread import MoteusThread, CONTROLLER_ID, ZEROING_VELOCITY_MPS
 
 
-COMPRESSION_DEPTH_CM: float = 7.0 # depth of compressions in cm
+COMPRESSION_DEPTH_CM: float = 7.0 # depth of compressions in cm, because compression setpoint math is in cm
+EXTENSION_STROKE_LIMIT_M: float = 0.0254 * 8 # maximum extension of plunger in meters, sets extension limit for zeroing, 8" in meters
+
+# TODO: Determine if this timeout should have extra buffer on top of time to take max extension
+ZEROING_TIMEOUT_SEC: float = EXTENSION_STROKE_LIMIT_M / ZEROING_VELOCITY_MPS # maximum time to spend zeroing, in seconds
+
+# See moteus_thread.py for hardware and velocity constants
+# See sensing.py for force threshold constants
+
 zeroing_start_time: float = 0.0 # time.monotonic() of when zeroing started
 compression_start_time: float = 0.0 # time.monotonic() of when compressions started, used to compute trapezoidal waveform
 
@@ -69,7 +77,32 @@ def zeroing() -> ErrorCode:
     Returns:
         ErrorCode: Normal while zeroing, ZEROING_FINISHED when finished, ERROR_ZEROING_FAILURE if failed (timeout, max extension reached)
     """
-    return ErrorCode.NORMAL_OPERATION
+    global ZEROING_TIMEOUT_SEC, EXTENSION_STROKE_LIMIT_M
+    global _motor_controller, zeroing_start_time, zeroed_position
+    
+    # Check for timeout
+    if time.monotonic() - zeroing_start_time > ZEROING_TIMEOUT_SEC:
+        logging.error("Zeroing failed: timeout")
+        return ErrorCode.ERROR_ZEROING_FAILURE
+    
+    # Get motor state
+    motor_state = _motor_controller.get_state()
+    
+    # Check for max extension
+    # TODO: Check if this returns in revolutions or meters, and convert if necessary
+    if motor_state.position > EXTENSION_STROKE_LIMIT_M:
+        logging.error("Zeroing failed: max extension reached")
+        return ErrorCode.ERROR_ZEROING_FAILURE
+    
+    # Set motor command to zeroing, can be done repeatedly since it is non-blocking
+    _motor_controller.set_target(ControlMode.ZEROING)
+    
+    # Read sensors
+    # If force limit to finish zeroing is reached, special error state to transmit to state machine
+    # All of that logic is in sensing.py
+    error = sensing.read_sensors(ControlMode.ZEROING)
+    
+    return error
 
 
 def init_compressions() -> ErrorCode:
