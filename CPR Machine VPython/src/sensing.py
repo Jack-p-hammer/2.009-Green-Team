@@ -21,7 +21,7 @@ from adafruit_bno08x.i2c import BNO08X_I2C
 from Enums.error_codes import ErrorCode
 from moteus_thread import MoteusThread
 from Enums.control_modes import ControlMode
-from moteus_thread import PINION_RADIUS
+from moteus_thread import PINION_RADIUS_M
 
 # Global variables for shared sensor instances
 _pi: pigpio.pi
@@ -41,12 +41,12 @@ ADC_VDD: float = 5.0  # 5V reference voltage for the ADC, used to convert the ra
 ADC_BITS: int = 10 
 
 # Battery voltage threshold for low battery detection. TODO: Calibrate this value based on actual battery performance.
-BATTERY_THRESHOLD: float = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
+BATTERY_THRESHOLD_V: float = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
 
-ZEROING_FORCE_THRESHOLD: float = 35.0  # Newtons, threshold for detecting contact with the patient during zeroing
-COMPRESSION_FORCE_THRESHOLD: float = 500.0  # Newtons
+ZEROING_FORCE_THRESHOLD_N: float = 35.0  # Newtons, threshold for detecting contact with the patient during zeroing
+COMPRESSION_FORCE_THRESHOLD_N: float = 500.0  # Newtons
 
-POSITION_DISAGREE_THRESHOLD: int = 2 # MILLIMETERS
+POSITION_DISAGREE_THRESHOLD_MM: int = 2 # Millimeters
 
 # Global variables for sensor starting positions
 rotary_absolute_zero_position: float = 0.0  # The absolute position of rotary encoder on startup
@@ -66,12 +66,13 @@ class SensorLimits:
 
 # Define setpoints for zeroing and compressions
 zeroing_limits = SensorLimits(
-    force = ZEROING_FORCE_THRESHOLD,
+    force = ZEROING_FORCE_THRESHOLD_N * 1.5, # Higher because we want to detect contact with the patient, but not trigger a sensor failure until the force is well above that threshold. 
+    # TODO: Refine Multiplier
     accel = (0.0, 0.0, 9.81)  # TODO: Determine method to set this based on IMU orientation. Assuming the IMU is oriented such that gravity is along the z-axis
 )
 
 compression_limits = SensorLimits(
-    force = COMPRESSION_FORCE_THRESHOLD,
+    force = COMPRESSION_FORCE_THRESHOLD_N,
     accel = (0.0, 0.0, 9.81) # TODO: Determine method to set this based on IMU orientation. Assuming the IMU is oriented such that gravity is along the z-axis
 )
 
@@ -164,7 +165,7 @@ def battery_check() -> ErrorCode:
         # Motor failure because moteus let us down
         return ErrorCode.ERROR_MOTOR_FAILURE
     
-    if battery_voltage < BATTERY_THRESHOLD:
+    if battery_voltage < BATTERY_THRESHOLD_V:
         return ErrorCode.ERROR_LOW_BATTERY
     return ErrorCode.NORMAL_OPERATION
 
@@ -225,7 +226,6 @@ def read_sensors(control_mode: ControlMode) -> ErrorCode:
     return validation_error
 
 
-
 def check_sensor_error(sensor_limits: SensorLimits, sensor_readings: tuple) -> ErrorCode:
     """Determines if any sensor readings are out of intended range. 
     NOTE THAT THIS ASSUMES zero_position == absolute_zero_position FOR BOTH POS SENSORS BEFORE ZEROING IS COMPLETED
@@ -263,11 +263,11 @@ def check_sensor_error(sensor_limits: SensorLimits, sensor_readings: tuple) -> E
         
     # Validate position sensors
     # TODO: This is placeholder logic
-    rotary_pos_m: float = (sensor_readings[1] - rotary_zero_position)*2*math.pi*PINION_RADIUS
+    rotary_pos_m: float = (sensor_readings[1] - rotary_zero_position)*2*math.pi*PINION_RADIUS_M
     rotary_pos_mm: float = rotary_pos_m*1000
     ToF_pos_mm: int = sensor_readings[2] - ToF_zero_position
     
-    if(abs(rotary_pos_mm-ToF_pos_mm) > POSITION_DISAGREE_THRESHOLD):
+    if(abs(rotary_pos_mm-ToF_pos_mm) > POSITION_DISAGREE_THRESHOLD_MM):
         logging.error(f"Position sensor disagreement: Rotary {rotary_pos_mm}, ToF {ToF_pos_mm}")
         return ErrorCode.ERROR_SENSOR_FAILURE
     

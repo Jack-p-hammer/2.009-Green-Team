@@ -1,5 +1,6 @@
 # hmi.py
-
+"""Library of functions for Human-Machine Interface (HMI) operations, including screen display, audio prompts, button handling, and laser control.
+"""
 # External imports
 import pigpio
 from pathlib import Path
@@ -69,9 +70,9 @@ def init_HMI(pi_instance: pigpio.pi) -> ErrorCode:
     Returns:
         ErrorCode: Normal operation if successful, ERROR_INIT_FAILURE if failed
     """
-
-    # Initialize the global variables for screens and pigpio instance
     global _screen, _pi
+    
+    # Initialize the global variable for the pigpio instance
     _pi = pi_instance
 
     # Initialize Pygame and audio mixer for sound playback
@@ -208,6 +209,7 @@ def next_button_pressed() -> bool:
     global _pi
     # pygame.event.pump() must be called regularly to keep the pygame window
     # responsive and prevent the OS from marking it as unresponsive
+    # TODO: Move this to a better location
     pygame.event.pump()
     return bool(_pi.read(NEXT_BTN_PIN))
 
@@ -219,5 +221,6 @@ def pause_button_pressed() -> bool:
         bool: True if button press detected, False otherwise
     """
     global _pi
+    # TODO: Move this to a better location
     pygame.event.pump()
     return bool(_pi.read(PAUSE_BTN_PIN))

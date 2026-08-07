@@ -19,10 +19,10 @@ from Enums.control_modes import ControlMode
 
 CONTROLLER_ID: int = 1  # The ID of the moteus-x1 controller on the CAN bus
 COMMAND_RATE_HZ: float = 100.0  # well under the ~0.1s watchdog timeout
-ZEROING_VELOCITY: float = 0.04  # meters per second, velocity of the plunger during zeroing
-RETRACT_VELOCITY: float = 2*ZEROING_VELOCITY  # meters per second, velocity of the plunger during retract
-TORQUE_LIMIT: float = 5.0 # Torque command should never exceed 5 Nm for max 500 N force out of rack
-PINION_RADIUS: float = 0.01 # meters, radius of the pinion gear on the motor shaft.
+ZEROING_VELOCITY_MPS: float = 0.04  # meters per second, velocity of the plunger during zeroing
+RETRACT_VELOCITY_MPS: float = 2*ZEROING_VELOCITY_MPS  # meters per second, velocity of the plunger during retract
+TORQUE_LIMIT_NM: float = 5.0 # Torque command should never exceed 5 Nm for max 500 N force out of rack
+PINION_RADIUS_M: float = 0.01 # meters, radius of the pinion gear on the motor shaft.
 
 # --- data structures ---------------------------------------------------
 
@@ -176,12 +176,12 @@ class MoteusThread:
             # Positive rotation of motor is down on rack, so down is positive up is negative
             case ControlMode.ZEROING:
                 position: float = math.nan
-                velocity: float = ZEROING_VELOCITY # meters per second, downwards
+                velocity: float = ZEROING_VELOCITY_MPS # meters per second, downwards
                 kp_scale: float = 0.0 # Set kp_scale to 0.0 to disable position control
                 kd_scale: float = 1.0
                 feedforward_torque: float = 0.0
-                velocity_limit: float = ZEROING_VELOCITY # meters per second, downwards
-                maximum_torque: float = TORQUE_LIMIT
+                velocity_limit: float = ZEROING_VELOCITY_MPS # meters per second, downwards
+                maximum_torque: float = TORQUE_LIMIT_NM
             case ControlMode.COMPRESSIONS:
                 position: float = compressionSetpoint + zeroed_position # meters, relative to zeroed position
                 velocity: float = math.nan # meters per second, downwards
@@ -189,7 +189,7 @@ class MoteusThread:
                 kd_scale: float = 1.0
                 feedforward_torque: float = 0.0
                 velocity_limit: float = math.nan
-                maximum_torque: float = TORQUE_LIMIT # Torque command should never exceed 5 Nm for max 500 N force out of rack
+                maximum_torque: float = TORQUE_LIMIT_NM # Torque command should never exceed 5 Nm for max 500 N force out of rack
             case ControlMode.HOLD_POSITION:
                 position: float = math.nan # TODO: Verify that NaN actually forces the controller to hold position
                 velocity: float = 0.0 
@@ -197,15 +197,15 @@ class MoteusThread:
                 kd_scale: float = 1.0
                 feedforward_torque: float = 0.0
                 velocity_limit: float = math.nan
-                maximum_torque: float = TORQUE_LIMIT # TODO: Change to 1.5x min torque to hold plunger against gravity
+                maximum_torque: float = TORQUE_LIMIT_NM # TODO: Change to 1.5x min torque to hold plunger against gravity
             case ControlMode.PAUSE_RETRACT:
                 position: float = zeroed_position # meters, retract to zeroed position
                 velocity: float = math.nan # meters per second, upwards
                 kp_scale: float = 1.0
                 kd_scale: float = 1.0
                 feedforward_torque: float = 0.0
-                velocity_limit: float = RETRACT_VELOCITY
-                maximum_torque: float = TORQUE_LIMIT
+                velocity_limit: float = RETRACT_VELOCITY_MPS
+                maximum_torque: float = TORQUE_LIMIT_NM
                 query: bool = True
             case ControlMode.ABORT_RETRACT:
                 position: float = starting_position # meters, retract to absolute zero
@@ -213,8 +213,8 @@ class MoteusThread:
                 kp_scale: float = 1.0
                 kd_scale: float = 1.0
                 feedforward_torque: float = 0.0
-                velocity_limit: float = RETRACT_VELOCITY
-                maximum_torque: float = TORQUE_LIMIT
+                velocity_limit: float = RETRACT_VELOCITY_MPS
+                maximum_torque: float = TORQUE_LIMIT_NM
                 query: bool = True
             case _:
                 logging.error(f"Invalid control mode: {control_mode}")

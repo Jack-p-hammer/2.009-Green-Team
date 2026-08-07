@@ -15,7 +15,7 @@ from Enums.error_codes import ErrorCode
 from Enums.states import CPRState
 
 # TODO: Optimize loop speed
-LOOP_TICK_SECONDS = 0.05  # 50ms per tick, 20 Hz
+LOOP_TICK_SEC = 0.05  # 50ms per tick, 20 Hz
 
 # Initialize log directory and file
 # 2x parent to get to project root
