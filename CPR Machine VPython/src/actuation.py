@@ -85,7 +85,13 @@ def zeroing() -> ErrorCode:
     if time.monotonic() - zeroing_start_time > ZEROING_TIMEOUT_SEC:
         logging.error("Zeroing failed: timeout")
         return ErrorCode.ERROR_ZEROING_FAILURE
-    
+
+    # Check for motor errors
+    error = _motor_controller.get_last_error()
+    if error != ErrorCode.NORMAL_OPERATION:
+        logging.error(f"Zeroing failed: motor error {error}")
+        return ErrorCode.ERROR_MOTOR_FAILURE
+        
     # Get motor state
     motor_state = _motor_controller.get_state()
     
@@ -98,19 +104,17 @@ def zeroing() -> ErrorCode:
     # Set motor command to zeroing, can be done repeatedly since it is non-blocking
     _motor_controller.set_target(ControlMode.ZEROING)
     
-    # Read sensors
-    # If force limit to finish zeroing is reached, special error state to transmit to state machine
-    # All of that logic is in sensing.py
-    error = sensing.read_sensors(ControlMode.ZEROING)
-    
-    return error
+    # Read sensors to determine if chest reached
+    # ZEROING_FINISHED exists to transmit zeroing success to state machine, just pass along results of sensor read
+    # All sensor reading logic is in sensing.py
+    return sensing.read_sensors(ControlMode.ZEROING)
 
 
 def init_compressions() -> ErrorCode:
     """Perform pre-compressions setup. Non-blocking.
 
     Returns:
-        ErrorCode: Normal operation if successful, ERROR_INIT_FAILURE if failed
+        ErrorCode: Normal operation
     """
     global compression_start_time
     compression_start_time = time.monotonic()
