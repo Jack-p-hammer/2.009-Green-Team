@@ -28,9 +28,6 @@ ZEROING_TIMEOUT_SEC: float = EXTENSION_STROKE_LIMIT_M / ZEROING_VELOCITY_MPS # m
 zeroing_start_time: float = 0.0 # time.monotonic() of when zeroing started
 compression_start_time: float = 0.0 # time.monotonic() of when compressions started, used to compute trapezoidal waveform
 
-starting_position: float = 0.0 # The position of the plunger on startup
-zeroed_position: float = 0.0 # The position of the plunger when zeroing is complete
-
 _motor_controller: MoteusThread  # The shared moteus controller instance
 
 
