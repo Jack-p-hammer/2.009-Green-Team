@@ -150,6 +150,7 @@ def main():
                 error = actuation.zeroing()
 
                 if error == ErrorCode.ZEROING_FINISHED:
+                    error = sensing.zero_position()
                     state = CPRState.COMPRESSION_PREP
 
             case(CPRState.COMPRESSION_PREP):

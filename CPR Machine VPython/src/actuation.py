@@ -61,6 +61,7 @@ def init_zeroing() -> ErrorCode:
         ErrorCode: Normal operation if successful, ERROR_ZEROING_FAILURE if failed
     """
     global zeroing_start_time
+    
     zeroing_start_time = time.monotonic()
     logging.debug("Zeroing initialized")
     

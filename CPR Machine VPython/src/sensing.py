@@ -233,6 +233,29 @@ def read_sensors(control_mode: ControlMode) -> ErrorCode:
         
     return validation_error
 
+def zero_position() -> ErrorCode:
+    """Set zeroed positions for the rotary encoder and ToF sensor. This should be called after zeroing is complete, and the plunger is at the zeroed position.
+
+    Returns:
+        ErrorCode: Error code describing the success or failure of the operation. Normal if successful, ERROR_SENSOR_FAILURE if failed.
+    """
+    global rotary_zero_position, ToF_zero_position
+    
+    # TODO: Determine if this read_sensors() is necessary
+    error = read_sensors(ControlMode.ZEROING)
+    if error != ErrorCode.ZEROING_FINISHED:
+        logging.error(f"Zeroing not finished, cannot set zeroed positions: {error}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    if(zero_rotary_encoder() != ErrorCode.NORMAL_OPERATION or 
+       zero_ToF_sensor() != ErrorCode.NORMAL_OPERATION):
+        logging.error("Failed to set zeroed positions for sensors")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    logging.info(f"Zeroed positions set: Rotary {rotary_zero_position}, ToF {ToF_zero_position}")
+    return ErrorCode.NORMAL_OPERATION
+    
+# -------- PRIVATE FUNCTIONS --------
 
 def check_sensor_error(sensor_limits: SensorLimits, sensor_readings: tuple) -> ErrorCode:
     """Determines if any sensor readings are out of intended range. 
