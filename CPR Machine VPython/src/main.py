@@ -70,6 +70,7 @@ def main():
         # If an error occurred, override the current state
         # Whenever an error occurs, system must be forced back to this point via continue
         if error in ERROR_STATE_MAP:
+            logging.warning(f"Error occurred: {error}, forcing state to {ERROR_STATE_MAP[error]}")
             state = ERROR_STATE_MAP[error]
             error = ErrorCode.NORMAL_OPERATION
 
