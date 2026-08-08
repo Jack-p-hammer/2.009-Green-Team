@@ -16,6 +16,7 @@ from typing import Optional
 # Internal imports
 from Enums.error_codes import ErrorCode
 from Enums.control_modes import ControlMode
+import sensing
 
 CONTROLLER_ID: int = 1  # The ID of the moteus-x1 controller on the CAN bus
 COMMAND_RATE_HZ: float = 100.0  # well under the ~0.1s watchdog timeout
@@ -165,13 +166,11 @@ class MoteusThread:
     # --- public, non-blocking API --------------------------------------
 
     def set_target(self, control_mode: ControlMode, compressionSetpoint: float = 0) -> ErrorCode:
-        # Grab zeroed position from global variable, which is set during zeroing.
-        global zeroed_position
-        zeroed_position: float
+        """Set the target values for the motor controller. The MoteusThread will pick up these values in its next loop and send them to the motor controller.
         
-        global starting_position
-        starting_position: float
-        
+            Returns:
+                ErrorCode: ERROR_MOTOR_FAILURE if the control mode is invalid, NORMAL_OPERATION otherwise
+        """
         match control_mode:
             # Positive rotation of motor is down on rack, so down is positive up is negative
             case ControlMode.ZEROING:
@@ -183,7 +182,7 @@ class MoteusThread:
                 velocity_limit: float = ZEROING_VELOCITY_MPS # meters per second, downwards
                 maximum_torque: float = TORQUE_LIMIT_NM
             case ControlMode.COMPRESSIONS:
-                position: float = compressionSetpoint + zeroed_position # meters, relative to zeroed position
+                position: float = compressionSetpoint + sensing.get_rotary_zero_position() # meters, relative to zeroed position
                 velocity: float = math.nan # meters per second, downwards
                 kp_scale: float = 1.0
                 kd_scale: float = 1.0
@@ -199,7 +198,7 @@ class MoteusThread:
                 velocity_limit: float = math.nan
                 maximum_torque: float = TORQUE_LIMIT_NM # TODO: Change to 1.5x min torque to hold plunger against gravity
             case ControlMode.PAUSE_RETRACT:
-                position: float = zeroed_position # meters, retract to zeroed position
+                position: float = sensing.get_rotary_zero_position() # meters, retract to zeroed position
                 velocity: float = math.nan # meters per second, upwards
                 kp_scale: float = 1.0
                 kd_scale: float = 1.0
@@ -208,7 +207,7 @@ class MoteusThread:
                 maximum_torque: float = TORQUE_LIMIT_NM
                 query: bool = True
             case ControlMode.ABORT_RETRACT:
-                position: float = starting_position # meters, retract to absolute zero
+                position: float = sensing.get_rotary_absolute_zero_position() # meters, retract to absolute zero
                 velocity: float = math.nan # meters per second, upwards
                 kp_scale: float = 1.0
                 kd_scale: float = 1.0
@@ -234,6 +233,11 @@ class MoteusThread:
         return ErrorCode.NORMAL_OPERATION
 
     def get_state(self) -> MotorState:
+        """Get motor state
+
+        Returns:
+            MotorState: State object containing the latest motor state, as reported by the moteus controller. If the state is stale (i.e. the controller has not responded yet), the stale field will be True.
+        """
         return self._state
 
     def get_last_error(self) -> ErrorCode:

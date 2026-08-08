@@ -183,6 +183,8 @@ def read_sensors(control_mode: ControlMode) -> ErrorCode:
             sensor_limits = zeroing_limits
         case ControlMode.COMPRESSIONS:
             sensor_limits = compression_limits
+        case ControlMode.PAUSE_RETRACT:
+            sensor_limits = compression_limits
         case _:
             logging.error(f"Invalid control mode for sensor reading: {control_mode}")
             return ErrorCode.ERROR_SENSOR_FAILURE
@@ -254,6 +256,24 @@ def zero_position() -> ErrorCode:
     
     logging.info(f"Zeroed positions set: Rotary {rotary_zero_position}, ToF {ToF_zero_position}")
     return ErrorCode.NORMAL_OPERATION
+
+def get_rotary_zero_position() -> float:
+    """Get the zeroed position of the rotary encoder in rotations.
+
+    Returns:
+        float: Zeroed position of the rotary encoder in rotations.
+    """
+    global rotary_zero_position
+    return rotary_zero_position
+
+def get_rotary_absolute_zero_position() -> float:
+    """Get the absolute zeroed position of the rotary encoder in rotations.
+
+    Returns:
+        float: Absolute zeroed position of the rotary encoder in rotations.
+    """
+    global rotary_absolute_zero_position
+    return rotary_absolute_zero_position
     
 # -------- PRIVATE FUNCTIONS --------
 
