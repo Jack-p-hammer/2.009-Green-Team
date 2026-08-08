@@ -187,19 +187,21 @@ def main():
                 # Setup
                 if state != prev_state:
                     HMI.disable_pause_button()
-                    actuation.stop_compressions()
+                    actuation.pause_compressions()
                     HMI.enable_next_button()
                     HMI.set_screen_audio(HMI.Image.PAUSE, HMI.AudioPrompt.PAUSE)
                     logging.debug("Device Paused")
 
                 # Loop
+                error = actuation.abort_compressions()
+                
                 if HMI.next_button_pressed():
                     state = CPRState.COMPRESSION_PREP
 
             case(CPRState.KNEEL_FAILURE):
                 # Setup
                 if state != prev_state:
-                    actuation.stop_compressions()
+                    actuation.pause_compressions()
                     HMI.disable_pause_button()
                     HMI.enable_next_button()
                     HMI.set_screen_audio(HMI.Image.KNEEL_FAILURE,
@@ -213,7 +215,7 @@ def main():
             case(CPRState.ABORT):
                 # Setup
                 if state != prev_state:
-                    actuation.stop_compressions()
+                    actuation.abort_compressions()
                     HMI.disable_next_button()
                     HMI.disable_pause_button()
                     HMI.set_screen_audio(HMI.Image.ABORT, HMI.AudioPrompt.ABORT)

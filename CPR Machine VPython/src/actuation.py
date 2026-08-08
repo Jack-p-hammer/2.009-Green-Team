@@ -129,16 +129,76 @@ def compressions() -> ErrorCode:
     Returns:
         ErrorCode: Normal operation while compressing, ERROR_SENSOR_FAILURE if sensor failure detected
     """
+    global _motor_controller
+    
+    # Read sensors
+    error = sensing.read_sensors(ControlMode.COMPRESSIONS)
+    if error != ErrorCode.NORMAL_OPERATION:
+        logging.error(f"Compressions failed on sensors: {error}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    # Check for motor failure
+    error = _motor_controller.get_last_error()
+    if error != ErrorCode.NORMAL_OPERATION:
+        logging.error(f"Compressions failed on motor: {error}")
+        return ErrorCode.ERROR_MOTOR_FAILURE
+
+    # Update compression setpoint
+    error = _motor_controller.set_target(ControlMode.COMPRESSIONS, computeCompressionSetpoint())
+    if error != ErrorCode.NORMAL_OPERATION:
+        logging.error(f"Compressions failed on motor command: {error}")
+        return ErrorCode.ERROR_MOTOR_FAILURE
+    
     return ErrorCode.NORMAL_OPERATION
 
 
-def stop_compressions() -> ErrorCode:
-    """Return plunger to zeroed position for compressions pause. Non-blocking.
+def pause_compressions() -> ErrorCode:
+    """Pause compressions by returning to zeroed position. Non-blocking.
+
+    Returns:
+        ErrorCode: Normal operation if successful, ERROR_SENSOR_FAILURE if failed
+    """
+    global _motor_controller
+    
+    # Read sensors
+    error = sensing.read_sensors(ControlMode.PAUSE_RETRACT)
+    if error != ErrorCode.NORMAL_OPERATION:
+        logging.error(f"Pause retract failed on sensors: {error}")
+        return ErrorCode.ERROR_SENSOR_FAILURE
+    
+    # Check for motor failure
+    error = _motor_controller.get_last_error()
+    if error != ErrorCode.NORMAL_OPERATION:
+        logging.error(f"Pause retract failed on motor: {error}")
+        return ErrorCode.ERROR_MOTOR_FAILURE
+    
+    # Update motor command to pause retract
+    # This works because motor setpoints are retained between calls
+    error = _motor_controller.set_target(ControlMode.PAUSE_RETRACT)
+    if error != ErrorCode.NORMAL_OPERATION:
+        logging.error(f"Pause retract failed on motor command: {error}")
+        return ErrorCode.ERROR_MOTOR_FAILURE
+    return ErrorCode.NORMAL_OPERATION
+
+
+def abort_compressions() -> ErrorCode:
+    """Return plunger to starting position for compressions abort. Non-blocking.
 
     Returns:
         ErrorCode: Normal operation if successful, ERROR_ZEROING_FAILURE if failed
     """
-    logging.debug("Stopping compressions")
+    global _motor_controller
+    
+    # Abort process does not call sensors, just return to absolute zero position ASAP
+    # If this happens we don't care about state, but whatever
+    
+    # Update motor command to pause retract, non-blocking so it can be called repeatedly
+    error = _motor_controller.set_target(ControlMode.ABORT_RETRACT)
+    if error != ErrorCode.NORMAL_OPERATION:
+        logging.error(f"Abort compressions failed on motor command: {error}")
+        return ErrorCode.ERROR_MOTOR_FAILURE
+    
+    logging.info("Stopping compressions")
     return ErrorCode.NORMAL_OPERATION
 
 
