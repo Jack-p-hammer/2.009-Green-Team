@@ -10,7 +10,7 @@ import time
 import math
 
 # Internal imports
-import sensing
+import sensing # So long as init_motor never needs anything from sensing, this is fine. If it does, we have a circular import problem
 from Enums.error_codes import ErrorCode
 from Enums.control_modes import ControlMode
 from moteus_thread import MoteusThread, CONTROLLER_ID, ZEROING_VELOCITY_MPS
@@ -21,6 +21,9 @@ EXTENSION_STROKE_LIMIT_M: float = 0.0254 * 8 # maximum extension of plunger in m
 
 # TODO: Determine if this timeout should have extra buffer on top of time to take max extension
 ZEROING_TIMEOUT_SEC: float = EXTENSION_STROKE_LIMIT_M / ZEROING_VELOCITY_MPS # maximum time to spend zeroing, in seconds
+
+# Battery voltage threshold for low battery detection. TODO: Calibrate this value based on actual battery performance.
+BATTERY_THRESHOLD_V: float = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
 
 # See moteus_thread.py for hardware and velocity constants
 # See sensing.py for force threshold constants
@@ -223,3 +226,33 @@ def computeCompressionSetpoint() -> float:
     
     # Convert to meters and return
     return outputPos_cm / 100.0
+
+
+def read_rotary_encoder() -> float:
+    """Read the rotary encoder from the moteus-x1 and return the value in rotations
+
+    Returns:
+        float: Rotary position in rotations
+    """
+    # TODO: Implement actual rotary encoder reading logic
+    global _motor_controller
+    return _motor_controller.get_rotary_position()
+
+def battery_check() -> ErrorCode:
+    """Ensure sufficient charge for operation. 
+    TODO: Split into startup battery check and continuous monitoring. Higher threshold on startup to prevent mid-operation shutdown, but still check battery voltage during operation.
+
+    Returns:
+        ErrorCode: Normal if battery is sufficient, otherwise ERROR_LOW_BATTERY
+    """
+    global _motor_controller
+    try:
+        battery_voltage: float = _motor_controller.get_battery_voltage()
+    except Exception as e:
+        logging.error(f"Battery voltage read failed: {e}")
+        # Motor failure because moteus let us down
+        return ErrorCode.ERROR_MOTOR_FAILURE
+    
+    if battery_voltage < BATTERY_THRESHOLD_V:
+        return ErrorCode.ERROR_LOW_BATTERY
+    return ErrorCode.NORMAL_OPERATION
