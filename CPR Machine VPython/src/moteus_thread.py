@@ -16,7 +16,6 @@ from typing import Optional
 # Internal imports
 from Enums.error_codes import ErrorCode
 from Enums.control_modes import ControlMode
-import sensing
 
 CONTROLLER_ID: int = 1  # The ID of the moteus-x1 controller on the CAN bus
 COMMAND_RATE_HZ: float = 100.0  # well under the ~0.1s watchdog timeout
