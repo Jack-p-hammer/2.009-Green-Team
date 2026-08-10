@@ -19,7 +19,6 @@ from adafruit_bno08x.i2c import BNO08X_I2C
 
 # Internal imports
 from Enums.error_codes import ErrorCode
-import actuation
 from moteus_thread import MoteusThread
 from Enums.control_modes import ControlMode
 from moteus_thread import PINION_RADIUS_M
@@ -29,6 +28,7 @@ _pi: pigpio.pi
 _vl61: adafruit_vl6180x.VL6180X
 _bno: BNO08X_I2C
 _i2c: busio.I2C
+_motor_controller: MoteusThread
 
 # Futureproofing for a possible MUX on our I2C ADC
 # Low - Force Sensor
@@ -39,6 +39,9 @@ ADC_MUX_SIG_PIN = 19
 ADC_ADDR = 0x48   # A0 variant: device code 1001 + address bits 000
 ADC_VDD: float = 5.0  # 5V reference voltage for the ADC, used to convert the raw ADC reading to a voltage value
 ADC_BITS: int = 10 
+
+# Battery voltage threshold for low battery detection. TODO: Calibrate this value based on actual battery performance.
+BATTERY_THRESHOLD_V: float = 21.6  # 6S LiPo battery, 3.6V per cell minimum, 4.2V per cell maximum. 6S = 21.6V minimum, 25.2V maximum.
 
 ZEROING_FORCE_THRESHOLD_N: float = 35.0  # Newtons, threshold for detecting contact with the patient during zeroing
 COMPRESSION_FORCE_THRESHOLD_N: float = 500.0  # Newtons
@@ -76,13 +79,18 @@ compression_limits = SensorLimits(
 
 def get_pi():
     """Returns the shared pigpio instance for use by hmi.py's button/LED/laser GPIO."""
+    global _pi
     return _pi
 
 
-def init_sensors() -> ErrorCode:
+def init_sensors(motor_controller: MoteusThread) -> ErrorCode:
     """Initialize the shared GPIO and sensor hardware used by the system."""
     global _pi, _vl61, _bno, _i2c
     global rotary_absolute_zero_position, ToF_absolute_zero_position, force_zero_value
+    global _motor_controller
+    
+    # Pull the shared moteus controller instance from actuation.py
+    _motor_controller = motor_controller
 
     # pigpio is only used here for the shared GPIO instance passed to hmi.py.
     # The sensors themselves use the Adafruit/Blinka I2C abstraction below.
@@ -123,7 +131,7 @@ def init_sensors() -> ErrorCode:
     
     # Zero the position sensors
     try:
-        rotary_absolute_zero_position = actuation.read_rotary_encoder()
+        rotary_absolute_zero_position = read_rotary_encoder()
     except Exception as e:
         logging.error(f"Rotary encoder absolute zeroing failed: {e}")
         return ErrorCode.ERROR_INIT_FAILURE
@@ -174,7 +182,7 @@ def read_sensors(control_mode: ControlMode) -> ErrorCode:
         return ErrorCode.ERROR_SENSOR_FAILURE
     
     try:
-        current_rotary: float = actuation.read_rotary_encoder()
+        current_rotary: float = read_rotary_encoder()
     except Exception as e:
         logging.error(f"Rotary encoder read failed: {e}")
         return ErrorCode.ERROR_SENSOR_FAILURE
@@ -251,6 +259,26 @@ def get_rotary_absolute_zero_position() -> float:
     """
     global rotary_absolute_zero_position
     return rotary_absolute_zero_position
+
+
+def battery_check() -> ErrorCode:
+    """Ensure sufficient charge for operation. 
+    TODO: Split into startup battery check and continuous monitoring. Higher threshold on startup to prevent mid-operation shutdown, but still check battery voltage during operation.
+
+    Returns:
+        ErrorCode: Normal if battery is sufficient, otherwise ERROR_LOW_BATTERY
+    """
+    global _motor_controller
+    try:
+        battery_voltage: float = _motor_controller.get_battery_voltage()
+    except Exception as e:
+        logging.error(f"Battery voltage read failed: {e}")
+        # Motor failure because moteus let us down
+        return ErrorCode.ERROR_MOTOR_FAILURE
+    
+    if battery_voltage < BATTERY_THRESHOLD_V:
+        return ErrorCode.ERROR_LOW_BATTERY
+    return ErrorCode.NORMAL_OPERATION
     
 # -------- PRIVATE FUNCTIONS --------
 
@@ -374,7 +402,7 @@ def zero_rotary_encoder() -> ErrorCode:
     """
     global rotary_zero_position
     try:
-        rotary_zero_position = actuation.read_rotary_encoder()
+        rotary_zero_position = read_rotary_encoder()
         return ErrorCode.NORMAL_OPERATION
     except Exception as e:
         logging.error(f"Failed to zero rotary encoder: {e}")
@@ -394,3 +422,14 @@ def zero_ToF_sensor() -> ErrorCode:
     except Exception as e:
         logging.error(f"Failed to zero ToF sensor: {e}")
         return ErrorCode.ERROR_SENSOR_FAILURE
+    
+
+def read_rotary_encoder() -> float:
+    """Read the rotary encoder from the moteus-x1 and return the value in rotations
+
+    Returns:
+        float: Rotary position in rotations
+    """
+    # TODO: Implement actual rotary encoder reading logic
+    global _motor_controller
+    return _motor_controller.get_rotary_position()

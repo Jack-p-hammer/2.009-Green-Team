@@ -87,13 +87,13 @@ def main():
                     error = actuation.init_motor()
                     if error != ErrorCode.NORMAL_OPERATION:
                         continue
-                    error = sensing.init_sensors()
+                    error = sensing.init_sensors(actuation.get_motor_controller())
                     if error != ErrorCode.NORMAL_OPERATION:
                         continue
                     error = HMI.init_HMI(sensing.get_pi())
                     if error != ErrorCode.NORMAL_OPERATION:
                         continue
-                    error = actuation.battery_check()
+                    error = sensing.battery_check()
                     if error != ErrorCode.NORMAL_OPERATION:
                         continue
 
