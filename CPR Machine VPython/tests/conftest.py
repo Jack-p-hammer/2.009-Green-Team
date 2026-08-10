@@ -1,8 +1,35 @@
-import importlib
+"""Shared hardware abstractions for the CPR machine test suite.
+
+This module fakes out every external hardware library the app touches
+(pigpio, board/busio, the Adafruit sensor drivers, and moteus) so that
+sensing.py, actuation.py, and moteus_thread.py can be imported and exercised
+on a laptop with no hardware attached.
+
+There are two layers of fakes, used for two different kinds of tests:
+
+- Hardware-level fakes (`HardwareHarness` / `install_fake_hardware_modules` /
+  the `hardware` fixture) stub out the external libraries only. The real
+  sensing.py / actuation.py / moteus_thread.py source runs unmodified on top
+  of them. Use this layer to test the logic inside those modules.
+
+- Whole-module fakes (`install_fake_main_modules`) replace sensing.py,
+  actuation.py, and HMI.py entirely with lightweight stand-ins matching their
+  public API. Use this layer to test main.py's state machine in isolation,
+  without depending on sensing/actuation/HMI internals.
+
+HMI.py is not yet implemented, so there is no hardware-level fake for pygame
+here. Once HMI.py is fleshed out, add a pygame fake alongside these.
+
+sensing.py, actuation.py, and moteus_thread.py form a one-way dependency
+chain (actuation -> sensing -> moteus_thread), not a cycle: the shared
+MoteusThread instance is created in actuation.py and passed into
+sensing.init_sensors() as a parameter, so no module needs to reach back into
+one that imports it. Any of the three can be imported first in a test.
+"""
 import sys
 import types
 from pathlib import Path
-from typing import Any
+from typing import Optional
 
 import pytest
 
@@ -12,12 +39,44 @@ SRC_STR = str(SRC.resolve())
 if SRC_STR not in sys.path:
     sys.path.insert(0, SRC_STR)
 
-_error_codes = importlib.import_module("error_codes")
-ErrorCode = _error_codes.ErrorCode
+from Enums.error_codes import ErrorCode
 
+# Modules from src/ that need to be re-imported fresh once fake hardware/main
+# modules are (re)installed, so they pick up the fakes instead of any
+# previously cached real/fake versions.
+_APP_MODULES = ["sensing", "actuation", "moteus_thread", "HMI", "main"]
+
+# Shared keys used by both the fake moteus.Register namespace and the values
+# dict FakeMoteusController hands back, so `result.values[moteus.Register.X]`
+# lookups succeed by identity.
+_MOTEUS_REGISTERS = types.SimpleNamespace(
+    MODE="mode", FAULT="fault", POSITION="position", VELOCITY="velocity", VOLTAGE="voltage",
+)
+
+
+def _clear_app_modules():
+    for name in _APP_MODULES:
+        sys.modules.pop(name, None)
+
+
+def _fake_module(name: str, **attrs) -> types.ModuleType:
+    """Build a types.ModuleType and populate it via setattr.
+
+    Static type checkers (pyright/Pylance) reject `mod.attr = value` on a bare
+    ModuleType since it has no declared attributes; setattr sidesteps that
+    while still producing a real module object, which is what sys.modules is
+    typed to hold.
+    """
+    mod = types.ModuleType(name)
+    for key, value in attrs.items():
+        setattr(mod, key, value)
+    return mod
+
+
+# -------------------- Hardware-level fakes --------------------
 
 class FakePi:
-    """Small stand-in for the real pigpio object used by the HMI module."""
+    """Stand-in for a pigpio.pi() instance."""
 
     def __init__(self, connected=True):
         self.connected = connected
@@ -40,106 +99,251 @@ class FakePi:
 
 
 class FakeI2C:
-    """Simple stand-in for the I2C bus used by the sensors."""
+    """Stand-in for the busio.I2C bus shared by the ToF sensor, IMU, and ADC."""
 
-    def __init__(self, *args, **kwargs):
-        pass
+    def __init__(self):
+        self.adc_bytes = bytearray(2)
+        self.reads = []
+
+    def readfrom_into(self, address, buffer):
+        self.reads.append(address)
+        n = min(len(buffer), len(self.adc_bytes))
+        buffer[:n] = self.adc_bytes[:n]
 
 
-class FakeVL53L0X:
-    """Simple stand-in for the VL53L0X sensor object."""
+class FakeVL6180X:
+    """Stand-in for the adafruit_vl6180x.VL6180X time-of-flight sensor."""
 
-    def __init__(self, *args, **kwargs):
-        pass
+    def __init__(self):
+        self.range = 0
 
 
 class FakeBNO08X_I2C:
-    """Simple stand-in for the BNO08X sensor object."""
+    """Stand-in for the adafruit_bno08x BNO08X_I2C IMU."""
 
-    def __init__(self, *args, **kwargs):
-        pass
+    def __init__(self):
+        self.enabled_features = []
+        self.acceleration = (0.0, 0.0, 9.81)
 
     def enable_feature(self, feature):
-        return None
+        self.enabled_features.append(feature)
 
 
-def install_fake_hardware_modules():
-    """Install the fake hardware modules used by the application modules.
+class FakeMoteusResult:
+    """Stand-in for the moteus.Result returned by a query-mode command."""
 
-    This helper is used both by pytest fixtures and by individual tests that need
-    to override one detail for a failure case.
+    def __init__(self, values: dict):
+        self.values = values
+
+
+class FakeMoteusController:
+    """Stand-in for moteus.Controller, the object MoteusThread talks to.
+
+    Configure `mode`/`fault`/`position`/`velocity`/`voltage` to control what
+    the next query returns, or set `raise_on_set_position` to an exception
+    instance to simulate a communication failure. Every call is recorded in
+    `commands` for assertions.
     """
-    pigpio_mod = types.ModuleType("pigpio")
-    setattr(pigpio_mod, "INPUT", 0)
-    setattr(pigpio_mod, "OUTPUT", 1)
-    setattr(pigpio_mod, "PUD_UP", 2)
-    setattr(pigpio_mod, "pi", lambda: FakePi())
-    sys.modules["pigpio"] = pigpio_mod
 
-    board_mod = types.ModuleType("board")
-    setattr(board_mod, "SCL", "SCL")
-    setattr(board_mod, "SDA", "SDA")
-    sys.modules["board"] = board_mod
+    def __init__(self):
+        self.controller_id: Optional[int] = None
+        self.commands: list[dict] = []
+        self.mode = 0
+        self.fault = 0
+        self.position = 0.0
+        self.velocity = 0.0
+        self.voltage = 24.0
+        self.raise_on_set_position: Optional[Exception] = None
 
-    busio_mod = types.ModuleType("busio")
-    setattr(busio_mod, "I2C", FakeI2C)
-    sys.modules["busio"] = busio_mod
+    async def set_position(self, **kwargs) -> FakeMoteusResult:
+        if self.raise_on_set_position is not None:
+            raise self.raise_on_set_position
+        self.commands.append(kwargs)
+        return FakeMoteusResult({
+            _MOTEUS_REGISTERS.MODE: self.mode,
+            _MOTEUS_REGISTERS.FAULT: self.fault,
+            _MOTEUS_REGISTERS.POSITION: self.position,
+            _MOTEUS_REGISTERS.VELOCITY: self.velocity,
+            _MOTEUS_REGISTERS.VOLTAGE: self.voltage,
+        })
 
-    vl53_mod = types.ModuleType("adafruit_vl53l0x")
-    setattr(vl53_mod, "VL53L0X", FakeVL53L0X)
-    sys.modules["adafruit_vl53l0x"] = vl53_mod
 
-    bno_mod = types.ModuleType("adafruit_bno08x")
-    setattr(bno_mod, "BNO_REPORT_ACCELEROMETER", "accel")
+class HardwareHarness:
+    """One place to configure and inspect all fake hardware for a test.
+
+    Set the `*_connect_error` attributes to an exception instance to make the
+    corresponding init step fail; leave them None (the default) for a
+    successful init. The `pi`/`i2c`/`tof`/`imu`/`moteus_controller` attributes
+    are the actual fake objects the app code will read from and write to, so
+    tests can configure sensor readings on them directly (e.g.
+    `harness.tof.range = 42`).
+    """
+
+    def __init__(self):
+        self.pi = FakePi()
+        self.i2c = FakeI2C()
+        self.tof = FakeVL6180X()
+        self.imu = FakeBNO08X_I2C()
+        self.moteus_controller = FakeMoteusController()
+
+        self.i2c_connect_error: Optional[Exception] = None
+        self.tof_connect_error: Optional[Exception] = None
+        self.imu_connect_error: Optional[Exception] = None
+        self.moteus_connect_error: Optional[Exception] = None
+
+
+def _make_pigpio_module(harness: HardwareHarness) -> types.ModuleType:
+    return _fake_module(
+        "pigpio",
+        INPUT=0,
+        OUTPUT=1,
+        PUD_UP=2,
+        PUD_DOWN=3,
+        pi=lambda: harness.pi,
+    )
+
+
+def _make_board_module() -> types.ModuleType:
+    return _fake_module("board", SCL="SCL", SDA="SDA")
+
+
+def _make_busio_module(harness: HardwareHarness) -> types.ModuleType:
+    def I2C(scl, sda):
+        if harness.i2c_connect_error is not None:
+            raise harness.i2c_connect_error
+        return harness.i2c
+
+    return _fake_module("busio", I2C=I2C)
+
+
+def _make_vl6180x_module(harness: HardwareHarness) -> types.ModuleType:
+    def VL6180X(i2c):
+        if harness.tof_connect_error is not None:
+            raise harness.tof_connect_error
+        return harness.tof
+
+    return _fake_module("adafruit_vl6180x", VL6180X=VL6180X)
+
+
+def _make_bno08x_modules(harness: HardwareHarness) -> tuple[types.ModuleType, types.ModuleType]:
+    def BNO08X_I2C(i2c):
+        if harness.imu_connect_error is not None:
+            raise harness.imu_connect_error
+        return harness.imu
+
+    bno_i2c_mod = _fake_module("adafruit_bno08x.i2c", BNO08X_I2C=BNO08X_I2C)
+    bno_mod = _fake_module("adafruit_bno08x", BNO_REPORT_ACCELEROMETER="accel", i2c=bno_i2c_mod)
+    return bno_mod, bno_i2c_mod
+
+
+def _make_moteus_module(harness: HardwareHarness) -> types.ModuleType:
+    def Controller(*, id=1, **_kwargs):
+        if harness.moteus_connect_error is not None:
+            raise harness.moteus_connect_error
+        harness.moteus_controller.controller_id = id
+        return harness.moteus_controller
+
+    return _fake_module("moteus", Register=_MOTEUS_REGISTERS, Controller=Controller)
+
+
+def install_fake_hardware_modules(harness: Optional[HardwareHarness] = None) -> HardwareHarness:
+    """Install fake pigpio/board/busio/adafruit/moteus modules into sys.modules.
+
+    Pass a pre-configured HardwareHarness (e.g. with a `*_connect_error` set)
+    to simulate a failure from the very first import, or omit it to get a
+    harness that behaves as fully healthy hardware until a test configures it
+    otherwise. Also clears any cached sensing/actuation/moteus_thread/HMI/main
+    imports so the next `import` of those picks up the fakes installed here.
+    """
+    harness = harness or HardwareHarness()
+
+    sys.modules["pigpio"] = _make_pigpio_module(harness)
+    sys.modules["board"] = _make_board_module()
+    sys.modules["busio"] = _make_busio_module(harness)
+    sys.modules["adafruit_vl6180x"] = _make_vl6180x_module(harness)
+    bno_mod, bno_i2c_mod = _make_bno08x_modules(harness)
     sys.modules["adafruit_bno08x"] = bno_mod
-
-    bno_i2c_mod = types.ModuleType("adafruit_bno08x.i2c")
-    setattr(bno_i2c_mod, "BNO08X_I2C", FakeBNO08X_I2C)
     sys.modules["adafruit_bno08x.i2c"] = bno_i2c_mod
+    sys.modules["moteus"] = _make_moteus_module(harness)
 
-    # The motor-driver library is not implemented yet, so the test environment
-    # should simply make it importable without crashing.
-    moteus_mod = types.ModuleType("moteus")
-    sys.modules["moteus"] = moteus_mod
+    _clear_app_modules()
 
-    # Remove any previously imported versions of the app modules so each test starts
-    # from a clean state and sees the fake hardware modules we just installed.
-    for name in ["sensing", "actuation", "states", "error_codes", "HMI", "multi_system", "main"]:
-        sys.modules.pop(name, None)
-
-    return None
+    return harness
 
 
 @pytest.fixture
-def fake_hardware_modules():
-    """Provide the fake hardware environment used by tests.
+def hardware():
+    """Provide a fresh HardwareHarness with fake hardware modules installed.
 
-    This fixture gives the code a pretend environment so we can test logic without
-    needing the real robot hardware, sensors, or display attached.
+    Usage:
+        def test_something(hardware):
+            hardware.pi.connected = False
+            import actuation, sensing
+            actuation.init_motor()
+            assert sensing.init_sensors(actuation.get_motor_controller()) == ErrorCode.ERROR_INIT_FAILURE
+
+    Note that sensing.init_sensors() takes the shared MoteusThread instance as
+    a parameter (it zeroes the rotary encoder by reading from it directly), so
+    call `actuation.init_motor()` first and pass `actuation.get_motor_controller()`
+    in, matching what main.py does.
     """
-    return install_fake_hardware_modules()
+    harness = install_fake_hardware_modules()
+    yield harness
+
+    # Stop any motor command thread a test started via actuation.init_motor(),
+    # so it doesn't keep spinning at 100Hz in the background during later tests.
+    actuation_mod = sys.modules.get("actuation")
+    if actuation_mod is not None:
+        controller = getattr(actuation_mod, "_motor_controller", None)
+        if controller is not None:
+            controller.stop()
+
+    _clear_app_modules()
 
 
-def install_fake_main_modules(monkeypatch):
-    """Install lightweight fake modules for state-machine tests in main.py."""
-    sensing_mod = types.ModuleType("sensing")
-    sensing_mod.__dict__["init_sensors"] = lambda: ErrorCode.NORMAL_OPERATION
-    sensing_mod.__dict__["get_pi"] = lambda: FakePi()
-    sensing_mod.__dict__["battery_check"] = lambda: ErrorCode.NORMAL_OPERATION
+# -------------------- Whole-module fakes for main.py tests --------------------
+
+def install_fake_main_modules(monkeypatch) -> dict:
+    """Install lightweight fake sensing/actuation/HMI modules for main.py tests.
+
+    These replace the whole module (not just the underlying hardware
+    libraries), so main.py's state machine can be tested without depending on
+    the real sensing/actuation logic. HMI.py is still unimplemented, so this
+    fake only covers the surface main.py currently calls; revisit once HMI.py
+    is built out.
+
+    Returns a dict of the installed fake modules so a test can further
+    customize individual functions. Use setattr (not direct assignment) so
+    static type checkers don't flag it the same way direct assignment on a
+    ModuleType is flagged above, e.g.:
+        modules = install_fake_main_modules(monkeypatch)
+        setattr(modules["HMI"], "next_button_pressed", lambda: True)
+    """
+    monkeypatch.delitem(sys.modules, "main", raising=False)
+
+    sensing_mod = _fake_module(
+        "sensing",
+        init_sensors=lambda motor_controller: ErrorCode.NORMAL_OPERATION,
+        get_pi=lambda: FakePi(),
+        zero_position=lambda: ErrorCode.NORMAL_OPERATION,
+        battery_check=lambda: ErrorCode.NORMAL_OPERATION,
+    )
     monkeypatch.setitem(sys.modules, "sensing", sensing_mod)
 
-    actuation_mod = types.ModuleType("actuation")
-    actuation_mod.__dict__["init_motor"] = lambda: ErrorCode.NORMAL_OPERATION
-    actuation_mod.__dict__["zeroing"] = lambda: ErrorCode.NORMAL_OPERATION
-    actuation_mod.__dict__[
-        "init_compressions"] = lambda: ErrorCode.NORMAL_OPERATION
-    actuation_mod.__dict__["compressions"] = lambda: ErrorCode.NORMAL_OPERATION
-    actuation_mod.__dict__["stop_compressions"] = lambda: None
+    actuation_mod = _fake_module(
+        "actuation",
+        init_motor=lambda: ErrorCode.NORMAL_OPERATION,
+        get_motor_controller=lambda: None,
+        init_zeroing=lambda: ErrorCode.NORMAL_OPERATION,
+        zeroing=lambda: ErrorCode.NORMAL_OPERATION,
+        init_compressions=lambda: ErrorCode.NORMAL_OPERATION,
+        compressions=lambda: ErrorCode.NORMAL_OPERATION,
+        pause_compressions=lambda: ErrorCode.NORMAL_OPERATION,
+        abort_compressions=lambda: ErrorCode.NORMAL_OPERATION,
+    )
     monkeypatch.setitem(sys.modules, "actuation", actuation_mod)
 
-    hmi_mod = types.ModuleType("HMI")
-    hmi_mod.__dict__["ErrorCode"] = ErrorCode
-    hmi_mod.__dict__["Image"] = types.SimpleNamespace(
+    hmi_image = types.SimpleNamespace(
         STARTUP="startup",
         UNFOLD="unfold",
         ALIGNMENT="alignment",
@@ -151,7 +355,7 @@ def install_fake_main_modules(monkeypatch):
         ABORT="abort",
         KNEEL_FAILURE="kneel_failure",
     )
-    hmi_mod.__dict__["AudioPrompt"] = types.SimpleNamespace(
+    hmi_audio_prompt = types.SimpleNamespace(
         STARTUP="startup_prompt",
         UNFOLD="unfold_prompt",
         ALIGNMENT="alignment_prompt",
@@ -163,65 +367,22 @@ def install_fake_main_modules(monkeypatch):
         ABORT="",
         KNEEL_FAILURE="",
     )
-    hmi_mod.__dict__[
-        "init_HMI"] = lambda pi_instance: ErrorCode.NORMAL_OPERATION
-    hmi_mod.__dict__["set_screen_audio"] = lambda image, prompt: None
-    hmi_mod.__dict__["enable_next_button"] = lambda: None
-    hmi_mod.__dict__["disable_next_button"] = lambda: None
-    hmi_mod.__dict__["enable_pause_button"] = lambda: None
-    hmi_mod.__dict__["disable_pause_button"] = lambda: None
-    hmi_mod.__dict__["enable_lasers"] = lambda: None
-    hmi_mod.__dict__["disable_lasers"] = lambda: None
-    hmi_mod.__dict__["next_button_pressed"] = lambda: False
-    hmi_mod.__dict__["pause_button_pressed"] = lambda: False
-    hmi_mod.__dict__["audio_finished"] = lambda: True
+    hmi_mod = _fake_module(
+        "HMI",
+        Image=hmi_image,
+        AudioPrompt=hmi_audio_prompt,
+        init_HMI=lambda pi_instance: ErrorCode.NORMAL_OPERATION,
+        set_screen_audio=lambda image, prompt: None,
+        enable_next_button=lambda: None,
+        disable_next_button=lambda: None,
+        enable_pause_button=lambda: None,
+        disable_pause_button=lambda: None,
+        enable_lasers=lambda: None,
+        disable_lasers=lambda: None,
+        next_button_pressed=lambda: False,
+        pause_button_pressed=lambda: False,
+        audio_finished=lambda: True,
+    )
     monkeypatch.setitem(sys.modules, "HMI", hmi_mod)
 
-    multi_system_mod = types.ModuleType("multi_system")
-    monkeypatch.setitem(sys.modules, "multi_system", multi_system_mod)
-
-    return {"sensing": sensing_mod, "actuation": actuation_mod, "HMI": hmi_mod, "multi_system": multi_system_mod}
-
-
-def install_fake_pygame(monkeypatch):
-    """Install a minimal pygame module so HMI code can run without a GUI window."""
-    pygame_mod = types.ModuleType("pygame")
-    setattr(pygame_mod, "FULLSCREEN", 0)
-    setattr(pygame_mod, "init", lambda: None)
-    setattr(
-        pygame_mod,
-        "mixer",
-        types.SimpleNamespace(init=lambda *args, **
-                              kwargs: None, get_busy=lambda: False),
-    )
-    setattr(
-        pygame_mod,
-        "display",
-        types.SimpleNamespace(
-            Info=lambda: types.SimpleNamespace(current_w=800, current_h=600),
-            set_mode=lambda *args, **kwargs: object(),
-            set_caption=lambda *args, **kwargs: None,
-            flip=lambda: None,
-        ),
-    )
-    setattr(pygame_mod, "image", types.SimpleNamespace(
-        load=lambda path: types.SimpleNamespace()))
-    setattr(pygame_mod, "transform", types.SimpleNamespace(
-        scale=lambda surf, size: surf))
-    setattr(pygame_mod, "Surface", object)
-    setattr(pygame_mod, "event", types.SimpleNamespace(pump=lambda: None))
-    monkeypatch.setitem(sys.modules, "pygame", pygame_mod)
-
-
-def install_fake_pigpio(monkeypatch, connected=True):
-    """Install a minimal pigpio module so HMI code can use GPIO-like calls.
-
-    The optional connected argument makes it easy to simulate both a healthy
-    connection and a failed one.
-    """
-    pigpio_mod = types.ModuleType("pigpio")
-    setattr(pigpio_mod, "INPUT", 0)
-    setattr(pigpio_mod, "OUTPUT", 1)
-    setattr(pigpio_mod, "PUD_UP", 2)
-    setattr(pigpio_mod, "pi", lambda: FakePi(connected=connected))
-    monkeypatch.setitem(sys.modules, "pigpio", pigpio_mod)
+    return {"sensing": sensing_mod, "actuation": actuation_mod, "HMI": hmi_mod}
