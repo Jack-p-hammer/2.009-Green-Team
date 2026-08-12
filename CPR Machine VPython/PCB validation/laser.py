@@ -46,7 +46,7 @@ def loop():
     # Sweep PWM duty cycles
     # Rate: 0.5%/step, 200 step/sec
     # Sweep between 25% and 75%
-    for duty_cycle in range(int(0.25*LASER_PWM_SCALE), int(0.75*LASER_PWM_SCALE), int(0.005*LASER_PWM_SCALE)):
+    for duty_cycle in range(int(0.1*LASER_PWM_SCALE), int(0.8*LASER_PWM_SCALE), int(0.001*LASER_PWM_SCALE)):
         _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, duty_cycle)
         time.sleep(0.005)
         
