@@ -53,7 +53,7 @@ def loop():
     # 5 sec all OFF
     # 5 sec Pause ON
     # 5 sec all OFF
-    current_time:float = time.time()
+    current_time = time.time()
     cycle_time = current_time - prev_cycle
     if cycle_time >= 15:
         _pi.write(PAUSE_ENABLE_PIN, 0)
