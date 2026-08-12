@@ -35,7 +35,7 @@ def setup():
     _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
     time.sleep(5)
     
-    _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, 0.5*LASER_PWM_FREQUENCY)
+    _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, int(0.5*LASER_PWM_FREQUENCY))
     time.sleep(5)
     _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
     time.sleep(5)
