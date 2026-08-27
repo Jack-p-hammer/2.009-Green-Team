@@ -3016,6 +3016,16 @@
 		)
 		(uuid "d8a890fc-7fce-40fd-b1b6-192800a0a75f")
 	)
+	(text "3V3 disconnected because of seperate 3V3 source on hat"
+		(exclude_from_sim no)
+		(at 173.228 72.136 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f938668a-5f61-4486-a533-d66c24dfe139")
+	)
 	(junction
 		(at 143.51 143.51)
 		(diameter 0)
@@ -3556,6 +3566,16 @@
 		)
 		(uuid "b08083c2-9098-4b12-99e7-49d2af6984aa")
 	)
+	(label "GPIO19"
+		(at 120.65 105.41 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "bc303ef9-03b5-4e2a-9912-92730ea8b3d3")
+	)
 	(label "GPIO11"
 		(at 161.29 123.19 0)
 		(effects
@@ -3703,17 +3723,6 @@
 		)
 		(uuid "a6073ba7-492a-4af3-9426-e10e040e8698")
 	)
-	(hierarchical_label "MUX Select"
-		(shape output)
-		(at 120.65 105.41 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "f7cb1643-3ce1-40d5-aa5c-dda0b26b8dbe")
-	)
 	(symbol
 		(lib_id "power:+5V")
 		(at 210.82 86.36 270)
@@ -3858,7 +3867,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "434593c4-dfa4-4ebb-bd55-d4a389e09256")
-		(property "Reference" "J13"
+		(property "Reference" "J14"
 			(at 148.1933 74.93 0)
 			(effects
 				(font
@@ -4035,7 +4044,7 @@
 		(instances
 			(project ""
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/7b515552-6db1-403d-b6a0-a1579d4772aa"
-					(reference "J13")
+					(reference "J14")
 					(unit 1)
 				)
 			)
@@ -4673,7 +4682,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e221d26f-ed96-42f7-ab55-9557a089df9a")
-		(property "Reference" "J15"
+		(property "Reference" "J8"
 			(at 204.47 80.01 0)
 			(effects
 				(font
@@ -4848,7 +4857,7 @@
 		(instances
 			(project ""
 				(path "/8991fc77-975f-4978-a089-6b2a5e33f59b/7b515552-6db1-403d-b6a0-a1579d4772aa"
-					(reference "J15")
+					(reference "J8")
 					(unit 1)
 				)
 			)
