@@ -34,7 +34,11 @@ ERROR_STATE_MAP = {
     ErrorCode.ERROR_MOTOR_FAILURE:          CPRState.ABORT,
 }
 
-FATAL_ERRORS = {ErrorCode.EXIT_UNKNOWN, ErrorCode.ERROR_UNKNOWN_IMAGE}
+FATAL_ERRORS = {
+    ErrorCode.EXIT_UNKNOWN, 
+    ErrorCode.ERROR_SCREEN_INIT_FAILURE,
+    ErrorCode.ERROR_UNKNOWN_IMAGE,
+}
 
 
 def configure_logging():
