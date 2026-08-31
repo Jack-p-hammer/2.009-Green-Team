@@ -139,7 +139,7 @@ def pump_events() -> ErrorCode:
     loop tick, unconditionally, regardless of state
     
     Returns:
-        ErrorCode: NORMAL_OPERATION if successful, ERROR_HMI_UNINITIALIZED if failed
+        ErrorCode: NORMAL_OPERATION if successful, WARNING_PYGAME_PUMP_FAILURE if failed
     """
     try:
         pygame.event.pump()
