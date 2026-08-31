@@ -18,8 +18,14 @@ PAUSE_BTN_PIN = 25
 # LED Outputs/Button Toggles
 NEXT_ENABLE_PIN = 24
 PAUSE_ENABLE_PIN = 26
+
 # Laser PWM Output
 LASER_PIN = 12
+# Duty Cycle Scale: 0-1M
+LASER_PWM_SCALE: int = 1000000
+# For now, 25 kHz PWM
+LASER_PWM_FREQUENCY:int = 25000
+LASER_PWM_DUTY_CYCLE: float = 0.5  # 50% duty cycle for now
 
 # Declare paths for images and audio files relative to this script's directory
 IMAGES = Path(__file__).resolve().parent / "Images"
@@ -107,6 +113,12 @@ def init_HMI(pi_instance: pigpio.pi) -> ErrorCode:
         for pin in (NEXT_ENABLE_PIN, PAUSE_ENABLE_PIN, LASER_PIN):
             _pi.set_mode(pin, pigpio.OUTPUT)
             _pi.set_pull_up_down(pin, pigpio.PUD_DOWN)
+            
+        # Initialize laser PWM
+        # Duty cycle ranges from 0-1M
+        # Initialize to off
+        _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
+        
     except Exception as e:
         logging.error(f"HMI GPIO initialization failed: {e}")
         return ErrorCode.ERROR_INIT_FAILURE
@@ -114,7 +126,7 @@ def init_HMI(pi_instance: pigpio.pi) -> ErrorCode:
     return ErrorCode.NORMAL_OPERATION
 
 
-def set_screen_image(image: Image):
+def set_image(image: Image):
     """Set image to display on screens
 
     Args:
@@ -125,6 +137,13 @@ def set_screen_image(image: Image):
     surf = pygame.transform.scale(surf, _screen.get_size())
     _screen.blit(surf, (0, 0))
     pygame.display.flip()
+    
+def set_audio(prompt: AudioPrompt):
+    """Play audio prompt once. Call once on state entry.
+
+    Args:
+        prompt (AudioPrompt): Audio prompt enum for current state
+    """
 
 
 def set_screen_audio(image: Image, prompt: AudioPrompt):
@@ -134,26 +153,28 @@ def set_screen_audio(image: Image, prompt: AudioPrompt):
         image (Image): Image enum for current state
         prompt (AudioPrompt): Audio prompt enum for current state
     """
-    set_screen_image(image)
+    set_image(image)
 
     # TODO: Implement looping audio
-    if prompt.value:
-        pygame.mixer.Sound(prompt.value).play()
+    set_audio(prompt)
 
 
 def enable_lasers():
     """Enables alignment lasers
     """
     global _pi
-    # TODO: Implement PWM
-    _pi.write(LASER_PIN, 1)
+    
+    # Enable lasers by giving nonzero duty cycle and PWM frequency
+    _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, int(LASER_PWM_DUTY_CYCLE * LASER_PWM_SCALE))
 
 
 def disable_lasers():
     """Disables alignment lasers
     """
     global _pi
-    _pi.write(LASER_PIN, 0)
+    
+    # Disable lasers by setting duty cycle and PWM frequency to zero
+    _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
 
 
 def audio_finished() -> bool:
