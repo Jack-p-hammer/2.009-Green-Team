@@ -90,7 +90,10 @@ def main():
         # Each state checks (state != prev_state) to detect first entry, and runs
         # one-time setup (screen, audio, button enables) only on that first tick.
         # All other logic runs every tick until the exit condition is met.
-        match(state):
+        
+        # Capture current state to avoid issues with state changing mid-loop
+        current_state = state
+        match(current_state):
             case(CPRState.STARTUP):
                 # Setup
                 if state != prev_state:
@@ -282,7 +285,7 @@ def main():
                 error = ErrorCode.EXIT_UNKNOWN
 
         # Record the previous state and sleep for the remainder of the tick duration
-        prev_state = state
+        prev_state = current_state
         elapsed = time.monotonic() - loop_start
         time.sleep(max(0, LOOP_TICK_SEC - elapsed))
 
