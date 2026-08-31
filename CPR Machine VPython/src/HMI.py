@@ -66,6 +66,12 @@ class AudioPrompt(Enum):
 _screen: pygame.Surface
 _pi: pigpio.pi
 
+# Audio playback state for user prompting
+_audio_channel: pygame.mixer.Channel
+_audio_cache: dict = {}       # AudioPrompt -> loaded pygame.mixer.Sound
+_audio_start_time: int = 0    # pygame.time.get_ticks() when current audio loop started
+_audio_length: float = 0.0    # length in seconds of the currently playing prompt
+
 
 def init_HMI(pi_instance: pigpio.pi) -> ErrorCode:
     """Initialize screens, audio, lasers, and buttons.
@@ -76,8 +82,8 @@ def init_HMI(pi_instance: pigpio.pi) -> ErrorCode:
     Returns:
         ErrorCode: Normal operation if successful, ERROR_INIT_FAILURE if failed
     """
-    global _screen, _pi
-    
+    global _screen, _pi, _audio_channel
+
     # Initialize the global variable for the pigpio instance
     _pi = pi_instance
 
@@ -85,9 +91,11 @@ def init_HMI(pi_instance: pigpio.pi) -> ErrorCode:
     try:
         pygame.init()
         pygame.mixer.init(frequency=44100, channels=1, buffer=2048)
+        # Reserve a dedicated channel for audio prompts
+        _audio_channel = pygame.mixer.Channel(0)
     except Exception as e:
         logging.error(f"Pygame initialization failed: {e}")
-        return ErrorCode.ERROR_INIT_FAILURE
+        return ErrorCode.ERROR_PYGAME_INIT_FAILURE
 
     # Initialize the display in fullscreen mode
     try:
@@ -126,65 +134,146 @@ def init_HMI(pi_instance: pigpio.pi) -> ErrorCode:
     return ErrorCode.NORMAL_OPERATION
 
 
-def set_image(image: Image):
+def pump_events() -> ErrorCode:
+    """Service the pygame event queue. Must be called exactly once per main
+    loop tick, unconditionally, regardless of state
+    
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_HMI_UNINITIALIZED if failed
+    """
+    try:
+        pygame.event.pump()
+    except Exception as e:
+        # Pump should only fail if pygame is uninitialized, which should never happen after init_HMI() succeeds
+        logging.warning(f"Pygame event pump failed: {e}\n\tThis should only happen once, before init_HMI() is called.")
+        return ErrorCode.WARNING_PYGAME_PUMP_FAILURE
+    return ErrorCode.NORMAL_OPERATION
+
+
+def set_image(image: Image) -> ErrorCode:
     """Set image to display on screens
 
     Args:
         image (Image): Image enum for current state
+    
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_UNKNOWN_IMAGE if failed
     """
     global _screen
-    surf = pygame.image.load(image.value)
-    surf = pygame.transform.scale(surf, _screen.get_size())
-    _screen.blit(surf, (0, 0))
-    pygame.display.flip()
-    
-def set_audio(prompt: AudioPrompt):
-    """Play audio prompt once. Call once on state entry.
+    try:
+        surf = pygame.image.load(image.value)
+        surf = pygame.transform.scale(surf, _screen.get_size())
+        _screen.blit(surf, (0, 0))
+        pygame.display.flip()
+    except Exception as e:
+        logging.error(f"Failed to set image {image.name}: {e}")
+        return ErrorCode.ERROR_UNKNOWN_IMAGE
+    return ErrorCode.NORMAL_OPERATION
+
+
+def set_audio(prompt: AudioPrompt) -> ErrorCode:
+    """Play audio prompt on loop. Call once on state entry; restarts playback
+    from the beginning even if called again with the same prompt.
 
     Args:
         prompt (AudioPrompt): Audio prompt enum for current state
+        
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_PYGAME_FAILURE if failed
     """
+    global _audio_channel, _audio_cache, _audio_start_time, _audio_length
+
+    # Some states have no audio (empty path); stop whatever was playing
+    if not prompt.value:
+        _audio_channel.stop()
+        _audio_length = 0.0
+        return ErrorCode.NORMAL_OPERATION
+
+    # Load and cache each prompt's audio once instead of hitting disk every call
+    if prompt not in _audio_cache:
+        try:
+            _audio_cache[prompt] = pygame.mixer.Sound(str(prompt.value))
+        except Exception as e:
+            logging.error(f"Failed to load audio prompt {prompt.name}: {e}")
+            return ErrorCode.ERROR_PYGAME_FAILURE
+    prompt_audio = _audio_cache[prompt]
+
+    # Channel.play() always restarts from the beginning, so this swaps
+    # cleanly to a new prompt and restarts on a repeated one
+    try:
+        _audio_channel.play(prompt_audio, loops=-1)
+        _audio_start_time = pygame.time.get_ticks()
+        _audio_length = prompt_audio.get_length()
+    except Exception as e:
+        logging.error(f"Failed to play audio prompt {prompt.name}: {e}")
+        return ErrorCode.ERROR_PYGAME_FAILURE
+    
+    return ErrorCode.NORMAL_OPERATION
 
 
-def set_screen_audio(image: Image, prompt: AudioPrompt):
-    """Sets the screen image and plays the audio prompt once. Call once on state entry.
+def set_image_audio(image: Image, prompt: AudioPrompt) -> ErrorCode:
+    """Set both image and audio prompt for current state. Call once on state entry.
 
     Args:
         image (Image): Image enum for current state
         prompt (AudioPrompt): Audio prompt enum for current state
+    
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_UNKNOWN_IMAGE or ERROR_PYGAME_FAILURE if failed
     """
-    set_image(image)
+    error = set_image(image)
+    if error != ErrorCode.NORMAL_OPERATION:
+        return error
+    return set_audio(prompt)
+    
 
-    # TODO: Implement looping audio
-    set_audio(prompt)
 
-
-def enable_lasers():
+def enable_lasers() -> ErrorCode:
     """Enables alignment lasers
+
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_PI_DAEMON_FAILURE if failed
     """
     global _pi
-    
+
     # Enable lasers by giving nonzero duty cycle and PWM frequency
-    _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, int(LASER_PWM_DUTY_CYCLE * LASER_PWM_SCALE))
+    try:
+        _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, int(LASER_PWM_DUTY_CYCLE * LASER_PWM_SCALE))
+    except Exception as e:
+        logging.error(f"Failed to enable lasers: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE
+    return ErrorCode.NORMAL_OPERATION
 
 
-def disable_lasers():
+def disable_lasers() -> ErrorCode:
     """Disables alignment lasers
+
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_PI_DAEMON_FAILURE if failed
     """
     global _pi
-    
+
     # Disable lasers by setting duty cycle and PWM frequency to zero
-    _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
+    try:
+        _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
+    except Exception as e:
+        logging.error(f"Failed to disable lasers: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE
+    return ErrorCode.NORMAL_OPERATION
 
 
 def audio_finished() -> bool:
-    """Check if audio playback has finished
+    """Check if the current audio prompt has completed its first loop.
+    Playback continues looping regardless; this only reports elapsed time.
 
     Returns:
-        bool: True if audio finished, False otherwise
+        bool: True once one full loop has elapsed (or no audio is set), False otherwise
     """
-    # TODO: Change such that returns if audio loop finished once, not if audio is still playing
-    return not pygame.mixer.get_busy()
+    global _audio_start_time, _audio_length
+
+    if _audio_length == 0.0:
+        return True
+    return (pygame.time.get_ticks() - _audio_start_time) / 1000.0 >= _audio_length
 
 
 # The next and pause buttons each share a ground connection with their built-in LED.
@@ -193,55 +282,98 @@ def audio_finished() -> bool:
 # should not be accepted, to prevent unintended state transitions.
 
 
-def enable_next_button():
+def enable_next_button() -> ErrorCode:
     """Enable Next button and Next button LED
+
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_PI_DAEMON_FAILURE if failed
     """
     global _pi
-    _pi.write(NEXT_ENABLE_PIN, 1)
+    
+    try:
+        _pi.write(NEXT_ENABLE_PIN, 1)
+    except Exception as e:
+        logging.error(f"Failed to enable Next button: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE
+    return ErrorCode.NORMAL_OPERATION
 
 
-def disable_next_button():
+def disable_next_button() -> ErrorCode:
     """Disable Next button and Next button LED
+
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_PI_DAEMON_FAILURE if failed
     """
     global _pi
-    _pi.write(NEXT_ENABLE_PIN, 0)
+    
+    try:
+        _pi.write(NEXT_ENABLE_PIN, 0)
+    except Exception as e:
+        logging.error(f"Failed to disable Next button: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE
+    return ErrorCode.NORMAL_OPERATION
 
 
-def enable_pause_button():
+def enable_pause_button() -> ErrorCode:
     """Enable Pause button and Pause button LED
+
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_PI_DAEMON_FAILURE if failed
     """
     global _pi
-    _pi.write(PAUSE_ENABLE_PIN, 1)
+    
+    try:
+        _pi.write(PAUSE_ENABLE_PIN, 1)
+    except Exception as e:
+        logging.error(f"Failed to enable Pause button: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE
+    return ErrorCode.NORMAL_OPERATION
 
 
-def disable_pause_button():
+def disable_pause_button() -> ErrorCode:
     """Disable Pause button and Pause button LED
+
+    Returns:
+        ErrorCode: NORMAL_OPERATION if successful, ERROR_PI_DAEMON_FAILURE if failed
     """
     global _pi
-    _pi.write(PAUSE_ENABLE_PIN, 0)
+    
+    try:
+        _pi.write(PAUSE_ENABLE_PIN, 0)
+    except Exception as e:
+        logging.error(f"Failed to disable Pause button: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE
+    return ErrorCode.NORMAL_OPERATION
 
 
-def next_button_pressed() -> bool:
+def next_button_pressed() -> tuple[ErrorCode, bool]:
     """Return state of next button. Non-blocking.
 
     Returns:
-        bool: True if button press detected, False otherwise
+        tuple[ErrorCode, bool]: A tuple containing the error code and the button state
     """
     global _pi
-    # pygame.event.pump() must be called regularly to keep the pygame window
-    # responsive and prevent the OS from marking it as unresponsive
-    # TODO: Move this to a better location
-    pygame.event.pump()
-    return bool(_pi.read(NEXT_BTN_PIN))
+    
+    try:
+        read_val = bool(_pi.read(NEXT_BTN_PIN))
+    except Exception as e:
+        logging.error(f"Failed to read Next button state: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE, False
 
+    return ErrorCode.NORMAL_OPERATION, read_val
 
-def pause_button_pressed() -> bool:
+def pause_button_pressed() -> tuple[ErrorCode, bool]:
     """Return state of pause button. Non-blocking.
 
     Returns:
-        bool: True if button press detected, False otherwise
+        tuple[ErrorCode, bool]: A tuple containing the error code and the button state
     """
     global _pi
-    # TODO: Move this to a better location
-    pygame.event.pump()
-    return bool(_pi.read(PAUSE_BTN_PIN))
+    
+    try:
+        read_val = bool(_pi.read(PAUSE_BTN_PIN))
+    except Exception as e:
+        logging.error(f"Failed to read Pause button state: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE, False
+
+    return ErrorCode.NORMAL_OPERATION, read_val
