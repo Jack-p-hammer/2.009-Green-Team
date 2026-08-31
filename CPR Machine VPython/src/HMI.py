@@ -6,6 +6,7 @@ import pigpio
 from pathlib import Path
 import pygame
 import logging
+import time
 from enum import Enum
 
 # Internal imports
@@ -69,7 +70,7 @@ _pi: pigpio.pi
 # Audio playback state for user prompting
 _audio_channel: pygame.mixer.Channel
 _audio_cache: dict = {}       # AudioPrompt -> loaded pygame.mixer.Sound
-_audio_start_time: int = 0    # pygame.time.get_ticks() when current audio loop started
+_audio_start_time: float = 0.0    # time.monotonic() when current audio loop started
 _audio_length: float = 0.0    # length in seconds of the currently playing prompt
 
 
@@ -202,7 +203,7 @@ def set_audio(prompt: AudioPrompt) -> ErrorCode:
     # cleanly to a new prompt and restarts on a repeated one
     try:
         _audio_channel.play(prompt_audio, loops=-1)
-        _audio_start_time = pygame.time.get_ticks()
+        _audio_start_time = time.monotonic()
         _audio_length = prompt_audio.get_length()
     except Exception as e:
         logging.error(f"Failed to play audio prompt {prompt.name}: {e}")
@@ -273,7 +274,7 @@ def audio_finished() -> bool:
 
     if _audio_length == 0.0:
         return True
-    return (pygame.time.get_ticks() - _audio_start_time) / 1000.0 >= _audio_length
+    return (time.monotonic() - _audio_start_time) >= _audio_length
 
 
 # The next and pause buttons each share a ground connection with their built-in LED.
