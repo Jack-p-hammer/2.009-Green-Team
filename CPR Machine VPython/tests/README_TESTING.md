@@ -1,17 +1,8 @@
-# Testing the CPR Machine Code
-
+# CPR Machine Code Tests
 This folder contains simple tests for the parts of the project that can be checked without the real hardware attached.
 
 ## Why these tests exist
 The machine depends on sensors, buttons, LEDs, and a motor controller. Those pieces are hard to test on a laptop, so these tests use small fake versions of the hardware interfaces instead.
-
-That means we can still check that the Python code behaves the way we expect.
-
-## What is covered
-- HMI behavior such as startup setup and button control
-- Sensing behavior such as initialization and placeholder-safe helper functions
-- Actuation placeholder behavior for the motor-related functions
-- Main-state helper behavior for the control flow and error routing
 
 ## How to run the tests
 From the project root, run:
@@ -23,18 +14,26 @@ python -m pytest -q
 If you only want to run the tests in this folder, that same command will do it.
 
 ## Notes for future contributors
-- These tests are intentionally simple and use fake hardware.
-- They are meant to verify logic and basic behavior, not to test the real physical device.
+- These tests use fake hardware.
 - If new hardware logic is added, add or update tests in this folder.
 
 
 ## Current test inventory
 ### HMI tests
 - Checks that HMI startup sets up the display and GPIO pins correctly.
-- Checks that button helpers write the expected LED and button states.
-- Checks that HMI initialization fails gracefully when pygame startup fails.
-- Checks that button readers and laser controls respond to fake GPIO input.
-- Checks that the audio-finished helper reports the current mixer state.
+- Checks that HMI initialization fails gracefully when pygame startup, display
+  setup, or GPIO setup fails.
+- Checks that button/laser helpers write the expected LED and PWM states, and
+  report a daemon failure if the underlying pigpio call fails.
+- Checks that button readers respond to fake GPIO input and report a daemon
+  failure if the underlying pigpio call fails.
+- Checks that pump_events() succeeds normally and warns (without raising) if
+  the pygame event queue fails.
+- Checks that set_image/set_audio/set_image_audio play the right prompt, stop
+  playback for audio-less states, and report the right error code (unknown
+  image vs. pygame failure) when the underlying pygame call fails.
+- Checks that the audio-finished helper reports elapsed time against the
+  current prompt's length, not the pygame mixer's busy state.
 
 ### Sensing tests
 - Checks that sensing initialization fails gracefully when the pigpio connection is unavailable.

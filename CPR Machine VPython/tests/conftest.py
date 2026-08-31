@@ -1,24 +1,22 @@
 """Shared hardware abstractions for the CPR machine test suite.
 
 This module fakes out every external hardware library the app touches
-(pigpio, board/busio, the Adafruit sensor drivers, and moteus) so that
-sensing.py, actuation.py, and moteus_thread.py can be imported and exercised
-on a laptop with no hardware attached.
+(pigpio, board/busio, the Adafruit sensor drivers, moteus, and pygame) so
+that sensing.py, actuation.py, moteus_thread.py, and HMI.py can be imported
+and exercised on a laptop with no hardware attached.
 
 There are two layers of fakes, used for two different kinds of tests:
 
 - Hardware-level fakes (`HardwareHarness` / `install_fake_hardware_modules` /
   the `hardware` fixture) stub out the external libraries only. The real
-  sensing.py / actuation.py / moteus_thread.py source runs unmodified on top
-  of them. Use this layer to test the logic inside those modules.
+  sensing.py / actuation.py / moteus_thread.py / HMI.py source runs
+  unmodified on top of them. Use this layer to test the logic inside those
+  modules.
 
 - Whole-module fakes (`install_fake_main_modules`) replace sensing.py,
   actuation.py, and HMI.py entirely with lightweight stand-ins matching their
   public API. Use this layer to test main.py's state machine in isolation,
   without depending on sensing/actuation/HMI internals.
-
-HMI.py is not yet implemented, so there is no hardware-level fake for pygame
-here. Once HMI.py is fleshed out, add a pygame fake alongside these.
 
 sensing.py, actuation.py, and moteus_thread.py form a one-way dependency
 chain (actuation -> sensing -> moteus_thread), not a cycle: the shared
@@ -76,7 +74,12 @@ def _fake_module(name: str, **attrs) -> types.ModuleType:
 # -------------------- Hardware-level fakes --------------------
 
 class FakePi:
-    """Stand-in for a pigpio.pi() instance."""
+    """Stand-in for a pigpio.pi() instance.
+
+    Set any `raise_on_*` attribute to an exception instance to make that
+    method fail on its next call, e.g. `harness.pi.raise_on_write = OSError()`
+    to exercise an ERROR_PI_DAEMON_FAILURE path.
+    """
 
     def __init__(self, connected=True):
         self.connected = connected
@@ -84,18 +87,35 @@ class FakePi:
         self.pulls = {}
         self.writes = []
         self.reads = {}
+        self.pwm_calls = []
+
+        self.raise_on_set_mode: Optional[Exception] = None
+        self.raise_on_write: Optional[Exception] = None
+        self.raise_on_read: Optional[Exception] = None
+        self.raise_on_hardware_pwm: Optional[Exception] = None
 
     def set_mode(self, pin, mode):
+        if self.raise_on_set_mode is not None:
+            raise self.raise_on_set_mode
         self.modes[pin] = mode
 
     def set_pull_up_down(self, pin, pull):
         self.pulls[pin] = pull
 
     def write(self, pin, value):
+        if self.raise_on_write is not None:
+            raise self.raise_on_write
         self.writes.append((pin, value))
 
     def read(self, pin):
+        if self.raise_on_read is not None:
+            raise self.raise_on_read
         return self.reads.get(pin, 0)
+
+    def hardware_PWM(self, pin, frequency, duty_cycle):
+        if self.raise_on_hardware_pwm is not None:
+            raise self.raise_on_hardware_pwm
+        self.pwm_calls.append((pin, frequency, duty_cycle))
 
 
 class FakeI2C:
@@ -168,15 +188,83 @@ class FakeMoteusController:
         })
 
 
+class FakePygameSurface:
+    """Stand-in for a pygame.Surface: the fullscreen display, or a loaded image."""
+
+    def __init__(self, size=(800, 600)):
+        self._size = size
+
+    def get_size(self):
+        return self._size
+
+    def blit(self, source, dest):
+        pass
+
+
+class FakePygameSound:
+    """Stand-in for a pygame.mixer.Sound loaded from an audio prompt's path."""
+
+    def __init__(self, path, length=1.0):
+        self.path = path
+        self._length = length
+
+    def get_length(self):
+        return self._length
+
+
+class FakePygameChannel:
+    """Stand-in for the dedicated pygame.mixer.Channel HMI plays audio prompts on.
+
+    Set `raise_on_play` to an exception instance to simulate playback failure.
+    """
+
+    def __init__(self):
+        self.sound: Optional[FakePygameSound] = None
+        self.loops: Optional[int] = None
+        self.raise_on_play: Optional[Exception] = None
+
+    def play(self, sound, loops=0):
+        if self.raise_on_play is not None:
+            raise self.raise_on_play
+        self.sound = sound
+        self.loops = loops
+
+    def stop(self):
+        self.sound = None
+        self.loops = None
+
+
+class PygameHarness:
+    """Fake pygame state used by HMI.py tests.
+
+    `ticks` stands in for pygame.time.get_ticks(); advance it manually to
+    simulate elapsed time for audio_finished(). The `*_error` attributes make
+    the corresponding pygame call fail; `channel.raise_on_play` fails playback
+    specifically (see FakePygameChannel).
+    """
+
+    def __init__(self):
+        self.screen = FakePygameSurface()
+        self.channel = FakePygameChannel()
+        self.ticks = 0
+        self.sound_length_sec = 1.0
+
+        self.init_error: Optional[Exception] = None
+        self.display_error: Optional[Exception] = None
+        self.image_load_error: Optional[Exception] = None
+        self.audio_load_error: Optional[Exception] = None
+        self.event_pump_error: Optional[Exception] = None
+
+
 class HardwareHarness:
     """One place to configure and inspect all fake hardware for a test.
 
     Set the `*_connect_error` attributes to an exception instance to make the
     corresponding init step fail; leave them None (the default) for a
-    successful init. The `pi`/`i2c`/`tof`/`imu`/`moteus_controller` attributes
-    are the actual fake objects the app code will read from and write to, so
-    tests can configure sensor readings on them directly (e.g.
-    `harness.tof.range = 42`).
+    successful init. The `pi`/`i2c`/`tof`/`imu`/`moteus_controller`/`pygame`
+    attributes are the actual fake objects the app code will read from and
+    write to, so tests can configure sensor readings and HMI state on them
+    directly (e.g. `harness.tof.range = 42`, `harness.pygame.ticks += 2000`).
     """
 
     def __init__(self):
@@ -185,6 +273,7 @@ class HardwareHarness:
         self.tof = FakeVL6180X()
         self.imu = FakeBNO08X_I2C()
         self.moteus_controller = FakeMoteusController()
+        self.pygame = PygameHarness()
 
         self.i2c_connect_error: Optional[Exception] = None
         self.tof_connect_error: Optional[Exception] = None
@@ -246,6 +335,78 @@ def _make_moteus_module(harness: HardwareHarness) -> types.ModuleType:
     return _fake_module("moteus", Register=_MOTEUS_REGISTERS, Controller=Controller)
 
 
+def _make_pygame_module(harness: HardwareHarness) -> types.ModuleType:
+    pg = harness.pygame
+
+    def pg_init():
+        if pg.init_error is not None:
+            raise pg.init_error
+
+    def mixer_init(frequency=44100, channels=1, buffer=2048):
+        if pg.init_error is not None:
+            raise pg.init_error
+
+    def mixer_channel(index):
+        return pg.channel
+
+    def mixer_sound(path):
+        if pg.audio_load_error is not None:
+            raise pg.audio_load_error
+        return FakePygameSound(path, length=pg.sound_length_sec)
+
+    mixer_ns = types.SimpleNamespace(init=mixer_init, Channel=mixer_channel, Sound=mixer_sound)
+
+    def display_info():
+        if pg.display_error is not None:
+            raise pg.display_error
+        w, h = pg.screen.get_size()
+        return types.SimpleNamespace(current_w=w, current_h=h)
+
+    def display_set_mode(size, flags=0):
+        if pg.display_error is not None:
+            raise pg.display_error
+        return pg.screen
+
+    def display_set_caption(title):
+        if pg.display_error is not None:
+            raise pg.display_error
+
+    def display_flip():
+        pass
+
+    display_ns = types.SimpleNamespace(
+        Info=display_info, set_mode=display_set_mode, set_caption=display_set_caption, flip=display_flip,
+    )
+
+    def image_load(path):
+        if pg.image_load_error is not None:
+            raise pg.image_load_error
+        return FakePygameSurface()
+
+    image_ns = types.SimpleNamespace(load=image_load)
+    transform_ns = types.SimpleNamespace(scale=lambda surface, size: surface)
+
+    def event_pump():
+        if pg.event_pump_error is not None:
+            raise pg.event_pump_error
+
+    event_ns = types.SimpleNamespace(pump=event_pump)
+    time_ns = types.SimpleNamespace(get_ticks=lambda: pg.ticks)
+
+    return _fake_module(
+        "pygame",
+        FULLSCREEN=0,
+        Surface=FakePygameSurface,
+        init=pg_init,
+        mixer=mixer_ns,
+        display=display_ns,
+        image=image_ns,
+        transform=transform_ns,
+        event=event_ns,
+        time=time_ns,
+    )
+
+
 def install_fake_hardware_modules(harness: Optional[HardwareHarness] = None) -> HardwareHarness:
     """Install fake pigpio/board/busio/adafruit/moteus modules into sys.modules.
 
@@ -265,6 +426,7 @@ def install_fake_hardware_modules(harness: Optional[HardwareHarness] = None) -> 
     sys.modules["adafruit_bno08x"] = bno_mod
     sys.modules["adafruit_bno08x.i2c"] = bno_i2c_mod
     sys.modules["moteus"] = _make_moteus_module(harness)
+    sys.modules["pygame"] = _make_pygame_module(harness)
 
     _clear_app_modules()
 
@@ -308,9 +470,10 @@ def install_fake_main_modules(monkeypatch) -> dict:
 
     These replace the whole module (not just the underlying hardware
     libraries), so main.py's state machine can be tested without depending on
-    the real sensing/actuation logic. HMI.py is still unimplemented, so this
-    fake only covers the surface main.py currently calls; revisit once HMI.py
-    is built out.
+    the real sensing/actuation/HMI logic. Keep this in sync with main.py's
+    actual calls -- it's easy for it to drift silently since main.py doesn't
+    import these fakes, it imports the real modules; this file just shadows
+    them in sys.modules for the duration of a test.
 
     Returns a dict of the installed fake modules so a test can further
     customize individual functions. Use setattr (not direct assignment) so
@@ -372,15 +535,16 @@ def install_fake_main_modules(monkeypatch) -> dict:
         Image=hmi_image,
         AudioPrompt=hmi_audio_prompt,
         init_HMI=lambda pi_instance: ErrorCode.NORMAL_OPERATION,
-        set_screen_audio=lambda image, prompt: None,
-        enable_next_button=lambda: None,
-        disable_next_button=lambda: None,
-        enable_pause_button=lambda: None,
-        disable_pause_button=lambda: None,
-        enable_lasers=lambda: None,
-        disable_lasers=lambda: None,
-        next_button_pressed=lambda: False,
-        pause_button_pressed=lambda: False,
+        pump_events=lambda: ErrorCode.NORMAL_OPERATION,
+        set_image_audio=lambda image, prompt: ErrorCode.NORMAL_OPERATION,
+        enable_next_button=lambda: ErrorCode.NORMAL_OPERATION,
+        disable_next_button=lambda: ErrorCode.NORMAL_OPERATION,
+        enable_pause_button=lambda: ErrorCode.NORMAL_OPERATION,
+        disable_pause_button=lambda: ErrorCode.NORMAL_OPERATION,
+        enable_lasers=lambda: ErrorCode.NORMAL_OPERATION,
+        disable_lasers=lambda: ErrorCode.NORMAL_OPERATION,
+        next_button_pressed=lambda: (ErrorCode.NORMAL_OPERATION, False),
+        pause_button_pressed=lambda: (ErrorCode.NORMAL_OPERATION, False),
         audio_finished=lambda: True,
     )
     monkeypatch.setitem(sys.modules, "HMI", hmi_mod)
