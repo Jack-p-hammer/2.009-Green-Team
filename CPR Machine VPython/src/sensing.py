@@ -389,7 +389,6 @@ def read_IMU() -> tuple[float, float, float] | None:
         tuple [float, float, float]: IMU accelerometer readings in m/s^2 (x, y, z) or None
     """
     global _bno
-    # TODO: Implement actual IMU reading logic
     accel_reading: tuple[float, float, float] | None = _bno.acceleration
     return accel_reading
 
@@ -430,6 +429,5 @@ def read_rotary_encoder() -> float:
     Returns:
         float: Rotary position in rotations
     """
-    # TODO: Implement actual rotary encoder reading logic
     global _motor_controller
     return _motor_controller.get_rotary_position()
