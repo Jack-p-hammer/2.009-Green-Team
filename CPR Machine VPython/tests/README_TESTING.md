@@ -36,16 +36,42 @@ If you only want to run the tests in this folder, that same command will do it.
   current prompt's length, not the pygame mixer's busy state.
 
 ### Sensing tests
-- Checks that sensing initialization fails gracefully when the pigpio connection is unavailable.
-- Checks that sensing initialization succeeds with the fake hardware stack in place.
-- Checks that sensing initialization fails gracefully when the I2C bus cannot be created.
-- Checks that the current sensor helper functions behave safely as placeholders.
+- Checks that sensor initialization fails gracefully when pigpio, the I2C bus,
+  the ToF sensor, or the IMU is unavailable.
+- Checks that sensor initialization captures the absolute zero positions from
+  the rotary encoder, ToF sensor, and force sensor, both with a lightweight
+  fake controller and through the real actuation.init_motor() -> MoteusThread
+  path.
+- Checks that the individual sensor read helpers (force, ToF, IMU) report the
+  configured hardware values.
+- Checks that read_sensors() validates readings against mode-appropriate
+  limits: normal operation, zeroing finished, force/accel out of range, and
+  rotary/ToF position disagreement.
+- Checks that zero_position() captures the current position once zeroing
+  finishes, and fails if zeroing hasn't finished yet.
+- Checks that battery_check() reports normal operation, low battery, or a
+  motor failure if the voltage read itself fails.
 
 ### Actuation tests
-- Checks that the current motor placeholder functions report normal operation.
-- Checks that those placeholder functions return enum values rather than raw values.
+- Checks that init_motor() creates the shared motor controller on success and
+  reports an init failure if the underlying moteus controller can't be
+  constructed.
+- Checks that init_zeroing()/init_compressions() record their start times.
+- Checks that zeroing() fails on timeout, motor error, or exceeding the
+  extension limit, and succeeds when sensors are healthy.
+- Checks that computeCompressionSetpoint() follows the expected trapezoidal
+  profile across a full compression cycle.
+- Checks that compressions()/pause_compressions() report normal operation, a
+  sensor failure, or a motor failure depending on sensor/motor state.
+- Checks that abort_compressions() succeeds without requiring sensing to have
+  been initialized.
 
 ### Main-state tests
-- Checks that the main flow advances through the early startup states when the next button is pressed.
-- Checks that initialization errors are routed to the abort state.
-- Checks that the fatal-error set includes the expected terminal conditions.
+- Checks that ERROR_STATE_MAP routes each recoverable error to the correct
+  state, and that FATAL_ERRORS never overlaps it.
+- Checks that a fatal error during startup (HMI init failure, unknown image,
+  pigpio daemon failure) aborts the motor and exits the process.
+- Checks that a non-fatal error (e.g. motor init failure) routes to the ABORT
+  state and runs its setup instead of exiting.
+- Checks that each state's setup runs exactly once and the machine advances
+  through startup when the Next button is held down.
