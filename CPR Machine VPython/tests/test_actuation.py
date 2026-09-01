@@ -163,6 +163,25 @@ def test_compressions_fails_on_sensor_error(hardware):
     assert actuation.compressions() == ErrorCode.ERROR_SENSOR_FAILURE
 
 
+def test_compressions_propagates_imu_kneel_failure(hardware, monkeypatch):
+    """ERROR_IMU_KNEEL_FAILURE from read_sensors() must pass through as-is, unlike
+    every other non-normal result, which compressions() converts to
+    ERROR_SENSOR_FAILURE (see test_compressions_fails_on_sensor_error above).
+
+    sensing.py has no real path to produce ERROR_IMU_KNEEL_FAILURE yet (its
+    accel-limit check always reports ERROR_SENSOR_FAILURE -- see
+    test_sensing.py), so this injects it directly at the read_sensors() call
+    to test compressions()'s own handling in isolation.
+    """
+    import actuation
+    import sensing
+    actuation.init_motor()
+    sensing.init_sensors(actuation.get_motor_controller())
+    monkeypatch.setattr(sensing, "read_sensors", lambda control_mode: ErrorCode.ERROR_IMU_KNEEL_FAILURE)
+
+    assert actuation.compressions() == ErrorCode.ERROR_IMU_KNEEL_FAILURE
+
+
 def test_compressions_fails_on_motor_error(hardware):
     import time
     import actuation
@@ -201,6 +220,18 @@ def test_pause_compressions_fails_on_sensor_error(hardware):
     hardware.imu.acceleration = (0.0, 0.0, 20.0)
 
     assert actuation.pause_compressions() == ErrorCode.ERROR_SENSOR_FAILURE
+
+
+def test_pause_compressions_propagates_imu_kneel_failure(hardware, monkeypatch):
+    """Same distinction as test_compressions_propagates_imu_kneel_failure above,
+    for pause_compressions()."""
+    import actuation
+    import sensing
+    actuation.init_motor()
+    sensing.init_sensors(actuation.get_motor_controller())
+    monkeypatch.setattr(sensing, "read_sensors", lambda control_mode: ErrorCode.ERROR_IMU_KNEEL_FAILURE)
+
+    assert actuation.pause_compressions() == ErrorCode.ERROR_IMU_KNEEL_FAILURE
 
 
 def test_pause_compressions_fails_on_motor_error(hardware):

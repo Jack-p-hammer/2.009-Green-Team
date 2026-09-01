@@ -119,34 +119,74 @@ class FakePi:
 
 
 class FakeI2C:
-    """Stand-in for the busio.I2C bus shared by the ToF sensor, IMU, and ADC."""
+    """Stand-in for the busio.I2C bus shared by the ToF sensor, IMU, and ADC.
+
+    Set `raise_on_read` to an exception instance to simulate a transient/
+    timeout error on the next readfrom_into() call -- e.g. after a
+    previously successful init, to test a mid-operation failure.
+    """
 
     def __init__(self):
         self.adc_bytes = bytearray(2)
         self.reads = []
+        self.raise_on_read: Optional[Exception] = None
 
     def readfrom_into(self, address, buffer):
+        if self.raise_on_read is not None:
+            raise self.raise_on_read
         self.reads.append(address)
         n = min(len(buffer), len(self.adc_bytes))
         buffer[:n] = self.adc_bytes[:n]
 
 
 class FakeVL6180X:
-    """Stand-in for the adafruit_vl6180x.VL6180X time-of-flight sensor."""
+    """Stand-in for the adafruit_vl6180x.VL6180X time-of-flight sensor.
+
+    `range` is a property (not a plain attribute) so `raise_on_read` can
+    simulate the sensor disconnecting mid-operation, after a previously
+    successful init; reads and writes to `.range` still work as before.
+    """
 
     def __init__(self):
-        self.range = 0
+        self._range = 0
+        self.raise_on_read: Optional[Exception] = None
+
+    @property
+    def range(self):
+        if self.raise_on_read is not None:
+            raise self.raise_on_read
+        return self._range
+
+    @range.setter
+    def range(self, value):
+        self._range = value
 
 
 class FakeBNO08X_I2C:
-    """Stand-in for the adafruit_bno08x BNO08X_I2C IMU."""
+    """Stand-in for the adafruit_bno08x BNO08X_I2C IMU.
+
+    `acceleration` is a property (not a plain attribute) so `raise_on_read`
+    can simulate the sensor disconnecting mid-operation, after a previously
+    successful init; reads and writes to `.acceleration` still work as before.
+    """
 
     def __init__(self):
         self.enabled_features = []
-        self.acceleration = (0.0, 0.0, 9.81)
+        self._acceleration = (0.0, 0.0, 9.81)
+        self.raise_on_read: Optional[Exception] = None
 
     def enable_feature(self, feature):
         self.enabled_features.append(feature)
+
+    @property
+    def acceleration(self):
+        if self.raise_on_read is not None:
+            raise self.raise_on_read
+        return self._acceleration
+
+    @acceleration.setter
+    def acceleration(self, value):
+        self._acceleration = value
 
 
 class FakeMoteusResult:

@@ -176,7 +176,17 @@ def test_read_sensors_detects_zeroing_finished(hardware):
     assert sensing.read_sensors(ControlMode.ZEROING) == ErrorCode.ZEROING_FINISHED
 
 
+def test_read_sensors_accel_within_tolerance_is_normal_operation(hardware):
+    """IMU shift detection: an orientation within the tolerance band is not a fault."""
+    hardware.imu.acceleration = (0.0, 0.0, 9.0)  # under the 9.81 compression limit
+    import sensing
+    sensing.init_sensors(_fake_controller())
+
+    assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.NORMAL_OPERATION
+
+
 def test_read_sensors_detects_accel_over_limit(hardware):
+    """IMU shift detection: an orientation beyond the tolerance band is a fault."""
     hardware.imu.acceleration = (0.0, 0.0, 20.0)  # exceeds the 9.81 compression limit
     import sensing
     sensing.init_sensors(_fake_controller())
@@ -198,6 +208,34 @@ def test_read_sensors_rejects_invalid_control_mode(hardware):
     sensing.init_sensors(_fake_controller())
 
     assert sensing.read_sensors(ControlMode.HOLD_POSITION) == ErrorCode.ERROR_SENSOR_FAILURE
+
+
+def test_read_sensors_detects_i2c_read_failure_mid_operation(hardware):
+    """A transient I2C error on a read (after a previously successful init) is
+    reported as a sensor failure rather than raising out of read_sensors()."""
+    import sensing
+    sensing.init_sensors(_fake_controller())
+    hardware.i2c.raise_on_read = TimeoutError("i2c bus timeout")
+
+    assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.ERROR_SENSOR_FAILURE
+
+
+def test_read_sensors_detects_tof_disconnect_mid_operation(hardware):
+    """The ToF sensor failing after a previously successful init is a sensor failure."""
+    import sensing
+    sensing.init_sensors(_fake_controller())
+    hardware.tof.raise_on_read = RuntimeError("device not found")
+
+    assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.ERROR_SENSOR_FAILURE
+
+
+def test_read_sensors_detects_imu_disconnect_mid_operation(hardware):
+    """The IMU failing after a previously successful init is a sensor failure."""
+    import sensing
+    sensing.init_sensors(_fake_controller())
+    hardware.imu.raise_on_read = RuntimeError("device not found")
+
+    assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.ERROR_SENSOR_FAILURE
 
 
 # -------------------- zero_position --------------------
