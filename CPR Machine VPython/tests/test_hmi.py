@@ -17,14 +17,16 @@ test_set_audio_plays_prompt_and_reports_failures (which returns the
 existing ERROR_PYGAME_FAILURE, not ERROR_UNKNOWN_AUDIO).
 
 There's also no function that takes a duty cycle argument to accept or
-reject arbitrary values (enable_lasers()/disable_lasers() always use the
-fixed LASER_PWM_DUTY_CYCLE constant), so "accepts/rejects duty cycles
-0/0.5/1 vs -0.1/1.5" isn't directly testable either. What test_lasers_
-respond_to_enable_disable checks instead is the hardware analog: that the
-raw value handed to hardware_PWM() is exactly LASER_PWM_DUTY_CYCLE *
-LASER_PWM_SCALE, so HMI.py's configured duty cycle and scale are faithfully
-reflected in what actually reaches the hardware.
+reject arbitrary values -- enable_lasers()/disable_lasers() always read the
+LASER_PWM_DUTY_CYCLE module constant. test_laser_pwm_scaling_reflects_duty_
+cycle_constant validates the system's behavior around that constant's value
+by varying the constant itself (monkeypatching HMI.LASER_PWM_DUTY_CYCLE)
+rather than asserting against the one value currently hardcoded in HMI.py,
+including out-of-range values (-0.1, 1.5) to show they pass straight
+through to hardware_PWM() unclamped, with no rejection.
 """
+import pytest
+
 from Enums.error_codes import ErrorCode
 
 
@@ -185,14 +187,7 @@ def test_both_buttons_pressed_simultaneously(hardware):
 # -------------------- laser control --------------------
 
 def test_lasers_respond_to_enable_disable(hardware):
-    """Enabling lasers should set a nonzero PWM frequency/duty cycle; disabling zeroes both.
-
-    There's no function that takes a duty cycle argument to test accepting/
-    rejecting arbitrary values (enable_lasers()/disable_lasers() always use
-    the fixed LASER_PWM_DUTY_CYCLE constant), so this checks the hardware
-    analog instead: that the raw value actually handed to hardware_PWM()
-    correctly reflects HMI.py's configured duty cycle and scale.
-    """
+    """Enabling lasers should set a nonzero PWM frequency/duty cycle; disabling zeroes both."""
     import HMI
     HMI.init_HMI(hardware.pi)
 
@@ -200,11 +195,55 @@ def test_lasers_respond_to_enable_disable(hardware):
     pin, frequency, duty_cycle = hardware.pi.pwm_calls[-1]
     assert pin == HMI.LASER_PIN
     assert frequency == HMI.LASER_PWM_FREQUENCY
-    assert 0 <= duty_cycle <= HMI.LASER_PWM_SCALE
     assert duty_cycle == int(HMI.LASER_PWM_DUTY_CYCLE * HMI.LASER_PWM_SCALE)
 
     assert HMI.disable_lasers() == ErrorCode.NORMAL_OPERATION
     assert hardware.pi.pwm_calls[-1] == (HMI.LASER_PIN, 0, 0)
+
+
+@pytest.mark.parametrize("duty_cycle_const", [0.0, 0.25, 0.5, 1.0])
+def test_laser_pwm_scaling_reflects_duty_cycle_constant(hardware, monkeypatch, duty_cycle_const):
+    """enable_lasers() must scale whatever LASER_PWM_DUTY_CYCLE is configured to,
+    not just the one value currently hardcoded in HMI.py -- so this varies the
+    constant itself across its valid range rather than asserting against a
+    single fixed value.
+    """
+    import HMI
+    monkeypatch.setattr(HMI, "LASER_PWM_DUTY_CYCLE", duty_cycle_const)
+    HMI.init_HMI(hardware.pi)
+
+    assert HMI.enable_lasers() == ErrorCode.NORMAL_OPERATION
+    pin, frequency, duty_cycle = hardware.pi.pwm_calls[-1]
+    assert pin == HMI.LASER_PIN
+    assert frequency == HMI.LASER_PWM_FREQUENCY
+    assert duty_cycle == int(duty_cycle_const * HMI.LASER_PWM_SCALE)
+
+
+@pytest.mark.xfail(
+    reason=(
+        "enable_lasers() discards the return value of _pi.hardware_PWM() "
+        "entirely -- it only catches exceptions via try/except. Real "
+        "pigpio.hardware_PWM() signals a bad duty cycle by returning a "
+        "negative status code (PI_BAD_HPWM_DUTY), not by raising, so this "
+        "failure is currently silently treated as NORMAL_OPERATION. Flip "
+        "this to a normal test once enable_lasers() checks the return code."
+    ),
+    strict=True,
+)
+@pytest.mark.parametrize("duty_cycle_const", [-0.1, 1.5])
+def test_laser_pwm_fails_gracefully_for_out_of_range_duty_cycle(hardware, monkeypatch, duty_cycle_const):
+    """Real pigpio.hardware_PWM() rejects a duty cycle outside its valid range
+    (0 to 1_000_000) by returning a negative status code (PI_BAD_HPWM_DUTY),
+    not by raising -- confirmed against the installed pigpio package's source.
+    FakePi.hardware_PWM() models that return-code behavior (see conftest.py),
+    so enable_lasers() should report a graceful failure here, not
+    NORMAL_OPERATION.
+    """
+    import HMI
+    monkeypatch.setattr(HMI, "LASER_PWM_DUTY_CYCLE", duty_cycle_const)
+    HMI.init_HMI(hardware.pi)
+
+    assert HMI.enable_lasers() == ErrorCode.ERROR_PI_DAEMON_FAILURE
 
 
 def test_laser_pwm_failure_reports_pi_daemon_error(hardware):

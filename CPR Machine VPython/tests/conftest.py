@@ -90,12 +90,24 @@ def _fake_module(name: str, **attrs) -> types.ModuleType:
 
 # -------------------- Hardware-level fakes --------------------
 
+# Real pigpio.pi.hardware_PWM() returns 0 on success or a negative status
+# code on failure -- it does not raise for a bad duty cycle, unlike every
+# other FakePi method here. PI_BAD_HPWM_DUTY is pigpio's actual constant
+# (confirmed against the installed pigpio package's source) for a duty
+# cycle outside its valid range of 0 to PWM_REALRANGE (1_000_000).
+PI_BAD_HPWM_DUTY = -97
+PWM_REALRANGE = 1_000_000
+
+
 class FakePi:
     """Stand-in for a pigpio.pi() instance.
 
     Set any `raise_on_*` attribute to an exception instance to make that
     method fail on its next call, e.g. `harness.pi.raise_on_write = OSError()`
-    to exercise an ERROR_PI_DAEMON_FAILURE path.
+    to exercise an ERROR_PI_DAEMON_FAILURE path. hardware_PWM() is the one
+    exception to the raise_on_* pattern: real pigpio reports a bad duty
+    cycle via a negative return code, not an exception, so this returns
+    PI_BAD_HPWM_DUTY for one out of range instead.
     """
 
     def __init__(self, connected=True):
@@ -133,6 +145,9 @@ class FakePi:
         if self.raise_on_hardware_pwm is not None:
             raise self.raise_on_hardware_pwm
         self.pwm_calls.append((pin, frequency, duty_cycle))
+        if not (0 <= duty_cycle <= PWM_REALRANGE):
+            return PI_BAD_HPWM_DUTY
+        return 0
 
 
 class FakeI2C:

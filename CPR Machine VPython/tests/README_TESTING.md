@@ -19,102 +19,75 @@ If you only want to run the tests in this folder, that same command will do it.
 
 
 ## Current test inventory
+Format: `case -> result`.
+
 ### HMI tests
-- Startup GPIO setup: given healthy fake GPIO, init_HMI() sets the Next/Pause
-  button pins to input+pullup, the Next/Pause LED and laser pins to
-  output+pulldown, and leaves the laser PWM off.
-- Startup failure paths: given an injected pygame/mixer failure, init_HMI()
-  returns the dedicated fatal ERROR_PYGAME_INIT_FAILURE; given a display or
-  GPIO failure, it returns the recoverable ERROR_INIT_FAILURE (never raises
-  either way).
-- Button/LED writes: given a healthy pi, enable/disable_next/pause_button()
-  write HIGH/LOW to the right pin; calling either twice in a row is
-  idempotent, and a pigpio write exception returns ERROR_PI_DAEMON_FAILURE.
-- Button reads: given HIGH/LOW on the button pins (including both pressed at
-  once), next/pause_button_pressed() report the matching bool; a pigpio read
-  exception returns ERROR_PI_DAEMON_FAILURE.
-- Laser control: given a healthy pi, enable_lasers()/disable_lasers() write a
-  nonzero/zero PWM duty cycle to the laser pin, with the raw value equal to
-  LASER_PWM_DUTY_CYCLE * LASER_PWM_SCALE (the hardware analog of a
-  duty-cycle check, since there's no parameterized function to pass
-  arbitrary duty cycles into); a pigpio PWM exception returns
-  ERROR_PI_DAEMON_FAILURE.
-- pump_events(): given a healthy or broken pygame event queue, returns
-  NORMAL_OPERATION or WARNING_PYGAME_PUMP_FAILURE (never raises).
-- set_image/set_audio/set_image_audio: given a valid prompt they play it
-  (looped); given an injected pygame load failure they return
-  ERROR_UNKNOWN_IMAGE or ERROR_PYGAME_FAILURE, and set_image_audio() skips
-  audio entirely if the image failed; an audio-less state stops playback.
-- audio_finished(): given a prompt of known length, False before that much
-  time has elapsed and True at/after it; also True for an audio-less state
-  and before any prompt has ever been played (confirmed intended:
-  true-on-loop-finish is the natural default when nothing is queued).
-- Not yet coverable: the team's inventory also lists an ERROR_UNKNOWN_AUDIO
-  code for a missing audio file -- no such code exists in error_codes.py,
-  and audio_finished() (a plain bool, no file access) isn't the function
-  that would ever load one, so there's nothing to test against (see
-  summary).
+- init_HMI(): healthy GPIO -> pins configured (Next/Pause input+pullup,
+  LED/laser output+pulldown), laser PWM off. pygame/mixer failure ->
+  ERROR_PYGAME_INIT_FAILURE. display failure -> ERROR_INIT_FAILURE. GPIO
+  failure -> ERROR_INIT_FAILURE.
+- enable/disable_next/pause_button(): writes HIGH/LOW to LED pin. Repeated
+  call -> idempotent. pigpio write exception -> ERROR_PI_DAEMON_FAILURE.
+- next/pause_button_pressed(): pin HIGH/LOW -> True/False. Both pins HIGH ->
+  both True. pigpio read exception -> ERROR_PI_DAEMON_FAILURE, False.
+- enable/disable_lasers(): writes nonzero/zero duty cycle to laser pin.
+  LASER_PWM_DUTY_CYCLE in {0, 0.25, 0.5, 1.0} -> raw value DUTY_CYCLE *
+  SCALE, NORMAL_OPERATION. pigpio PWM exception -> ERROR_PI_DAEMON_FAILURE.
+  LASER_PWM_DUTY_CYCLE in {-0.1, 1.5} (real pigpio rejects via a negative
+  return code, not an exception) -> ERROR_PI_DAEMON_FAILURE expected, but
+  currently NORMAL_OPERATION; xfail pending a source fix.
+- pump_events(): healthy pygame -> NORMAL_OPERATION. broken event queue ->
+  WARNING_PYGAME_PUMP_FAILURE.
+- set_image()/set_audio()/set_image_audio(): valid prompt -> plays looped.
+  pygame load failure -> ERROR_UNKNOWN_IMAGE / ERROR_PYGAME_FAILURE. image
+  failure -> audio not attempted. audio-less state -> playback stopped.
+- audio_finished(): elapsed < prompt length -> False. elapsed >= length ->
+  True. audio-less state -> True. no prompt ever played -> True.
+- Not coverable: ERROR_UNKNOWN_AUDIO for a missing file -- no such code
+  exists, and audio_finished() has no file access to fail on.
 
 ### Sensing tests
-- init_sensors() failure paths: given an unavailable pigpio daemon, I2C bus,
-  ToF sensor, or IMU, returns ERROR_INIT_FAILURE (never raises).
-- init_sensors() success: given healthy fake hardware (one test goes through
-  the real actuation.init_motor() -> MoteusThread path), returns
-  NORMAL_OPERATION and snapshots the rotary/ToF/force readings as absolute
-  zero.
-- Individual sensor reads: read_force_sensor()/read_ToF_sensor()/read_IMU()
-  return whatever raw ADC bytes/ToF range/IMU acceleration the fakes were
-  given.
-- read_sensors() validation: given readings within limits, NORMAL_OPERATION;
-  given force past the zeroing threshold, ZEROING_FINISHED; given IMU
-  orientation beyond tolerance, rotary/ToF disagreement, or an invalid
-  control mode, ERROR_SENSOR_FAILURE.
-- read_sensors() mid-operation failures: given the I2C bus, ToF sensor, or
-  IMU raising after a previously successful init, ERROR_SENSOR_FAILURE
-  (never raises out of read_sensors()).
-- zero_position(): given zeroing finished, captures the zeroed position and
-  returns NORMAL_OPERATION; given zeroing still in progress,
-  ERROR_SENSOR_FAILURE.
-- battery_check(): given a healthy, low, or unreadable voltage, returns
-  NORMAL_OPERATION, ERROR_LOW_BATTERY, or ERROR_MOTOR_FAILURE respectively.
+- init_sensors(): pigpio/I2C/ToF/IMU unavailable -> ERROR_INIT_FAILURE.
+  healthy hardware -> NORMAL_OPERATION, absolute-zero positions captured.
+- read_force_sensor()/read_ToF_sensor()/read_IMU(): raw ADC bytes/ToF
+  range/IMU accel -> matching converted value.
+- read_sensors(): within limits -> NORMAL_OPERATION. force past zeroing
+  threshold -> ZEROING_FINISHED. IMU beyond tolerance, rotary/ToF
+  disagreement, or invalid mode -> ERROR_SENSOR_FAILURE. I2C/ToF/IMU raises
+  mid-operation -> ERROR_SENSOR_FAILURE.
+- zero_position(): zeroing finished -> position captured, NORMAL_OPERATION.
+  zeroing in progress -> ERROR_SENSOR_FAILURE.
+- battery_check(): healthy/low/unreadable voltage -> NORMAL_OPERATION /
+  ERROR_LOW_BATTERY / ERROR_MOTOR_FAILURE.
 
 ### Actuation tests
-- init_motor()/get_motor_controller(): given a healthy or failing moteus
-  controller construction, returns NORMAL_OPERATION (and the same controller
-  instance thereafter) or ERROR_INIT_FAILURE.
-- init_zeroing()/init_compressions(): record their start times.
-- zeroing(): given a timeout, a motor error, or exceeding the extension
-  limit, returns the matching error; given healthy sensors,
-  NORMAL_OPERATION.
-- computeCompressionSetpoint(): follows the expected trapezoidal profile
-  (flat, ramp, plateau, ramp, repeat) across a full 0.56s compression cycle.
-- compressions()/pause_compressions(): given healthy state, a sensor
-  failure, or a motor failure, return NORMAL_OPERATION,
-  ERROR_SENSOR_FAILURE, or ERROR_MOTOR_FAILURE respectively; given an IMU
-  kneel failure, pass it through unchanged instead of converting it to
-  ERROR_SENSOR_FAILURE.
-- abort_compressions(): succeeds without requiring sensing to have been
-  initialized.
+- init_motor()/get_motor_controller(): healthy moteus construction ->
+  NORMAL_OPERATION, same instance on later calls. failing construction ->
+  ERROR_INIT_FAILURE.
+- init_zeroing()/init_compressions(): records start time.
+- zeroing(): timeout / motor error / max extension -> matching error.
+  healthy sensors -> NORMAL_OPERATION.
+- computeCompressionSetpoint(): time in 0.56s cycle -> flat, ramp, plateau,
+  ramp, repeat.
+- compressions()/pause_compressions(): healthy / sensor failure / motor
+  failure -> NORMAL_OPERATION / ERROR_SENSOR_FAILURE / ERROR_MOTOR_FAILURE.
+  IMU kneel failure -> passed through unchanged, not ERROR_SENSOR_FAILURE.
+- abort_compressions(): no sensing init needed -> NORMAL_OPERATION.
 
 ### Main-state tests
-- ERROR_STATE_MAP: every recoverable error routes to ABORT except the IMU
-  kneel failure, which routes to KNEEL_FAILURE; FATAL_ERRORS is exactly
-  {EXIT_UNKNOWN, ERROR_PYGAME_INIT_FAILURE, ERROR_PI_DAEMON_FAILURE,
-  ERROR_UNKNOWN_IMAGE} and never overlaps ERROR_STATE_MAP.
-- Fatal-error fast exit: an HMI init failure, an unknown image, or a pigpio
-  daemon failure during startup aborts the motor and raises SystemExit(1).
-- State chain: holding Next advances STARTUP through UNFOLD_CUT_CLOTHES,
-  ALIGNMENT, ZEROING_PREP, and into ZEROING; zeroing finished advances
-  ZEROING to COMPRESSION_PREP and holds it there otherwise; audio finished
-  advances COMPRESSION_PREP to COMPRESSION and holds it there otherwise.
-- Compression and pause: the pause button, not Next, moves COMPRESSION to
-  PAUSE; Next returns PAUSE to COMPRESSION_PREP; Next returns KNEEL_FAILURE
-  to ALIGNMENT.
-- Error-driven routing: a battery failure in STARTUP, a zeroing failure or
-  sensor failure in ZEROING, and a sensor failure in COMPRESSION or PAUSE
-  all route to ABORT; an IMU kneel failure in ZEROING, COMPRESSION, or PAUSE
-  routes to KNEEL_FAILURE.
-- Kneel-failure setup: tolerates a repeated IMU kneel failure from
-  pause_compressions() and still shows its screen, instead of re-routing
-  into itself forever; any other error from that call still routes to
-  ABORT.
+- ERROR_STATE_MAP: each recoverable error -> ABORT, except IMU kneel ->
+  KNEEL_FAILURE. FATAL_ERRORS = {EXIT_UNKNOWN, ERROR_PYGAME_INIT_FAILURE,
+  ERROR_PI_DAEMON_FAILURE, ERROR_UNKNOWN_IMAGE}, disjoint from
+  ERROR_STATE_MAP.
+- Fatal fast exit: HMI init failure / unknown image / pigpio daemon failure
+  in STARTUP -> motor aborted, SystemExit(1).
+- State chain, Next held: STARTUP -> UNFOLD_CUT_CLOTHES -> ALIGNMENT ->
+  ZEROING_PREP -> ZEROING. zeroing finished -> COMPRESSION_PREP, else stays.
+  audio finished -> COMPRESSION, else stays.
+- Pause button (not Next) -> COMPRESSION to PAUSE. Next -> PAUSE to
+  COMPRESSION_PREP. Next -> KNEEL_FAILURE to ALIGNMENT.
+- Error routing: battery failure in STARTUP; zeroing or sensor failure in
+  ZEROING; sensor failure in COMPRESSION/PAUSE -> ABORT. IMU kneel in
+  ZEROING/COMPRESSION/PAUSE -> KNEEL_FAILURE.
+- KNEEL_FAILURE setup: repeated IMU kneel from pause_compressions() ->
+  screen still shown, no loop. any other error -> ABORT.
