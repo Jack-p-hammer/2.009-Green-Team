@@ -44,16 +44,22 @@ def _run_main_for_ticks(monkeypatch, main, max_ticks):
         pass
 
 
-def _recording(return_value=ErrorCode.NORMAL_OPERATION):
-    """Build a fake that records each call's args and returns a fixed value."""
-    calls = []
+class _Recorder:
+    """Callable fake that records each call's args and returns a fixed value.
 
-    def fn(*args, **kwargs):
-        calls.append(args)
-        return return_value
+    A plain function with a `.calls` list bolted onto it would work at
+    runtime but isn't something a type checker accepts (function objects
+    don't declare arbitrary attributes) -- a small class with a real,
+    declared `calls` attribute avoids that friction.
+    """
 
-    fn.calls = calls
-    return fn
+    def __init__(self, return_value=ErrorCode.NORMAL_OPERATION):
+        self.return_value = return_value
+        self.calls: list[tuple] = []
+
+    def __call__(self, *args, **kwargs):
+        self.calls.append(args)
+        return self.return_value
 
 
 # -------------------- static routing tables --------------------
@@ -96,7 +102,7 @@ def test_main_exits_on_hmi_init_failure(monkeypatch):
     """A pygame init failure during startup should abort the motor and exit(1)."""
     modules = install_fake_main_modules(monkeypatch)
     setattr(modules["HMI"], "init_HMI", lambda pi_instance: ErrorCode.ERROR_PYGAME_INIT_FAILURE)
-    abort = _recording()
+    abort = _Recorder()
     setattr(modules["actuation"], "abort_compressions", abort)
 
     import main
@@ -133,7 +139,7 @@ def test_main_routes_init_failure_to_abort_state(monkeypatch):
     """A non-fatal init failure should route to ABORT and run its setup, not exit."""
     modules = install_fake_main_modules(monkeypatch)
     setattr(modules["actuation"], "init_motor", lambda: ErrorCode.ERROR_INIT_FAILURE)
-    set_image_audio = _recording()
+    set_image_audio = _Recorder()
     setattr(modules["HMI"], "set_image_audio", set_image_audio)
 
     import main
@@ -148,7 +154,7 @@ def test_main_advances_from_startup_when_next_pressed(monkeypatch):
     """With the Next button held down, each state's setup should run once and advance."""
     modules = install_fake_main_modules(monkeypatch)
     setattr(modules["HMI"], "next_button_pressed", lambda: (ErrorCode.NORMAL_OPERATION, True))
-    set_image_audio = _recording()
+    set_image_audio = _Recorder()
     setattr(modules["HMI"], "set_image_audio", set_image_audio)
 
     import main

@@ -10,10 +10,17 @@ catch up) entirely. Exactly one test (test_init_sensors_integrates_with_real_
 motor_controller) exercises the real actuation.init_motor() -> MoteusThread
 path end to end, to prove the wiring genuinely works.
 """
+from typing import TYPE_CHECKING, cast
+
 import pytest
 
 from Enums.error_codes import ErrorCode
 from Enums.control_modes import ControlMode
+
+if TYPE_CHECKING:
+    # Only needed for the cast() below -- importing the real module here would
+    # pull in the real `moteus` package at test-collection time for no reason.
+    from moteus_thread import MoteusThread
 
 
 class _FakeMotorController:
@@ -36,6 +43,17 @@ class _FakeMotorController:
         return self.voltage
 
 
+def _fake_controller(position=0.0, voltage=24.0, raise_on_battery=None) -> "MoteusThread":
+    """Build a _FakeMotorController, typed as a MoteusThread for callers.
+
+    sensing.init_sensors() is annotated to take a real MoteusThread; a duck-
+    typed fake satisfies it at runtime but not for a nominal type checker
+    like pyright, so this cast documents that the mismatch is intentional
+    rather than sprinkling `# type: ignore` across every call site.
+    """
+    return cast("MoteusThread", _FakeMotorController(position, voltage, raise_on_battery))
+
+
 def _raw_adc_bytes_for_force(force_newtons: float) -> bytes:
     """Compute the 2 raw ADC bytes read_force_sensor() would need to see to
     report the given force, inverting sensing.py's raw -> voltage -> force
@@ -51,28 +69,28 @@ def test_init_sensors_fails_when_pigpio_unavailable(hardware):
     hardware.pi.connected = False
     import sensing
 
-    assert sensing.init_sensors(_FakeMotorController()) == ErrorCode.ERROR_INIT_FAILURE
+    assert sensing.init_sensors(_fake_controller()) == ErrorCode.ERROR_INIT_FAILURE
 
 
 def test_init_sensors_fails_when_i2c_unavailable(hardware):
     hardware.i2c_connect_error = RuntimeError("i2c bus unavailable")
     import sensing
 
-    assert sensing.init_sensors(_FakeMotorController()) == ErrorCode.ERROR_INIT_FAILURE
+    assert sensing.init_sensors(_fake_controller()) == ErrorCode.ERROR_INIT_FAILURE
 
 
 def test_init_sensors_fails_when_tof_sensor_unavailable(hardware):
     hardware.tof_connect_error = RuntimeError("ToF sensor not responding")
     import sensing
 
-    assert sensing.init_sensors(_FakeMotorController()) == ErrorCode.ERROR_INIT_FAILURE
+    assert sensing.init_sensors(_fake_controller()) == ErrorCode.ERROR_INIT_FAILURE
 
 
 def test_init_sensors_fails_when_imu_unavailable(hardware):
     hardware.imu_connect_error = RuntimeError("IMU not responding")
     import sensing
 
-    assert sensing.init_sensors(_FakeMotorController()) == ErrorCode.ERROR_INIT_FAILURE
+    assert sensing.init_sensors(_fake_controller()) == ErrorCode.ERROR_INIT_FAILURE
 
 
 # -------------------- init_sensors: happy path --------------------
@@ -83,7 +101,7 @@ def test_init_sensors_captures_absolute_zero_positions(hardware):
     hardware.i2c.adc_bytes = bytes([0, 0])  # 0V -> 0N
     import sensing
 
-    error = sensing.init_sensors(_FakeMotorController(position=0.25))
+    error = sensing.init_sensors(_fake_controller(position=0.25))
 
     assert error == ErrorCode.NORMAL_OPERATION
     assert sensing.rotary_absolute_zero_position == 0.25
@@ -117,7 +135,7 @@ def test_init_sensors_integrates_with_real_motor_controller(hardware):
 def test_read_force_sensor_converts_adc_reading(hardware):
     hardware.i2c.adc_bytes = _raw_adc_bytes_for_force(250.0)
     import sensing
-    sensing.init_sensors(_FakeMotorController())
+    sensing.init_sensors(_fake_controller())
 
     assert sensing.read_force_sensor() == pytest.approx(250.0)
 
@@ -125,7 +143,7 @@ def test_read_force_sensor_converts_adc_reading(hardware):
 def test_read_tof_sensor_returns_configured_range(hardware):
     hardware.tof.range = 42
     import sensing
-    sensing.init_sensors(_FakeMotorController())
+    sensing.init_sensors(_fake_controller())
 
     assert sensing.read_ToF_sensor() == 42
 
@@ -133,7 +151,7 @@ def test_read_tof_sensor_returns_configured_range(hardware):
 def test_read_imu_returns_configured_acceleration(hardware):
     hardware.imu.acceleration = (1.0, 2.0, 3.0)
     import sensing
-    sensing.init_sensors(_FakeMotorController())
+    sensing.init_sensors(_fake_controller())
 
     assert sensing.read_IMU() == (1.0, 2.0, 3.0)
 
@@ -143,7 +161,7 @@ def test_read_imu_returns_configured_acceleration(hardware):
 def test_read_sensors_normal_operation_within_limits(hardware):
     """Default harness state (0 force, 0 position, 9.81 accel) is within every limit."""
     import sensing
-    sensing.init_sensors(_FakeMotorController())
+    sensing.init_sensors(_fake_controller())
 
     assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.NORMAL_OPERATION
 
@@ -153,7 +171,7 @@ def test_read_sensors_detects_zeroing_finished(hardware):
     report ZEROING_FINISHED during a zeroing read."""
     hardware.i2c.adc_bytes = _raw_adc_bytes_for_force(40.0)  # > 35N threshold, < 52.5N limit
     import sensing
-    sensing.init_sensors(_FakeMotorController())
+    sensing.init_sensors(_fake_controller())
 
     assert sensing.read_sensors(ControlMode.ZEROING) == ErrorCode.ZEROING_FINISHED
 
@@ -161,7 +179,7 @@ def test_read_sensors_detects_zeroing_finished(hardware):
 def test_read_sensors_detects_accel_over_limit(hardware):
     hardware.imu.acceleration = (0.0, 0.0, 20.0)  # exceeds the 9.81 compression limit
     import sensing
-    sensing.init_sensors(_FakeMotorController())
+    sensing.init_sensors(_fake_controller())
 
     assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.ERROR_SENSOR_FAILURE
 
@@ -169,7 +187,7 @@ def test_read_sensors_detects_accel_over_limit(hardware):
 def test_read_sensors_detects_position_disagreement(hardware):
     """Rotary and ToF should agree on position; a large mismatch is a sensor failure."""
     import sensing
-    sensing.init_sensors(_FakeMotorController(position=1.0))  # ~62.8mm of rotary travel
+    sensing.init_sensors(_fake_controller(position=1.0))  # ~62.8mm of rotary travel
     hardware.tof.range = 0  # ToF disagrees by ~63mm, far past the 2mm threshold
 
     assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.ERROR_SENSOR_FAILURE
@@ -177,7 +195,7 @@ def test_read_sensors_detects_position_disagreement(hardware):
 
 def test_read_sensors_rejects_invalid_control_mode(hardware):
     import sensing
-    sensing.init_sensors(_FakeMotorController())
+    sensing.init_sensors(_fake_controller())
 
     assert sensing.read_sensors(ControlMode.HOLD_POSITION) == ErrorCode.ERROR_SENSOR_FAILURE
 
@@ -187,7 +205,7 @@ def test_read_sensors_rejects_invalid_control_mode(hardware):
 def test_zero_position_captures_current_position_once_zeroing_finishes(hardware):
     hardware.i2c.adc_bytes = _raw_adc_bytes_for_force(40.0)  # past the zeroing threshold
     import sensing
-    sensing.init_sensors(_FakeMotorController(position=1.0))
+    sensing.init_sensors(_fake_controller(position=1.0))
     hardware.tof.range = 63  # agrees with 1.0 rotation within the 2mm threshold
 
     assert sensing.zero_position() == ErrorCode.NORMAL_OPERATION
@@ -199,7 +217,7 @@ def test_zero_position_captures_current_position_once_zeroing_finishes(hardware)
 def test_zero_position_fails_when_zeroing_not_finished(hardware):
     """With force still under the zeroing threshold, zeroing hasn't finished yet."""
     import sensing
-    sensing.init_sensors(_FakeMotorController())
+    sensing.init_sensors(_fake_controller())
 
     assert sensing.zero_position() == ErrorCode.ERROR_SENSOR_FAILURE
 
@@ -208,20 +226,20 @@ def test_zero_position_fails_when_zeroing_not_finished(hardware):
 
 def test_battery_check_normal_operation(hardware):
     import sensing
-    sensing.init_sensors(_FakeMotorController(voltage=24.0))
+    sensing.init_sensors(_fake_controller(voltage=24.0))
 
     assert sensing.battery_check() == ErrorCode.NORMAL_OPERATION
 
 
 def test_battery_check_reports_low_battery(hardware):
     import sensing
-    sensing.init_sensors(_FakeMotorController(voltage=20.0))  # under the 21.6V threshold
+    sensing.init_sensors(_fake_controller(voltage=20.0))  # under the 21.6V threshold
 
     assert sensing.battery_check() == ErrorCode.ERROR_LOW_BATTERY
 
 
 def test_battery_check_reports_motor_failure_when_read_fails(hardware):
     import sensing
-    sensing.init_sensors(_FakeMotorController(raise_on_battery=RuntimeError("comm lost")))
+    sensing.init_sensors(_fake_controller(raise_on_battery=RuntimeError("comm lost")))
 
     assert sensing.battery_check() == ErrorCode.ERROR_MOTOR_FAILURE

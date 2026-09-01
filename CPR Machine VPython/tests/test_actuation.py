@@ -96,11 +96,16 @@ def test_zeroing_fails_on_max_extension(hardware):
 
 
 def test_zeroing_succeeds_when_sensors_healthy(hardware):
+    import time
     import actuation
     import sensing
     actuation.init_motor()
     sensing.init_sensors(actuation.get_motor_controller())
     actuation.init_zeroing()
+
+    # zeroing() checks get_last_error(), which only reflects NORMAL_OPERATION
+    # once the background command loop has completed its first tick.
+    time.sleep(0.05)
 
     assert actuation.zeroing() == ErrorCode.NORMAL_OPERATION
 
@@ -135,10 +140,15 @@ def test_compute_compression_setpoint_piecewise_profile(hardware, monkeypatch):
 # -------------------- compressions --------------------
 
 def test_compressions_normal_operation(hardware):
+    import time
     import actuation
     import sensing
     actuation.init_motor()
     sensing.init_sensors(actuation.get_motor_controller())
+
+    # compressions() checks get_last_error(), which only reflects NORMAL_OPERATION
+    # once the background command loop has completed its first tick.
+    time.sleep(0.05)
 
     assert actuation.compressions() == ErrorCode.NORMAL_OPERATION
 
@@ -169,10 +179,16 @@ def test_compressions_fails_on_motor_error(hardware):
 # -------------------- pause_compressions --------------------
 
 def test_pause_compressions_normal_operation(hardware):
+    import time
     import actuation
     import sensing
     actuation.init_motor()
     sensing.init_sensors(actuation.get_motor_controller())
+
+    # pause_compressions() checks get_last_error(), which only reflects
+    # NORMAL_OPERATION once the background command loop has completed its
+    # first tick.
+    time.sleep(0.05)
 
     assert actuation.pause_compressions() == ErrorCode.NORMAL_OPERATION
 
