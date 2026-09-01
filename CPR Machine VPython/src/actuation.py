@@ -140,6 +140,9 @@ def compressions() -> ErrorCode:
     
     # Read sensors
     error = sensing.read_sensors(ControlMode.COMPRESSIONS)
+    if error == ErrorCode.ERROR_IMU_KNEEL_FAILURE:
+        logging.error(f"Compressions failed on IMU kneel: {error}")
+        return ErrorCode.ERROR_IMU_KNEEL_FAILURE
     if error != ErrorCode.NORMAL_OPERATION:
         logging.error(f"Compressions failed on sensors: {error}")
         return ErrorCode.ERROR_SENSOR_FAILURE
@@ -172,6 +175,9 @@ def pause_compressions() -> ErrorCode:
     
     # Read sensors
     error = sensing.read_sensors(ControlMode.PAUSE_RETRACT)
+    if error == ErrorCode.ERROR_IMU_KNEEL_FAILURE:
+        logging.error(f"Compressions failed on IMU kneel: {error}")
+        return ErrorCode.ERROR_IMU_KNEEL_FAILURE
     if error != ErrorCode.NORMAL_OPERATION:
         logging.error(f"Pause retract failed on sensors: {error}")
         return ErrorCode.ERROR_SENSOR_FAILURE

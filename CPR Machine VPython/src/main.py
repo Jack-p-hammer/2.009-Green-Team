@@ -237,6 +237,7 @@ def main():
                     logging.debug("Device Paused")
 
                 # Loop
+                # TODO: Must track kneel failure during pause as well
                 error = actuation.abort_compressions()
                 if error != ErrorCode.NORMAL_OPERATION: continue
                 
