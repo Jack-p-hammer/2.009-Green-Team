@@ -216,9 +216,9 @@ def main():
                 error = actuation.compressions()
                 if error != ErrorCode.NORMAL_OPERATION: continue
 
-                error, next_pressed = HMI.next_button_pressed()
+                error, pause_pressed = HMI.pause_button_pressed()
                 if error != ErrorCode.NORMAL_OPERATION: continue
-                if next_pressed:
+                if pause_pressed:
                     state = CPRState.PAUSE
 
             case(CPRState.PAUSE):
