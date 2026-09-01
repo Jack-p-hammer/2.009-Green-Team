@@ -249,8 +249,9 @@ def main():
             case(CPRState.KNEEL_FAILURE):
                 # Setup
                 if state != prev_state:
+                    logging.warning(f"Kneel failure tripped: {error}")
                     error = actuation.pause_compressions()
-                    if error != ErrorCode.NORMAL_OPERATION: continue
+                    if error not in (ErrorCode.NORMAL_OPERATION, ErrorCode.ERROR_IMU_KNEEL_FAILURE): continue
 
                     error = HMI.disable_pause_button()
                     if error != ErrorCode.NORMAL_OPERATION: continue
@@ -259,7 +260,6 @@ def main():
                     error = HMI.set_image_audio(HMI.Image.KNEEL_FAILURE, HMI.AudioPrompt.KNEEL_FAILURE)
                     if error != ErrorCode.NORMAL_OPERATION: continue
                     
-                    logging.warning(f"Kneel failure tripped: {error}")
 
                 # Loop
                 error, next_pressed = HMI.next_button_pressed()
