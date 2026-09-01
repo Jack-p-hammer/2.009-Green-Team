@@ -24,6 +24,7 @@ MoteusThread instance is created in actuation.py and passed into
 sensing.init_sensors() as a parameter, so no module needs to reach back into
 one that imports it. Any of the three can be imported first in a test.
 """
+import logging
 import sys
 import types
 from pathlib import Path
@@ -38,6 +39,22 @@ if SRC_STR not in sys.path:
     sys.path.insert(0, SRC_STR)
 
 from Enums.error_codes import ErrorCode
+
+
+@pytest.fixture(autouse=True)
+def _no_main_log_files(monkeypatch):
+    """Keep main.main() from writing log files to the real Logs/ directory during tests.
+
+    main.py's configure_logging() constructs a logging.FileHandler on every
+    call, which touches disk immediately -- even when the logging.basicConfig()
+    call right after it ends up doing nothing, because the root logger
+    already has handlers from an earlier call in the same test session.
+    Across a suite that calls main.main() dozens of times, that means dozens
+    of near-empty log files landing in the real Logs/ directory. This swaps
+    logging.FileHandler for a no-op NullHandler for the duration of each
+    test so none of that ever touches disk.
+    """
+    monkeypatch.setattr(logging, "FileHandler", lambda *args, **kwargs: logging.NullHandler())
 
 # Modules from src/ that need to be re-imported fresh once fake hardware/main
 # modules are (re)installed, so they pick up the fakes instead of any
