@@ -239,6 +239,7 @@ def enable_lasers() -> ErrorCode:
 
     # Enable lasers by giving nonzero duty cycle and PWM frequency
     try:
+        # TODO: hardware_PWM does not throw an exeption, instead returning a negative error code. Consider checking the return value instead of using try/except.
         _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, int(LASER_PWM_DUTY_CYCLE * LASER_PWM_SCALE))
     except Exception as e:
         logging.error(f"Failed to enable lasers: {e}")
