@@ -87,6 +87,7 @@ def init_sensors(motor_controller: MoteusThread) -> ErrorCode:
     """Initialize the shared GPIO and sensor hardware used by the system."""
     global _pi, _vl61, _bno, _i2c
     global rotary_absolute_zero_position, ToF_absolute_zero_position, force_zero_value
+    global rotary_zero_position, ToF_zero_position
     global _motor_controller
     
     # Pull the shared moteus controller instance from actuation.py
@@ -131,13 +132,15 @@ def init_sensors(motor_controller: MoteusThread) -> ErrorCode:
     
     # Zero the position sensors
     try:
-        rotary_absolute_zero_position = read_rotary_encoder()
+        rotary_zero_position = read_rotary_encoder()
+        rotary_absolute_zero_position = rotary_zero_position
     except Exception as e:
         logging.error(f"Rotary encoder absolute zeroing failed: {e}")
         return ErrorCode.ERROR_INIT_FAILURE
     
     try:
-        ToF_absolute_zero_position = read_ToF_sensor()
+        ToF_zero_position = read_ToF_sensor()
+        ToF_absolute_zero_position = ToF_zero_position
     except Exception as e:
         logging.error(f"ToF absolute zeroing failed: {e}")
         return ErrorCode.ERROR_INIT_FAILURE
