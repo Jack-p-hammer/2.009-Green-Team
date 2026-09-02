@@ -210,8 +210,12 @@ def read_sensors(control_mode: ControlMode) -> ErrorCode:
     current_readings: tuple = (current_force, current_rotary, current_ToF, current_accel)
     
     # Check readings against limits for the current control mode
-    if(check_sensor_error(sensor_limits, current_readings) == ErrorCode.NORMAL_OPERATION):
+    check_result: ErrorCode = check_sensor_error(sensor_limits, current_readings)
+    if(check_result == ErrorCode.NORMAL_OPERATION):
         validation_error = ErrorCode.NORMAL_OPERATION
+    elif(check_result == ErrorCode.ERROR_IMU_KNEEL_FAILURE):
+        # Pass through IMU kneel failure error code
+        validation_error = ErrorCode.ERROR_IMU_KNEEL_FAILURE
         
     # Zeroing Case: Check for successful zeroing (force threshold exceeded)
     # At this point, we know that force is below error threshold, so only check for zeroing threshold
@@ -318,7 +322,7 @@ def check_sensor_error(sensor_limits: SensorLimits, sensor_readings: tuple) -> E
             logging.error(
                 f"IMU reading out of range: Read {sensor_readings[3][accel_tuple_index]}, Limit {sensor_limits.accel[accel_tuple_index]} for direction {accel_tuple_index}"
             )
-            return ErrorCode.ERROR_SENSOR_FAILURE
+            return ErrorCode.ERROR_IMU_KNEEL_FAILURE
         
     # Validate position sensors
     # TODO: This is placeholder logic
