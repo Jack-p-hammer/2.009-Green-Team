@@ -62,6 +62,25 @@ class _Recorder:
         return self.return_value
 
 
+def _fail_n_times(n, failure_result, then_result=ErrorCode.NORMAL_OPERATION):
+    """Build a zero-arg fake that returns `failure_result` for its first `n`
+    calls, then `then_result` after. Use for a function called from two
+    different states (e.g. actuation.abort_compressions(), which both PAUSE's
+    loop and ABORT's own setup call) when only a bounded number of failures
+    should happen -- failing it forever can make the second call site's setup
+    never complete either, an infinite busy-loop that never reaches
+    time.sleep() (see conversation, same issue as the KNEEL_FAILURE/
+    pause_compressions() case).
+    """
+    calls = {"count": 0}
+
+    def fn(*args, **kwargs):
+        calls["count"] += 1
+        return failure_result if calls["count"] <= n else then_result
+
+    return fn
+
+
 def _cascade_fakes(modules, next_pressed=True, pause_pressed=True,
                     zeroing_result=ErrorCode.ZEROING_FINISHED):
     """Wire the whole-module fakes so main() can freely cascade through every
@@ -138,20 +157,30 @@ def test_main_exits_on_unknown_image(monkeypatch):
     """An unrecognized image path during startup is fatal, not routed to ABORT state."""
     modules = install_fake_main_modules(monkeypatch)
     setattr(modules["HMI"], "set_image_audio", lambda image, prompt: ErrorCode.ERROR_UNKNOWN_IMAGE)
+    abort = _Recorder()
+    setattr(modules["actuation"], "abort_compressions", abort)
 
     import main
-    with pytest.raises(SystemExit):
+    with pytest.raises(SystemExit) as exc_info:
         main.main()
+
+    assert exc_info.value.code == 1
+    assert len(abort.calls) == 1  # the shutdown sequence aborts the motor before exiting
 
 
 def test_main_exits_on_pi_daemon_failure(monkeypatch):
     """A pigpio daemon failure anywhere is fatal -- GPIO state can't be trusted afterward."""
     modules = install_fake_main_modules(monkeypatch)
     setattr(modules["HMI"], "enable_next_button", lambda: ErrorCode.ERROR_PI_DAEMON_FAILURE)
+    abort = _Recorder()
+    setattr(modules["actuation"], "abort_compressions", abort)
 
     import main
-    with pytest.raises(SystemExit):
+    with pytest.raises(SystemExit) as exc_info:
         main.main()
+
+    assert exc_info.value.code == 1
+    assert len(abort.calls) == 1  # the shutdown sequence aborts the motor before exiting
 
 
 # -------------------- non-fatal error routing --------------------
@@ -199,6 +228,59 @@ def test_main_starts_in_startup_state(monkeypatch):
     _run_main_for_ticks(monkeypatch, main, max_ticks=1)
 
     assert (main.HMI.Image.STARTUP, main.HMI.AudioPrompt.STARTUP) in set_image_audio.calls
+
+
+def test_main_calls_pump_events_every_tick_across_states(monkeypatch):
+    """pump_events() must run every tick regardless of state ("or the OS can mark
+    the window as unresponsive", per main.py's own comment) -- confirmed by
+    counting calls across several ticks that span multiple different states,
+    not just checking it ran once during STARTUP.
+    """
+    modules = install_fake_main_modules(monkeypatch)
+    pump_events = _Recorder()
+    setattr(modules["HMI"], "pump_events", pump_events)
+    set_image_audio = _cascade_fakes(modules)
+
+    import main
+    _run_main_for_ticks(monkeypatch, main, max_ticks=5)
+
+    # Confirm the run actually spanned multiple different states...
+    assert (main.HMI.Image.STARTUP, main.HMI.AudioPrompt.STARTUP) in set_image_audio.calls
+    assert (main.HMI.Image.ZEROING_PREP, main.HMI.AudioPrompt.ZEROING_PREP) in set_image_audio.calls
+    # ...and pump_events() ran on every single one of those ticks, not just once.
+    assert len(pump_events.calls) == 5
+
+
+def test_main_pump_events_warning_does_not_disrupt_routing(monkeypatch):
+    """WARNING_PYGAME_PUMP_FAILURE is deliberately absent from both
+    ERROR_STATE_MAP and FATAL_ERRORS (see the static test above) -- confirm a
+    live run with pump_events() failing on every tick still advances normally
+    through the whole happy path, not just that the tables say it should.
+    """
+    modules = install_fake_main_modules(monkeypatch)
+    setattr(modules["HMI"], "pump_events", lambda: ErrorCode.WARNING_PYGAME_PUMP_FAILURE)
+    set_image_audio = _cascade_fakes(modules)
+
+    import main
+    _run_main_for_ticks(monkeypatch, main, max_ticks=15)
+
+    assert (main.HMI.Image.COMPRESSION, main.HMI.AudioPrompt.COMPRESSION) in set_image_audio.calls
+
+
+def test_main_abort_state_is_terminal(monkeypatch):
+    """Once ABORT is entered, nothing else should happen on later ticks: its
+    setup ("Halt -- only a power cycle exits this state") must run exactly
+    once, never re-triggered across many further ticks.
+    """
+    modules = install_fake_main_modules(monkeypatch)
+    setattr(modules["actuation"], "init_motor", lambda: ErrorCode.ERROR_INIT_FAILURE)
+    set_image_audio = _cascade_fakes(modules)
+
+    import main
+    _run_main_for_ticks(monkeypatch, main, max_ticks=15)
+
+    abort_entries = set_image_audio.calls.count((main.HMI.Image.ABORT, main.HMI.AudioPrompt.ABORT))
+    assert abort_entries == 1
 
 
 def test_main_advances_from_startup_when_next_pressed(monkeypatch):
@@ -260,6 +342,21 @@ def test_main_flow_zeroing_stays_while_not_finished(monkeypatch):
     _run_main_for_ticks(monkeypatch, main, max_ticks=15)
 
     assert (main.HMI.Image.ZEROING, main.HMI.AudioPrompt.ZEROING) in set_image_audio.calls
+    assert (main.HMI.Image.COMPRESSION_PREP, main.HMI.AudioPrompt.COMPRESSION_PREP) not in set_image_audio.calls
+
+
+def test_main_flow_zero_position_failure_after_zeroing_finished_routes_to_abort(monkeypatch):
+    """zeroing() finishing only advances to COMPRESSION_PREP if sensing.zero_position()
+    also succeeds right after -- a failure there should route to ABORT instead of
+    silently advancing or getting stuck."""
+    modules = install_fake_main_modules(monkeypatch)
+    setattr(modules["sensing"], "zero_position", lambda: ErrorCode.ERROR_SENSOR_FAILURE)
+    set_image_audio = _cascade_fakes(modules, zeroing_result=ErrorCode.ZEROING_FINISHED)
+
+    import main
+    _run_main_for_ticks(monkeypatch, main, max_ticks=15)
+
+    assert (main.HMI.Image.ABORT, main.HMI.AudioPrompt.ABORT) in set_image_audio.calls
     assert (main.HMI.Image.COMPRESSION_PREP, main.HMI.AudioPrompt.COMPRESSION_PREP) not in set_image_audio.calls
 
 
@@ -332,6 +429,26 @@ def test_main_flow_pause_to_compression_prep_on_next(monkeypatch):
     assert compression_prep_entries >= 2
 
 
+def test_main_flow_pause_loop_abort_failure_routes_to_abort(monkeypatch):
+    """PAUSE's ongoing loop (not just its setup) calls actuation.abort_compressions()
+    every tick; a motor failure there should route to ABORT.
+
+    Only fails on the first call (from PAUSE's loop): ABORT's own setup also
+    calls abort_compressions(), so failing it forever would recreate the same
+    busy-loop the KNEEL_FAILURE/pause_compressions() case hit earlier (see
+    conversation) -- ABORT's setup would never reach set_image_audio().
+    """
+    modules = install_fake_main_modules(monkeypatch)
+    setattr(modules["actuation"], "abort_compressions", _fail_n_times(1, ErrorCode.ERROR_MOTOR_FAILURE))
+    set_image_audio = _cascade_fakes(modules)
+
+    import main
+    _run_main_for_ticks(monkeypatch, main, max_ticks=15)
+
+    assert (main.HMI.Image.PAUSE, main.HMI.AudioPrompt.PAUSE) in set_image_audio.calls
+    assert (main.HMI.Image.ABORT, main.HMI.AudioPrompt.ABORT) in set_image_audio.calls
+
+
 def test_main_flow_kneel_failure_to_alignment_on_next(monkeypatch):
     """Kneel failure resumes into ALIGNMENT (re-confirm position), not COMPRESSION_PREP.
 
@@ -352,6 +469,30 @@ def test_main_flow_kneel_failure_to_alignment_on_next(monkeypatch):
         (main.HMI.Image.ALIGNMENT, main.HMI.AudioPrompt.ALIGNMENT)
     )
     assert alignment_entries >= 2
+
+
+def test_main_flow_kneel_failure_stays_without_next_and_has_no_ongoing_monitoring(monkeypatch):
+    """KNEEL_FAILURE intentionally requires only the operator's acknowledgement
+    (Next) to return to ALIGNMENT -- its loop does no ongoing sensor/actuation
+    monitoring beyond the one-time setup call to pause_compressions(). This is
+    confirmed-correct current behavior, not a bug -- locked in as a regression
+    test so a future change can't silently reintroduce per-tick monitoring, or
+    drop the Next-only exit, without a test catching it.
+    """
+    modules = install_fake_main_modules(monkeypatch)
+    setattr(modules["actuation"], "init_motor", lambda: ErrorCode.ERROR_IMU_KNEEL_FAILURE)
+    pause_compressions = _Recorder()
+    setattr(modules["actuation"], "pause_compressions", pause_compressions)
+    setattr(modules["HMI"], "next_button_pressed", lambda: (ErrorCode.NORMAL_OPERATION, False))
+    set_image_audio = _Recorder()
+    setattr(modules["HMI"], "set_image_audio", set_image_audio)
+
+    import main
+    _run_main_for_ticks(monkeypatch, main, max_ticks=10)
+
+    assert (main.HMI.Image.KNEEL_FAILURE, main.HMI.AudioPrompt.KNEEL_FAILURE) in set_image_audio.calls
+    assert (main.HMI.Image.ALIGNMENT, main.HMI.AudioPrompt.ALIGNMENT) not in set_image_audio.calls
+    assert len(pause_compressions.calls) == 1  # only the one-time setup call, never repeated per tick
 
 
 # -------------------- flow: error-driven edges --------------------

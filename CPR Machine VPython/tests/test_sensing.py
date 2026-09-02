@@ -186,19 +186,25 @@ def test_read_sensors_accel_within_tolerance_is_normal_operation(hardware):
 
 
 def test_read_sensors_detects_accel_over_limit(hardware):
-    """IMU shift detection: an orientation beyond the tolerance band is a fault."""
+    """IMU shift detection: an orientation beyond the tolerance band is a kneel
+    failure specifically, not the generic ERROR_SENSOR_FAILURE (contrast with
+    test_read_sensors_detects_position_disagreement below, a non-IMU failure)."""
     hardware.imu.acceleration = (0.0, 0.0, 20.0)  # exceeds the 9.81 compression limit
     import sensing
     sensing.init_sensors(_fake_controller())
 
-    assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.ERROR_SENSOR_FAILURE
+    assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.ERROR_IMU_KNEEL_FAILURE
 
 
 def test_read_sensors_detects_position_disagreement(hardware):
-    """Rotary and ToF should agree on position; a large mismatch is a sensor failure."""
+    """Rotary and ToF should agree on how far each has moved since zeroing; a
+    large mismatch between the two is a sensor failure."""
     import sensing
-    sensing.init_sensors(_fake_controller(position=1.0))  # ~62.8mm of rotary travel
-    hardware.tof.range = 0  # ToF disagrees by ~63mm, far past the 2mm threshold
+    controller = _FakeMotorController(position=0.0)
+    sensing.init_sensors(cast("MoteusThread", controller))  # zeroes both sensors to their readings at init
+    controller.position = 1.0  # rotary now reports ~62.8mm of travel since zeroing
+    # hardware.tof.range is left unchanged, so ToF reports no travel at all --
+    # a ~63mm disagreement, far past the 2mm threshold
 
     assert sensing.read_sensors(ControlMode.COMPRESSIONS) == ErrorCode.ERROR_SENSOR_FAILURE
 

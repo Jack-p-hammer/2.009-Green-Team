@@ -294,10 +294,12 @@ class FakePygameChannel:
         self.sound: Optional[FakePygameSound] = None
         self.loops: Optional[int] = None
         self.raise_on_play: Optional[Exception] = None
+        self.play_calls: list = []
 
     def play(self, sound, loops=0):
         if self.raise_on_play is not None:
             raise self.raise_on_play
+        self.play_calls.append((sound, loops))
         self.sound = sound
         self.loops = loops
 
@@ -320,6 +322,7 @@ class PygameHarness:
         self.channel = FakePygameChannel()
         self.ticks = 0
         self.sound_length_sec = 1.0
+        self.sound_loads: list = []  # paths actually passed to mixer.Sound()
 
         self.init_error: Optional[Exception] = None
         self.display_error: Optional[Exception] = None
@@ -424,6 +427,7 @@ def _make_pygame_module(harness: HardwareHarness) -> types.ModuleType:
     def mixer_sound(path):
         if pg.audio_load_error is not None:
             raise pg.audio_load_error
+        pg.sound_loads.append(path)
         return FakePygameSound(path, length=pg.sound_length_sec)
 
     mixer_ns = types.SimpleNamespace(init=mixer_init, Channel=mixer_channel, Sound=mixer_sound)

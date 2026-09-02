@@ -6,24 +6,31 @@ disable_pause_button, enable/disable_lasers, next_button_pressed/
 pause_button_pressed (each returning an (ErrorCode, bool) tuple), and
 audio_finished (elapsed-time based, not pygame.mixer.get_busy()).
 
-One item from the team's test inventory isn't covered here because the
-underlying HMI.py functionality doesn't exist, not because a test is
-missing: "audio_finished handles missing files gracefully" (expects
-ERROR_UNKNOWN_AUDIO) -- no such error code exists in Enums.error_codes, and
-audio_finished() returns a plain bool. It never touches pygame or loads a
-file, so it can't fail this way; loading the audio file is set_audio()'s
-job, and its failure path is covered by
-test_set_audio_plays_prompt_and_reports_failures (which returns the
-existing ERROR_PYGAME_FAILURE, not ERROR_UNKNOWN_AUDIO).
+One item from the team's test inventory maps onto different behavior than
+its original description assumed: "audio_finished handles missing files
+gracefully" (expecting a dedicated ERROR_UNKNOWN_AUDIO code). No such code
+exists, and audio_finished() returns a plain bool -- it never touches
+pygame or loads a file, so it structurally can't fail this way. The intent
+is instead covered by set_audio()'s empty-path branch (HMI.py lines
+194-198): a state with no audio configured yet (the PAUSE/ABORT/
+KNEEL_FAILURE prompts are still "TODO" placeholders) stops playback and
+reports NORMAL_OPERATION rather than erroring, which is what
+test_set_audio_with_no_prompt_stops_channel checks. A genuinely missing
+*file* (a real path that doesn't resolve) instead hits set_audio()'s
+pygame.mixer.Sound() call and is covered by
+test_set_audio_plays_prompt_and_reports_failures, returning the existing
+ERROR_PYGAME_FAILURE.
 
 There's also no function that takes a duty cycle argument to accept or
 reject arbitrary values -- enable_lasers()/disable_lasers() always read the
 LASER_PWM_DUTY_CYCLE module constant. test_laser_pwm_scaling_reflects_duty_
-cycle_constant validates the system's behavior around that constant's value
-by varying the constant itself (monkeypatching HMI.LASER_PWM_DUTY_CYCLE)
-rather than asserting against the one value currently hardcoded in HMI.py,
-including out-of-range values (-0.1, 1.5) to show they pass straight
-through to hardware_PWM() unclamped, with no rejection.
+cycle_constant and test_laser_pwm_fails_gracefully_for_out_of_range_duty_
+cycle validate the system's behavior around that constant's value by
+varying the constant itself (monkeypatching HMI.LASER_PWM_DUTY_CYCLE)
+rather than asserting against the one value currently hardcoded in HMI.py:
+a valid value (0, 0.25, 0.5, 1.0) is scaled through to hardware_PWM() and
+reports NORMAL_OPERATION, an out-of-range one (-0.1, 1.5) is rejected by
+real pigpio via a negative return code and reports ERROR_PI_DAEMON_FAILURE.
 """
 import pytest
 
@@ -103,13 +110,18 @@ def test_enable_disable_pause_button_writes_expected_pin_states(hardware):
     assert hardware.pi.writes[-1] == (HMI.PAUSE_ENABLE_PIN, 0)
 
 
-def test_button_led_write_failure_reports_pi_daemon_error(hardware):
-    """A pigpio write failure while toggling a button LED surfaces as a daemon error."""
+@pytest.mark.parametrize("button_fn_name", [
+    "enable_next_button", "disable_next_button",
+    "enable_pause_button", "disable_pause_button",
+])
+def test_button_led_write_failure_reports_pi_daemon_error(hardware, button_fn_name):
+    """A pigpio write failure while toggling any button LED surfaces as a daemon error."""
     hardware.pi.raise_on_write = RuntimeError("daemon gone")
     import HMI
     HMI.init_HMI(hardware.pi)
 
-    assert HMI.enable_next_button() == ErrorCode.ERROR_PI_DAEMON_FAILURE
+    button_fn = getattr(HMI, button_fn_name)
+    assert button_fn() == ErrorCode.ERROR_PI_DAEMON_FAILURE
 
 
 def test_button_enable_disable_is_idempotent(hardware):
@@ -159,13 +171,15 @@ def test_button_readers_respond_to_fake_gpio_input(hardware):
     assert pressed is True
 
 
-def test_button_reader_failure_reports_pi_daemon_error(hardware):
-    """A pigpio read failure surfaces as a daemon error rather than raising."""
+@pytest.mark.parametrize("reader_fn_name", ["next_button_pressed", "pause_button_pressed"])
+def test_button_reader_failure_reports_pi_daemon_error(hardware, reader_fn_name):
+    """A pigpio read failure surfaces as a daemon error rather than raising, for either button."""
     hardware.pi.raise_on_read = RuntimeError("daemon gone")
     import HMI
     HMI.init_HMI(hardware.pi)
 
-    error, pressed = HMI.next_button_pressed()
+    reader_fn = getattr(HMI, reader_fn_name)
+    error, pressed = reader_fn()
     assert error == ErrorCode.ERROR_PI_DAEMON_FAILURE
     assert pressed is False
 
@@ -201,6 +215,28 @@ def test_lasers_respond_to_enable_disable(hardware):
     assert hardware.pi.pwm_calls[-1] == (HMI.LASER_PIN, 0, 0)
 
 
+def test_laser_enable_disable_is_idempotent(hardware):
+    """Calling enable/disable_lasers() twice in a row should just re-assert the
+    same PWM state, mirroring test_button_enable_disable_is_idempotent."""
+    import HMI
+    HMI.init_HMI(hardware.pi)
+
+    HMI.enable_lasers()
+    HMI.enable_lasers()
+    on_duty = int(HMI.LASER_PWM_DUTY_CYCLE * HMI.LASER_PWM_SCALE)
+    assert hardware.pi.pwm_calls[-2:] == [
+        (HMI.LASER_PIN, HMI.LASER_PWM_FREQUENCY, on_duty),
+        (HMI.LASER_PIN, HMI.LASER_PWM_FREQUENCY, on_duty),
+    ]
+
+    HMI.disable_lasers()
+    HMI.disable_lasers()
+    assert hardware.pi.pwm_calls[-2:] == [
+        (HMI.LASER_PIN, 0, 0),
+        (HMI.LASER_PIN, 0, 0),
+    ]
+
+
 @pytest.mark.parametrize("duty_cycle_const", [0.0, 0.25, 0.5, 1.0])
 def test_laser_pwm_scaling_reflects_duty_cycle_constant(hardware, monkeypatch, duty_cycle_const):
     """enable_lasers() must scale whatever LASER_PWM_DUTY_CYCLE is configured to,
@@ -219,25 +255,14 @@ def test_laser_pwm_scaling_reflects_duty_cycle_constant(hardware, monkeypatch, d
     assert duty_cycle == int(duty_cycle_const * HMI.LASER_PWM_SCALE)
 
 
-@pytest.mark.xfail(
-    reason=(
-        "enable_lasers() discards the return value of _pi.hardware_PWM() "
-        "entirely -- it only catches exceptions via try/except. Real "
-        "pigpio.hardware_PWM() signals a bad duty cycle by returning a "
-        "negative status code (PI_BAD_HPWM_DUTY), not by raising, so this "
-        "failure is currently silently treated as NORMAL_OPERATION. Flip "
-        "this to a normal test once enable_lasers() checks the return code."
-    ),
-    strict=True,
-)
 @pytest.mark.parametrize("duty_cycle_const", [-0.1, 1.5])
 def test_laser_pwm_fails_gracefully_for_out_of_range_duty_cycle(hardware, monkeypatch, duty_cycle_const):
     """Real pigpio.hardware_PWM() rejects a duty cycle outside its valid range
     (0 to 1_000_000) by returning a negative status code (PI_BAD_HPWM_DUTY),
     not by raising -- confirmed against the installed pigpio package's source.
     FakePi.hardware_PWM() models that return-code behavior (see conftest.py),
-    so enable_lasers() should report a graceful failure here, not
-    NORMAL_OPERATION.
+    and enable_lasers() now checks it, reporting a graceful failure here
+    instead of NORMAL_OPERATION.
     """
     import HMI
     monkeypatch.setattr(HMI, "LASER_PWM_DUTY_CYCLE", duty_cycle_const)
@@ -247,11 +272,16 @@ def test_laser_pwm_fails_gracefully_for_out_of_range_duty_cycle(hardware, monkey
 
 
 def test_laser_pwm_failure_reports_pi_daemon_error(hardware):
-    """A pigpio PWM failure while (de)activating the laser is a daemon error."""
+    """A pigpio PWM failure while (de)activating the laser is a daemon error.
+
+    The same exception also hits init_HMI()'s own laser-off init call (its
+    own try/except, separate from the earlier button/LED GPIO setup one), so
+    this checks that return value too, not just enable/disable_lasers().
+    """
     hardware.pi.raise_on_hardware_pwm = RuntimeError("pwm channel busy")
     import HMI
-    HMI.init_HMI(hardware.pi)
 
+    assert HMI.init_HMI(hardware.pi) == ErrorCode.ERROR_PI_DAEMON_FAILURE
     assert HMI.enable_lasers() == ErrorCode.ERROR_PI_DAEMON_FAILURE
     assert HMI.disable_lasers() == ErrorCode.ERROR_PI_DAEMON_FAILURE
 
@@ -295,6 +325,44 @@ def test_set_audio_plays_prompt_and_reports_failures(hardware):
     assert HMI.set_audio(HMI.AudioPrompt.ALIGNMENT) == ErrorCode.ERROR_PYGAME_FAILURE
 
 
+def test_set_audio_restarts_playback_on_repeated_same_prompt(hardware):
+    """set_audio() should restart playback from the beginning even when called
+    again with the same prompt, per its own docstring -- not skip the second
+    call just because that prompt is already playing."""
+    import HMI
+    HMI.init_HMI(hardware.pi)
+
+    assert HMI.set_audio(HMI.AudioPrompt.UNFOLD) == ErrorCode.NORMAL_OPERATION
+    assert HMI.set_audio(HMI.AudioPrompt.UNFOLD) == ErrorCode.NORMAL_OPERATION
+
+    assert len(hardware.pygame.channel.play_calls) == 2
+
+
+def test_set_audio_caches_sound_and_does_not_reload_on_repeat(hardware):
+    """Each prompt's Sound should be loaded from disk once and cached -- a second
+    call with the same prompt must succeed even if loading would now fail,
+    because it never touches pygame.mixer.Sound() again."""
+    import HMI
+    HMI.init_HMI(hardware.pi)
+
+    assert HMI.set_audio(HMI.AudioPrompt.UNFOLD) == ErrorCode.NORMAL_OPERATION
+    assert len(hardware.pygame.sound_loads) == 1
+
+    hardware.pygame.audio_load_error = RuntimeError("missing asset")
+    assert HMI.set_audio(HMI.AudioPrompt.UNFOLD) == ErrorCode.NORMAL_OPERATION
+    assert len(hardware.pygame.sound_loads) == 1  # still just the one load
+
+
+def test_set_audio_reports_failure_when_playback_fails(hardware):
+    """A pygame Channel.play() failure is a separate try/except from the Sound-loading
+    one above; it should also report ERROR_PYGAME_FAILURE, not just a load failure."""
+    import HMI
+    HMI.init_HMI(hardware.pi)
+    hardware.pygame.channel.raise_on_play = RuntimeError("mixer channel busy")
+
+    assert HMI.set_audio(HMI.AudioPrompt.UNFOLD) == ErrorCode.ERROR_PYGAME_FAILURE
+
+
 def test_set_audio_with_no_prompt_stops_channel(hardware):
     """States with no audio prompt (empty path) should stop whatever was playing."""
     import HMI
@@ -317,6 +385,18 @@ def test_set_image_audio_short_circuits_on_image_failure(hardware):
 
     assert error == ErrorCode.ERROR_UNKNOWN_IMAGE
     assert hardware.pygame.channel.sound is None
+
+
+def test_set_image_audio_propagates_audio_failure_when_image_succeeds(hardware):
+    """set_image_audio() should return set_audio()'s failure code when the image loads
+    fine but the audio itself fails, not silently report success."""
+    import HMI
+    HMI.init_HMI(hardware.pi)
+    hardware.pygame.audio_load_error = RuntimeError("missing asset")
+
+    error = HMI.set_image_audio(HMI.Image.UNFOLD, HMI.AudioPrompt.UNFOLD)
+
+    assert error == ErrorCode.ERROR_PYGAME_FAILURE
 
 
 # -------------------- audio_finished --------------------

@@ -137,6 +137,27 @@ def test_compute_compression_setpoint_piecewise_profile(hardware, monkeypatch):
     assert actuation.computeCompressionSetpoint() == pytest.approx(0.0)
 
 
+def test_compute_compression_setpoint_exact_boundary_values(hardware, monkeypatch):
+    """The test above checks interior points of each segment; this pins down the
+    exact transition instants so a boundary can't silently fall into the wrong
+    branch (e.g. an off-by-one in a `<` vs `<=` comparison)."""
+    import actuation
+
+    fake_time = {"t": 0.0}
+    monkeypatch.setattr(actuation.time, "monotonic", lambda: fake_time["t"])
+    actuation.init_compressions()
+    peak = actuation.COMPRESSION_DEPTH_CM / 100.0
+
+    fake_time["t"] = 0.12  # flat -> ramp boundary: ramp is just starting, still 0
+    assert actuation.computeCompressionSetpoint() == pytest.approx(0.0)
+
+    fake_time["t"] = 0.24  # ramp -> plateau boundary: ramp just finished, at peak
+    assert actuation.computeCompressionSetpoint() == pytest.approx(peak)
+
+    fake_time["t"] = 0.323  # plateau -> ramp-down boundary: still at peak
+    assert actuation.computeCompressionSetpoint() == pytest.approx(peak)
+
+
 # -------------------- compressions --------------------
 
 def test_compressions_normal_operation(hardware):
@@ -154,30 +175,31 @@ def test_compressions_normal_operation(hardware):
 
 
 def test_compressions_fails_on_sensor_error(hardware):
+    """A non-IMU sensor failure (here, rotary/ToF position disagreement) should
+    convert to the generic ERROR_SENSOR_FAILURE -- contrast with
+    test_compressions_propagates_imu_kneel_failure below, where an IMU-specific
+    failure is passed through unchanged instead."""
+    import time
+    import actuation
+    import sensing
+    actuation.init_motor()
+    sensing.init_sensors(actuation.get_motor_controller())
+    hardware.moteus_controller.position = 1.0  # ~62.8mm of rotary travel
+    hardware.tof.range = 0  # ToF disagrees by ~63mm, far past the 2mm threshold
+    time.sleep(0.05)  # let the background command loop pick up the new position
+
+    assert actuation.compressions() == ErrorCode.ERROR_SENSOR_FAILURE
+
+
+def test_compressions_propagates_imu_kneel_failure(hardware):
+    """ERROR_IMU_KNEEL_FAILURE from read_sensors() must pass through as-is, unlike
+    every other non-normal result, which compressions() converts to
+    ERROR_SENSOR_FAILURE (see test_compressions_fails_on_sensor_error above)."""
     import actuation
     import sensing
     actuation.init_motor()
     sensing.init_sensors(actuation.get_motor_controller())
     hardware.imu.acceleration = (0.0, 0.0, 20.0)  # exceeds the compression accel limit
-
-    assert actuation.compressions() == ErrorCode.ERROR_SENSOR_FAILURE
-
-
-def test_compressions_propagates_imu_kneel_failure(hardware, monkeypatch):
-    """ERROR_IMU_KNEEL_FAILURE from read_sensors() must pass through as-is, unlike
-    every other non-normal result, which compressions() converts to
-    ERROR_SENSOR_FAILURE (see test_compressions_fails_on_sensor_error above).
-
-    sensing.py has no real path to produce ERROR_IMU_KNEEL_FAILURE yet (its
-    accel-limit check always reports ERROR_SENSOR_FAILURE -- see
-    test_sensing.py), so this injects it directly at the read_sensors() call
-    to test compressions()'s own handling in isolation.
-    """
-    import actuation
-    import sensing
-    actuation.init_motor()
-    sensing.init_sensors(actuation.get_motor_controller())
-    monkeypatch.setattr(sensing, "read_sensors", lambda control_mode: ErrorCode.ERROR_IMU_KNEEL_FAILURE)
 
     assert actuation.compressions() == ErrorCode.ERROR_IMU_KNEEL_FAILURE
 
@@ -213,23 +235,28 @@ def test_pause_compressions_normal_operation(hardware):
 
 
 def test_pause_compressions_fails_on_sensor_error(hardware):
+    """Same distinction as test_compressions_fails_on_sensor_error above, for
+    pause_compressions()."""
+    import time
     import actuation
     import sensing
     actuation.init_motor()
     sensing.init_sensors(actuation.get_motor_controller())
-    hardware.imu.acceleration = (0.0, 0.0, 20.0)
+    hardware.moteus_controller.position = 1.0
+    hardware.tof.range = 0
+    time.sleep(0.05)  # let the background command loop pick up the new position
 
     assert actuation.pause_compressions() == ErrorCode.ERROR_SENSOR_FAILURE
 
 
-def test_pause_compressions_propagates_imu_kneel_failure(hardware, monkeypatch):
+def test_pause_compressions_propagates_imu_kneel_failure(hardware):
     """Same distinction as test_compressions_propagates_imu_kneel_failure above,
     for pause_compressions()."""
     import actuation
     import sensing
     actuation.init_motor()
     sensing.init_sensors(actuation.get_motor_controller())
-    monkeypatch.setattr(sensing, "read_sensors", lambda control_mode: ErrorCode.ERROR_IMU_KNEEL_FAILURE)
+    hardware.imu.acceleration = (0.0, 0.0, 20.0)
 
     assert actuation.pause_compressions() == ErrorCode.ERROR_IMU_KNEEL_FAILURE
 
