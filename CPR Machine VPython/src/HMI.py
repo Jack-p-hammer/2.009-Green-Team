@@ -122,15 +122,22 @@ def init_HMI(pi_instance: pigpio.pi) -> ErrorCode:
         for pin in (NEXT_ENABLE_PIN, PAUSE_ENABLE_PIN, LASER_PIN):
             _pi.set_mode(pin, pigpio.OUTPUT)
             _pi.set_pull_up_down(pin, pigpio.PUD_DOWN)
-            
-        # Initialize laser PWM
-        # Duty cycle ranges from 0-1M
-        # Initialize to off
-        _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
         
     except Exception as e:
         logging.error(f"HMI GPIO initialization failed: {e}")
         return ErrorCode.ERROR_INIT_FAILURE
+    
+    try:            
+        # Initialize laser PWM
+        # Duty cycle ranges from 0-1M
+        # Initialize to off
+        error_num = _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
+        if error_num < 0:
+            logging.error(f"Failed to initialize laser PWM: {error_num}")
+            return ErrorCode.ERROR_INIT_FAILURE
+    except Exception as e:
+        logging.error(f"Failed to communicate with pigpio daemon: {e}")
+        return ErrorCode.ERROR_PI_DAEMON_FAILURE
 
     return ErrorCode.NORMAL_OPERATION
 
@@ -237,12 +244,14 @@ def enable_lasers() -> ErrorCode:
     """
     global _pi
 
-    # Enable lasers by giving nonzero duty cycle and PWM frequency
     try:
-        # TODO: hardware_PWM does not throw an exeption, instead returning a negative error code. Consider checking the return value instead of using try/except.
-        _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, int(LASER_PWM_DUTY_CYCLE * LASER_PWM_SCALE))
+        # Enable lasers by giving nonzero duty cycle and PWM frequency
+        error_num = _pi.hardware_PWM(LASER_PIN, LASER_PWM_FREQUENCY, int(LASER_PWM_DUTY_CYCLE * LASER_PWM_SCALE))
+        if error_num < 0:
+            logging.error(f"Failed to enable lasers: {error_num}")
+            return ErrorCode.ERROR_PI_DAEMON_FAILURE
     except Exception as e:
-        logging.error(f"Failed to enable lasers: {e}")
+        logging.error(f"Failed to communicate with pigpio daemon: {e}")
         return ErrorCode.ERROR_PI_DAEMON_FAILURE
     return ErrorCode.NORMAL_OPERATION
 
@@ -255,11 +264,14 @@ def disable_lasers() -> ErrorCode:
     """
     global _pi
 
-    # Disable lasers by setting duty cycle and PWM frequency to zero
     try:
-        _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
+        # Disable lasers by setting duty cycle and PWM frequency to zero
+        error_num = _pi.hardware_PWM(LASER_PIN, 0, 0*LASER_PWM_SCALE)
+        if error_num < 0:
+            logging.error(f"Failed to disable lasers: {error_num}")
+            return ErrorCode.ERROR_PI_DAEMON_FAILURE
     except Exception as e:
-        logging.error(f"Failed to disable lasers: {e}")
+        logging.error(f"Failed to communicate with pigpio daemon: {e}")
         return ErrorCode.ERROR_PI_DAEMON_FAILURE
     return ErrorCode.NORMAL_OPERATION
 
